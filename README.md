@@ -7,7 +7,6 @@ SG(스마일게이트)에서 목표를 이루고(워너비)야 말겠다는 포�
 - [kor-Chipmunk](https://www.github.com/kor-Chipmunk) - `Server`
 - [happysoy](https://www.github.com/happysoy) - `Server`
 - [mingzooo](https://www.github.com/mingzooo) - `Web`
-- [chs98412](https://www.github.com/chs98412) - `Server`
 
 ## SG Wannabe 팀 링크
 * [문서 Github](./docs/README.md)
