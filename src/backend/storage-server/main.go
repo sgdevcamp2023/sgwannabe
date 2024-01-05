@@ -23,7 +23,7 @@ func main() {
 
 	logger.Info("starting Web Server")
 
-    registerHandlers()
+	registerHandlers()
 	listenServe()
 }
 
@@ -32,20 +32,22 @@ func loadEnvironments() {
 }
 
 type ReleaseType int
+
 const (
-	DEVELOP 	ReleaseType = iota
+	DEVELOP ReleaseType = iota
 	RELEASE
 	PRODUCTION
 )
 
-var releaseLookup = map[string]ReleaseType {
-	"": DEVELOP,
-	"develop": DEVELOP,
-	"release": RELEASE,
+var releaseLookup = map[string]ReleaseType{
+	"":           DEVELOP,
+	"develop":    DEVELOP,
+	"release":    RELEASE,
 	"production": PRODUCTION,
 }
 
 var logger *zap.Logger
+
 func configureLogger() {
 	environment := releaseLookup[os.Getenv("ENV")]
 	switch environment {
@@ -64,16 +66,16 @@ func configureLogger() {
 
 func listenServe() {
 	port := ":" + os.Getenv("PORT")
-    err := http.ListenAndServe(port, nil)
-    if err != nil {
-        log.Fatalln(err)
-    }
+	err := http.ListenAndServe(port, nil)
+	if err != nil {
+		log.Fatalln(err)
+	}
 	logger.Info("The server is listening on http://localhost:" + port)
 }
 
 func registerHandlers() {
-	http.HandleFunc("/", handleMusicStaticFiles);
-	http.HandleFunc("/upload", handleUploadMusic);
+	http.HandleFunc("/", handleMusicStaticFiles)
+	http.HandleFunc("/upload", handleUploadMusic)
 }
 
 func handleMusicStaticFiles(w http.ResponseWriter, r *http.Request) {
@@ -96,7 +98,7 @@ func handleMusicStaticFiles(w http.ResponseWriter, r *http.Request) {
 
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Content-Type", "audio/mpeg")
-		
+
 		etag := fmt.Sprintf("%x", md5.Sum([]byte(resourceName)))
 		w.Header().Set("Cache-Control", "public, max-age=600")
 		w.Header().Set("ETag", etag)
@@ -132,7 +134,7 @@ func handleUploadMusic(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			logger.Error(err.Error())
 			return
-		}	
+		}
 		defer file.Close()
 
 		logger.Sugar().Infof("Uploaded File: %+v", handler.Filename)
@@ -144,12 +146,12 @@ func handleUploadMusic(w http.ResponseWriter, r *http.Request) {
 			logger.Warn(err.Error())
 		}
 		defer tempFile.Close()
-	
+
 		fileBytes, err := io.ReadAll(file)
 		if err != nil {
 			logger.Warn(err.Error())
 		}
-		
+
 		tempFile.Write(fileBytes)
 		logger.Info("Successfully Uploaded File")
 		break
