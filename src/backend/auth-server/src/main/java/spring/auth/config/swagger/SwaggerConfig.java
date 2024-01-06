@@ -9,6 +9,7 @@ import io.swagger.v3.oas.models.examples.Example;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.responses.ApiResponses;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.customizers.OperationCustomizer;
@@ -27,6 +28,7 @@ import spring.auth.config.swagger.ExampleHolder;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -47,15 +49,15 @@ public class SwaggerConfig {
     private final ApplicationContext applicationContext;
 
     @Bean
-    public OpenAPI openAPI() {
+    public OpenAPI openAPI(){
+        SecurityScheme securityScheme = new SecurityScheme()
+                .type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")
+                .in(SecurityScheme.In.HEADER).name("Authorization");
+        SecurityRequirement securityRequirement = new SecurityRequirement().addList("bearerAuth");
+
         return new OpenAPI()
-                .components(new Components()
-                        .addSecuritySchemes("bearer-key",
-                        new io.swagger.v3.oas.models.security.SecurityScheme()
-                                .type(SecurityScheme.Type.HTTP)
-                                .scheme("bearer")
-                                .bearerFormat("JWT")
-                        ));
+                .components(new Components().addSecuritySchemes("bearerAuth", securityScheme))
+                .security(Collections.singletonList(securityRequirement));
     }
 
     @Bean

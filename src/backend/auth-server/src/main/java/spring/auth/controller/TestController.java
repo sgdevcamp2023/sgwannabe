@@ -15,9 +15,11 @@ import spring.auth.common.exception.docs.OtherServiceExceptionDocs;
 @RestController
 @RequestMapping("/api/test")
 public class TestController {
+
+    @Operation(summary = "Get Public Page", description = "모든 클라이언트가 접근가능한 페이지입니다")
     @GetMapping("/all")
     public ResponseEntity<?> allAccess() {
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().body(new SuccessMessageResponse("Public Content"));
     }
 
     @Operation(summary = "Get User Page", description = "회원 전용 페이지입니다")
@@ -28,9 +30,10 @@ public class TestController {
         return ResponseEntity.ok().body(new SuccessMessageResponse("User Content"));
     }
 
+    @Operation(summary = "Get Admin Page", description = "관리자 전용 페이지입니다")
     @GetMapping("/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> adminAccess() {
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().body(new SuccessMessageResponse("Admin Content"));
     }
 }
