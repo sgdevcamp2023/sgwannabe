@@ -1,0 +1,61 @@
+server:
+  port: 8000
+  tomcat:
+    uri-encoding: UTF-8
+
+spring:
+  application:
+    name: spring-security
+  datasource:
+    url: jdbc:h2:mem:local;MODE=MySQL;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        show_sql: true
+        format_sql: true #실행되는 쿼리 로그를 정렬하여 표시
+
+    hibernate:
+      ddl-auto: update
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+  data:
+    redis:
+      host: localhost
+      port: 16379
+
+
+# terminal에서 평문 암호화
+jwt:
+  access-cookie-name: soy-access-jwt
+  refresh-cookie-name: soy-refresh-jwt
+  secret: Y2hvcHBhLWRvbnQtYml0ZS1tZS1zcHJpbmctYm9vdC1qd3QtdGVzdC1zZWNyZXQta2V5LWNob3BwYS1kb250LWJpdGUtbWUtc3ByaW5nLWJvb3Qtand0LXRlc3Qtc2VjcmV0LWtleQo=
+  access-expiration: 1800000 # 30분
+  refresh-expiration: 86400000 #1일
+  # 테스트 용도
+#  access-expiration: 30000 # 30초
+#  refresh-expiration: 120000 # 2분
+springdoc:
+#  api-docs:
+#    enabled: true
+  default-produces-media-type: application/json
+  default-consumes-media-type: application/json
+  swagger-ui:
+    tags-sorter: alpha
+    disable-swagger-default-url: true   #디폴트 페이지 안나오게
+#  default-consumes-media-type: application/json
+#  default-produces-media-type: application/json
+#  show-login-endpoint: true
+#  swagger-ui:
+#    enabled: true
+##    path: /swagger-ui # default is '/swagger-ui/index.html'
+#    disable-swagger-default-url: true # default url disable
+#    groups-order: DESC # path, query, body, response 순으로 출력
+#    display-request-duration: true # swagger-ui에서 try 했을 때 request duration을 알려주는 설정
