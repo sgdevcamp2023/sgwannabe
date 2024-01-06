@@ -29,7 +29,6 @@ public class AuthEntryPoint implements AuthenticationEntryPoint {
         log.error("Unauthorized Error={}", authException.getMessage());
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
         final Map<String, Object> body = new HashMap<>();
         body.put("success", false);
@@ -37,6 +36,8 @@ public class AuthEntryPoint implements AuthenticationEntryPoint {
         body.put("code", "AUTH_2012_2"); // AuthErrorCode 맞춰서 변경
         body.put("message", AuthErrorCode.CLIENT_UNAUTHORIZED.getReason());
 //        body.put("timeStamp", LocalDateTime.now());
+        // TODO LocalDateTime 추가
+        // JavaTimeModule 사용해야 하는 듯?
         body.put("path", request.getServletPath());
 
         final ObjectMapper mapper = new ObjectMapper();
