@@ -43,6 +43,9 @@ public class JwtUtils {
     @Value("${jwt.refresh-cookie-name}")
     private String jwtRefreshCookie;
 
+    @Value("${jwt.cookie-max-age}")
+    private long cookieMaxAge;
+
     private final RedisService redisService;
 
 
@@ -84,7 +87,7 @@ public class JwtUtils {
     }
 
     private ResponseCookie generateCookie(String name, String value, String path) {
-        return ResponseCookie.from(name, value).path(path).maxAge(24 * 60 * 60).httpOnly(true).build(); // 1일
+        return ResponseCookie.from(name, value).path(path).maxAge(cookieMaxAge).httpOnly(true).build(); // 1일
     }
 
     private String getCookieValueByName(HttpServletRequest request, String name) {
@@ -121,8 +124,7 @@ public class JwtUtils {
     public String generateRefreshToken(String email) {
         String refreshToken = UUID.randomUUID().toString();
 
-//        long expiredTime = 30 * 1000; // 30초
-        redisService.setRedisTemplate(refreshToken, email, Duration.ofMillis(jwtRefreshExpiration)); // TODO test 용
+        redisService.setRedisTemplate(refreshToken, email, Duration.ofMillis(jwtRefreshExpiration));
         return refreshToken;
     }
 

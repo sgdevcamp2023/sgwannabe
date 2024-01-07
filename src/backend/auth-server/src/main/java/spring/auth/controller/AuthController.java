@@ -38,14 +38,6 @@ public class AuthController {
 
     private final UserService userService;
 
-    private final PasswordEncoder passwordEncoder;
-
-    private final JwtUtils jwtUtils;
-
-
-
-    // TODO annotation 중복 해결
-
     @Operation(summary = "Post Client SignUp", description = "클라이언트의 회원가입 요청을 수행합니다")
     @ApiErrorException(SignUpExceptionDocs.class)
     @PostMapping("/signup")

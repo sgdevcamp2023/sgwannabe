@@ -43,8 +43,9 @@ jwt:
   access-cookie-name: soy-access-jwt
   refresh-cookie-name: soy-refresh-jwt
   secret: Y2hvcHBhLWRvbnQtYml0ZS1tZS1zcHJpbmctYm9vdC1qd3QtdGVzdC1zZWNyZXQta2V5LWNob3BwYS1kb250LWJpdGUtbWUtc3ByaW5nLWJvb3Qtand0LXRlc3Qtc2VjcmV0LWtleQo=
-  access-expiration: 1800000 # 30분
-  refresh-expiration: 86400000 #1일
+  access-expiration: 1800000 # 30분 (ms)
+  refresh-expiration: 86400000 #1일 (ms)
+  cookie-max-age: 86400 #1일 (s)
   # 테스트 용도
 #  access-expiration: 30000 # 30초
 #  refresh-expiration: 120000 # 2분
@@ -56,12 +57,4 @@ springdoc:
   swagger-ui:
     tags-sorter: alpha
     disable-swagger-default-url: true   #디폴트 페이지 안나오게
-#  default-consumes-media-type: application/json
-#  default-produces-media-type: application/json
-#  show-login-endpoint: true
-#  swagger-ui:
-#    enabled: true
-##    path: /swagger-ui # default is '/swagger-ui/index.html'
-#    disable-swagger-default-url: true # default url disable
-#    groups-order: DESC # path, query, body, response 순으로 출력
-#    display-request-duration: true # swagger-ui에서 try 했을 때 request duration을 알려주는 설정
+
