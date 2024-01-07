@@ -22,8 +22,6 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -39,6 +37,17 @@ dependencies {
 
 	// swagger ui
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.3.0'
+
+	// jpa
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// GraphDB
+	implementation 'org.neo4j.driver:neo4j-java-driver:5.15.0'
+	implementation 'org.springframework.boot:spring-boot-starter-data-neo4j'
+
+	// redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+
 
 
 	compileOnly 'org.projectlombok:lombok'

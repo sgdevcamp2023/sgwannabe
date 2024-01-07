@@ -31,6 +31,12 @@ spring:
       host: localhost
       port: 16379
 
+  neo4j:
+    uri: neo4j://localhost:7687
+    authentication:
+      username: neo4j
+      password: password
+
 
 # terminal에서 평문 암호화
 jwt:
