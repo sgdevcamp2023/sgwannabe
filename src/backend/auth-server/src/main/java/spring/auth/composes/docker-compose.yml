@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  db:
+    container_name: test-mysql
+    image: mysql:8.0
+    env_file:
+      - test.env
+    environment:
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_DATABASE: "test"
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  redis:
+    container_name: test-redis
+    image: redis:7.0-alpine
+    hostname: test-redis
+    ports:
+      - "16379:6379"
+    command: redis-server --port 6379
+    labels:
+      - "name=redis"
+      - "mode=standalone"
+
+  neo4j:
+    container_name: test-neo4j
+    image: neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=${NEO4J_AUTH}
+    volumes:
+      - neo4j-data:/data
+      - neo4j-logs:/logs
+      - neo4j-import:/var/lib/neo4j/import
+      - neo4j-plugins:/plugins
+
+volumes:
+  db-data:
+  neo4j-data:
+  neo4j-logs:
+  neo4j-import:
+  neo4j-plugins:
