@@ -15,10 +15,4 @@ public class SecurityApplication {
 		SpringApplication.run(SecurityApplication.class, args);
 	}
 
-	// Neo4J 엔티티에서 @Id 어노테이션 사용시 발생하는 warning 제거
-	@Bean
-	Configuration cypherDslConfiguration() {
-		return Configuration.newConfig().withDialect(Dialect.NEO4J_5).build();
-	}
-
 }

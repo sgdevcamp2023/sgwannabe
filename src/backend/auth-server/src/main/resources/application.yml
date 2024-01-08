@@ -5,7 +5,7 @@ server:
 
 spring:
   application:
-    name: spring-security
+    name: auth-server
   datasource:
     url: jdbc:h2:mem:local;MODE=MySQL;DATABASE_TO_LOWER=TRUE
     username: sa
@@ -58,4 +58,3 @@ springdoc:
   swagger-ui:
     tags-sorter: alpha
     disable-swagger-default-url: true   #디폴트 페이지 안나오게
-
