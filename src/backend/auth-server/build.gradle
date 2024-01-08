@@ -41,10 +41,6 @@ dependencies {
 	// jpa
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-	// GraphDB
-	implementation 'org.neo4j.driver:neo4j-java-driver:5.15.0'
-	implementation 'org.springframework.boot:spring-boot-starter-data-neo4j'
-
 	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
 
