@@ -23,11 +23,7 @@ public record SignUpRequest(
 
         @NotBlank @Length(min=8, max=20)
         @Schema(description = "password", example="gggggggggg")
-        String password,
-
-        @NotBlank
-        @Schema(description = "passwordCheck", example="gggggggggg")
-        String passwordCheck
+        String password
 
 ) {
         public User toEntity(String hashPassword) {

@@ -50,8 +50,9 @@ jwt:
 #  access-expiration: 30000 # 30초
 #  refresh-expiration: 120000 # 2분
 springdoc:
-#  api-docs:
-#    enabled: true
+  api-docs:
+    enabled: true
+    path: /api-docs
   default-produces-media-type: application/json
   default-consumes-media-type: application/json
   swagger-ui:

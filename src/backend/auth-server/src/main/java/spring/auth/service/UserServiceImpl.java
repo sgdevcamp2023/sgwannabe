@@ -18,7 +18,6 @@ import spring.auth.common.exception.request.EmptyToken;
 import spring.auth.common.exception.request.ExpiredToken;
 import spring.auth.common.exception.response.DuplicateEmail;
 import spring.auth.common.exception.response.FailLogin;
-import spring.auth.common.exception.response.IncorrectPasswordCheck;
 import spring.auth.config.jwt.JwtUtils;
 import spring.auth.config.security.UserDetailsImpl;
 import spring.auth.domain.ERole;
@@ -48,10 +47,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public ResponseEntity<UserInfoResponse> signUp(SignUpRequest request) {
-        // 비밀번호 != 비밀번호 확인
-        if (!Objects.equals(request.password(), request.passwordCheck())) {
-            throw IncorrectPasswordCheck.EXCEPTION;
-        }
 
         // 이메일 중복 확인
         if (userRepository.existsByEmail(request.email())) {
@@ -98,6 +93,7 @@ public class UserServiceImpl implements UserService {
                 .header(HttpHeaders.SET_COOKIE, jwtAccessCookie.toString())
                 .header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString())
                 .body(UserAndTokenResponse.builder()
+                        .id(user.getId())
                         .username(user.getUsername())
                         .accessToken(jwtAccessCookie.toString())
                         .refreshToken(refreshToken)
@@ -116,6 +112,7 @@ public class UserServiceImpl implements UserService {
                         return ResponseEntity.ok()
                                 .header(HttpHeaders.SET_COOKIE, jwtAccessCookie.toString())
                                 .body(UserAndTokenResponse.builder()
+                                        .id(user.getId())
                                         .accessToken(jwtAccessCookie.toString())
                                         .refreshToken(refreshToken)
                                         .username(user.getUsername())
@@ -155,11 +152,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public ResponseEntity<?> changePassword(User user, ChangePasswordRequest request) {
-        // 비밀번호 != 비밀번호 확인
-        if (!Objects.equals(request.password(), request.passwordCheck())) {
-            throw IncorrectPasswordCheck.EXCEPTION;
-        }
-
         user.changePassword(hashPassword(request.password()));
         userRepository.save(user);
 

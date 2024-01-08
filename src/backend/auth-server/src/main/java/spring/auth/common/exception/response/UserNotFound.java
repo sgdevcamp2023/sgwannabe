@@ -2,7 +2,6 @@ package spring.auth.common.exception.response;
 
 import spring.auth.common.exception.AuthErrorCode;
 import spring.auth.common.exception.GlobalCustomException;
-import spring.auth.common.exception.request.ClientInvalidEmail;
 
 public class UserNotFound extends GlobalCustomException {
 

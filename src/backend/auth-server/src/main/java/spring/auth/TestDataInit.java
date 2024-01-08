@@ -37,8 +37,11 @@ public class TestDataInit {
 //        }
 
         public void dbInitUsers() {
-            extracted("신짱구", "jjangu@gmail.com", "gggggggggg");
+            extracted("신짱구", "jjangu@gmail.com", "aaaaaaaaaa");
             extracted("신짱아", "jjanga@gmail.com", "aaaaaaaaaa");
+            extracted("봉미선", "misun@gmail.com", "aaaaaaaaaa");
+            extracted("신형만", "man@gmail.com", "aaaaaaaaaa");
+            extracted("흰둥이", "doong@gmail.com", "aaaaaaaaaa");
         }
 
         private void extracted(String username, String email, String password) {

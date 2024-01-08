@@ -11,7 +11,10 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.WebUtils;
+import spring.auth.common.exception.request.EmptyToken;
 import spring.auth.common.exception.request.ExpiredToken;
+import spring.auth.common.exception.request.InvalidToken;
+import spring.auth.common.exception.request.UnsupportedToken;
 import spring.auth.domain.User;
 import spring.auth.service.RedisService;
 
@@ -147,16 +150,13 @@ public class JwtUtils {
                     .parse(token);
             return true;
         } catch (MalformedJwtException e) {
-            log.error("Invalid JWT token={}", e.getMessage());
-
+            throw InvalidToken.EXCEPTION;
         } catch (ExpiredJwtException e) {
-//            log.error("Jwt token is expired={}", e.getMessage());
             throw ExpiredToken.EXCEPTION;
         } catch (UnsupportedJwtException e) {
-            log.error("Jwt token is unsupported={}", e.getMessage());
+            throw UnsupportedToken.EXCEPTION;
         } catch (IllegalArgumentException e) {
-            log.error("Jwt claims string is empty={}", e.getMessage());
+            throw EmptyToken.EXCEPTION;
         }
-        return false;
     }
 }

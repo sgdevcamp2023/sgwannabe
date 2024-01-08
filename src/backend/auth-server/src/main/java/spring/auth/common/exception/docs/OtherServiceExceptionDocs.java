@@ -4,9 +4,7 @@ import spring.auth.common.annotation.ExceptionDoc;
 import spring.auth.common.annotation.ExplainError;
 import spring.auth.common.annotation.SwaggerException;
 import spring.auth.common.exception.GlobalCustomException;
-import spring.auth.common.exception.request.EmptyToken;
-import spring.auth.common.exception.request.ExpiredToken;
-import spring.auth.common.exception.request.UserAccessDenied;
+import spring.auth.common.exception.request.*;
 import spring.auth.common.exception.response.ClientUnauthorizedException;
 
 @ExceptionDoc
@@ -16,6 +14,12 @@ public class OtherServiceExceptionDocs implements SwaggerException {
 
     @ExplainError("헤더에 토큰이 없는 경우")
     public GlobalCustomException 토큰_없음 = EmptyToken.EXCEPTION;
+
+    @ExplainError("유효하지 않은 토큰인 경우")
+    public GlobalCustomException 토큰_미유효 = InvalidToken.EXCEPTION;
+
+    @ExplainError("지원하지 않는 토큰인 경우")
+    public GlobalCustomException 토큰_미지원 = UnsupportedToken.EXCEPTION;
 
     @ExplainError("사용자 인증이 되지 않은 경우 - header에 인증 정보가 담기지 않음 or 로그인 안함")
     public GlobalCustomException 인증_안됨 = ClientUnauthorizedException.EXCEPTION;

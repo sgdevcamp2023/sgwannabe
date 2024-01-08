@@ -22,19 +22,10 @@ public class ExceptionStatusProvider {
                     case "password" -> {
                         return AuthErrorCode.CLIENT_EMPTY_PASSWORD;
                     }
-                    case "passwordCheck" -> {
-                        return AuthErrorCode.CLIENT_EMPTY_PASSWORD_CHECK;
-                    }
                     case "username" -> {
                         return AuthErrorCode.CLIENT_EMPTY_USERNAME;
                     }
                 }
-            }
-            case "Length" -> { // "Password Length
-                return AuthErrorCode.CLIENT_INVALID_PASSWORD;
-            }
-            case "Email" ->{
-                return AuthErrorCode.CLIENT_INVALID_EMAIL;
             }
         }
         return AuthErrorCode.RESPONSE_ERROR;
