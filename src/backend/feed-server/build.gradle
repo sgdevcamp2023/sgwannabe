@@ -23,6 +23,11 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// Graph DB
+	implementation 'org.neo4j:neo4j-ogm-spring-boot-starter:1.0.3'
+
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
