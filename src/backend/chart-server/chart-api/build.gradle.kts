@@ -13,5 +13,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+
+    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.0.4")
+
     testImplementation("io.projectreactor:reactor-test")
 }
