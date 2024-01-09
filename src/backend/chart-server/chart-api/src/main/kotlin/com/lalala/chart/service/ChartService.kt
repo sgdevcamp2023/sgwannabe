@@ -13,12 +13,9 @@ import java.util.*
 class ChartService(
     private val chartRepository: ChartRepository,
 ) {
-    fun getChart(timeStamp: Int?): Mono<ChartEntity> {
-        return if (timeStamp == null) {
-            getLatestChart()
-        } else {
-            getChartByTimeStamp(timeStamp)
-        }
+    fun getChart(timeStamp: Int?): Mono<ChartEntity> = when (timeStamp) {
+        null -> getLatestChart()
+        else -> getChartByTimeStamp(timeStamp)
     }
 
     fun getLatestChart(): Mono<ChartEntity> =
