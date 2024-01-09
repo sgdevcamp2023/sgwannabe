@@ -26,7 +26,19 @@ class MongoConfiguration(
     override fun getDatabaseName() = "chart"
 
     override fun reactiveMongoClient() = mongoClient()
-    
+
+    override fun mappingMongoConverter(
+        databaseFactory: ReactiveMongoDatabaseFactory,
+        customConversions: MongoCustomConversions,
+        mappingContext: MongoMappingContext
+    ): MappingMongoConverter {
+        val converter = MappingMongoConverter(NoOpDbRefResolver.INSTANCE, mappingContext)
+        converter.customConversions = customConversions
+        converter.setCodecRegistryProvider(databaseFactory)
+        converter.setTypeMapper(DefaultMongoTypeMapper(null))
+        return converter
+    }
+
     @Bean
     fun mongoClient(): MongoClient {
         val uri = env.getProperty("spring.data.mongodb.uri") ?: "mongodb://localhost"
