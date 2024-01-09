@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  fileserver-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "20000:20000"
+    restart: unless-stopped
+    env_file:
+      - .env
+    networks:
+      - backend
+    volumes:
+      - static-data:/resources
+
+networks:
+  backend:
+
+volumes:
+  static-data:
+    driver: local
