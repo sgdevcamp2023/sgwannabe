@@ -1,0 +1,17 @@
+server:
+  port: 8200
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://chipmunk:JMTpdsu8YkLEXBW4RA@localhost:27017/chart
+
+springdoc:
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  cache:
+    disabled: true

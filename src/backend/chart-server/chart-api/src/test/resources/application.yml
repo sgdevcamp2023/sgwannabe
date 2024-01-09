@@ -1,0 +1,7 @@
+server:
+  port: 8200
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://chipmunk:JMTpdsu8YkLEXBW4RA@localhost:27017/chart
