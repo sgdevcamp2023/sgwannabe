@@ -548,4 +548,9 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
+
+### Docker ###
+**/.docker/
+
+
 # End of https://www.toptal.com/developers/gitignore/api/obsidian,intellij,node,react,python,macos,windows,linux,jenv,gradle
