@@ -21,10 +21,10 @@ public class MusicArrangerEntity extends BaseTimeEntity {
     Long id;
 
     @ManyToOne
-    @JoinColumn(name = "music_id")
+    @JoinColumn(name = "music_id", nullable = false)
     MusicEntity music;
 
     @ManyToOne
-    @JoinColumn(name = "artist_id")
+    @JoinColumn(name = "artist_id", nullable = false)
     ArtistEntity artist;
 }
