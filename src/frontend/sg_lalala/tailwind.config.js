@@ -10,6 +10,7 @@ module.exports = {
       primaryDark: "#01B925",
       up: "#F86A0E",
       down: "#86BCFE",
+      kakao: "#FAE100",
       gray: "#C2CAD4",
       black: "#2F2F37",
       whiteDark: "#F8F8F8",
@@ -27,6 +28,7 @@ module.exports = {
     },
     fontWeight: {
       700: "700",
+      600: "600",
       500: "500",
       400: "400",
       300: "300",
