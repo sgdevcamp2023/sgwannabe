@@ -8,12 +8,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMailMessage;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import userserver.domain.Role;
+import userserver.domain.Status;
+import userserver.domain.User;
 import userserver.payload.request.EmailAuthCodeRequest;
+import userserver.payload.request.EmailVerifyRequest;
+import userserver.payload.request.SignUpRequest;
 import userserver.repository.UserRepository;
 
 import java.time.Duration;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
@@ -25,6 +33,8 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final RedisService redisService;
     private final JavaMailSender mailSender;
+    private final PasswordEncoder passwordEncoder;
+
 
     public void sendAuthCodeByEmail(EmailAuthCodeRequest request) {
         String email = request.email();
@@ -42,6 +52,23 @@ public class UserServiceImpl implements UserService{
           이메일 전송
          */
         sendMessage(email, authCode);
+
+    }
+
+    @Transactional
+    public void signUp(SignUpRequest request) {
+
+        String encodePassword = passwordEncoder.encode(request.password());
+
+        User user = User.builder()
+                .username(request.username())
+                .email(request.email())
+                .password(encodePassword) // SHA-256 암호화 적용 //TODO 몇 byte?
+                .role(Role.ROLE_USER)
+                .status(Status.ENABLE)
+                .build();
+
+        userRepository.save(user);
 
     }
 
@@ -106,5 +133,19 @@ public class UserServiceImpl implements UserService{
             throw new RuntimeException();
         }
     }
+
+    public void verifyAuthCode(EmailVerifyRequest request) {
+        String email = request.email();
+        String code = request.code();
+        String validateCode = redisService.getRedisTemplateValue(email);
+
+        if (!Objects.equals(code, validateCode)) {
+            throw new RuntimeException();
+        }
+    }
+
+
+
+
 
 }

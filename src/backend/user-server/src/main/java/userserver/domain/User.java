@@ -31,19 +31,19 @@ public class User extends BaseTimeEntity {
     @Column(name = "number") // TODO columnDefinition = "int(11)"
     private Long number;
 
-//    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
-//    @Column(nullable = false) //TODO how long 인지 기재
+    @Column(nullable = false) //TODO how long 인지 기재
     private String password;
 
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private String username;
 
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private Role role;
 
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private Status status;
 
     @Type(JsonType.class)
