@@ -4,11 +4,8 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMessage.RecipientType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMailMessage;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,9 +45,7 @@ public class UserServiceImpl implements UserService{
          */
         redisService.setRedisTemplate(email, authCode, Duration.ofMinutes(3));
 
-        /*
-          이메일 전송
-         */
+        // 이메일 전송
         sendMessage(email, authCode);
 
     }
@@ -63,7 +58,7 @@ public class UserServiceImpl implements UserService{
         User user = User.builder()
                 .username(request.username())
                 .email(request.email())
-                .password(encodePassword) // SHA-256 암호화 적용 //TODO 몇 byte?
+                .password(encodePassword) // bcrypt 암호화 적용
                 .role(Role.ROLE_USER)
                 .status(Status.ENABLE)
                 .build();
@@ -89,7 +84,6 @@ public class UserServiceImpl implements UserService{
     /**
      * 이메일로 인증번호 전송
      * TODO 비동기 처리
-     * TODO 하드코딩 수정
      */
     private void sendMessage(String email, String code) {
         try {
@@ -107,6 +101,9 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    /**
+     * TODO 하드코딩 수정
+     */
     private MimeMessage createMessageForm(String email, String code) {
         try {
             final String ADMIN_ADDRESS = "sgwannabe2024@naver.com";
@@ -143,9 +140,6 @@ public class UserServiceImpl implements UserService{
             throw new RuntimeException();
         }
     }
-
-
-
 
 
 }

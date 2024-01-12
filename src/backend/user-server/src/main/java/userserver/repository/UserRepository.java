@@ -6,8 +6,6 @@ import userserver.domain.User;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-
     Optional<User> findByEmail(String email);
 
-    User findByNumber(Long number);
 }

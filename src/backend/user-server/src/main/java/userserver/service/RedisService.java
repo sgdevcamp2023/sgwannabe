@@ -11,7 +11,6 @@ import java.time.Duration;
 @RequiredArgsConstructor
 public class RedisService {
     private final RedisTemplate<String, String> redisTemplate;
-    private final UserRepository userRepository;
 
     // key: email, vale: authcode
     public String getRedisTemplateValue(String key) {

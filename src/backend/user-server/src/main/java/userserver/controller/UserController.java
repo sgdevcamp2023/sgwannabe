@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import userserver.payload.request.EmailAuthCodeRequest;
 import userserver.payload.request.EmailVerifyRequest;
 import userserver.payload.request.SignUpRequest;
-import userserver.service.RedisService;
 import userserver.service.UserService;
-import userserver.service.UserServiceImpl;
 
 
 @Slf4j
