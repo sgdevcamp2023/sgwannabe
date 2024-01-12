@@ -27,6 +27,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	implementation 'io.hypersistence:hypersistence-utils-hibernate-60:3.3.1' // json
+	implementation 'com.fasterxml.jackson.module:jackson-module-jakarta-xmlbind-annotations' // json 파싱(jackson)
+
+	implementation 'org.springframework.boot:spring-boot-starter-mail' // mail
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
