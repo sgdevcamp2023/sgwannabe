@@ -3,10 +3,10 @@ import MainChartPage from "./pages/MainChartPage";
 
 function App() {
   return (
-    <div className="flex justify-center h-full">
+    <div className="flex justify-center h-screen">
       <div className="flex flex-col w-[1080px] items-center">
-        {/* <LoginPage /> */}
-        <MainChartPage />
+        <LoginPage />
+        {/* <MainChartPage /> */}
       </div>
     </div>
   );
