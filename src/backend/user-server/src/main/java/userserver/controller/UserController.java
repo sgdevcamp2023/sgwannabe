@@ -27,9 +27,7 @@ public class UserController {
      */
     @PostMapping("/email")
     public ResponseEntity<?> sendAuthCodeByEmail(@Validated @RequestBody EmailAuthCodeRequest request) {
-        log.info("POST 이메일 인증 코드 전송");
-        userService.sendAuthCodeByEmail(request);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return userService.sendAuthCodeByEmail(request);
     }
 
     /**
@@ -37,15 +35,12 @@ public class UserController {
      */
     @PostMapping("/verification")
     public ResponseEntity<?> verifyAuthCode(@Validated @RequestBody EmailVerifyRequest request) {
-        log.info("POST 이메일 코드 검증 진행");
-        userService.verifyAuthCode(request);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return userService.verifyAuthCode(request);
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Validated @RequestBody SignUpRequest request) {
-        log.info("POST 회원가입 요청");
-        userService.signUp(request);
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        return userService.signUp(request);
     }
 }

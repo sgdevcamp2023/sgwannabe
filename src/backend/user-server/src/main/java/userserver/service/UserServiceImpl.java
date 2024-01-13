@@ -4,6 +4,7 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMessage.RecipientType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,9 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import userserver.domain.Role;
 import userserver.domain.Status;
 import userserver.domain.User;
+import userserver.exception.CustomException;
+import userserver.exception.CustomUserCode;
 import userserver.payload.request.EmailAuthCodeRequest;
 import userserver.payload.request.EmailVerifyRequest;
 import userserver.payload.request.SignUpRequest;
+import userserver.payload.response.SuccessMessageResponse;
 import userserver.repository.UserRepository;
 
 import java.time.Duration;
@@ -33,7 +37,7 @@ public class UserServiceImpl implements UserService{
     private final PasswordEncoder passwordEncoder;
 
 
-    public void sendAuthCodeByEmail(EmailAuthCodeRequest request) {
+    public ResponseEntity<?> sendAuthCodeByEmail(EmailAuthCodeRequest request) {
         String email = request.email();
         validateEmailDuplicate(email);
 
@@ -48,10 +52,14 @@ public class UserServiceImpl implements UserService{
         // 이메일 전송
         sendMessage(email, authCode);
 
+        return ResponseEntity.ok().body(new SuccessMessageResponse(CustomUserCode.SUCCESS_MAIL_SEND.getMessage()));
+
     }
 
     @Transactional
-    public void signUp(SignUpRequest request) {
+    public ResponseEntity<?> signUp(SignUpRequest request) {
+        // TODO 프론트에서 이메일 인증을 한 경우에만 회원가입 버튼이 활성화가 되는 건 지 논의 필요
+        validateEmailDuplicate(request.email());
 
         String encodePassword = passwordEncoder.encode(request.password());
 
@@ -65,12 +73,14 @@ public class UserServiceImpl implements UserService{
 
         userRepository.save(user);
 
+        return ResponseEntity.ok().body(new SuccessMessageResponse(CustomUserCode.SUCCESS_SIGNUP.getMessage()));
+
     }
 
     public void validateEmailDuplicate(String email) {
         userRepository.findByEmail(email)
                 .ifPresent((user -> {
-                    throw new RuntimeException();
+                    throw new CustomException(CustomUserCode.DUPLICATE_EMAIL);
                 }));
     }
 
@@ -88,16 +98,14 @@ public class UserServiceImpl implements UserService{
     private void sendMessage(String email, String code) {
         try {
             MimeMessage message = createMessageForm(email, code);
-
             try {
                 mailSender.send(message);
             } catch (MailException e) {
-                log.error("Error sending email for email: {} and code: {}", email, code, e);
-                throw new RuntimeException();
+                throw new CustomException(CustomUserCode.SEND_EMAIL_ERROR);
             }
 
         } catch (Exception e) {
-            throw new RuntimeException();
+            throw new CustomException(CustomUserCode.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -127,18 +135,19 @@ public class UserServiceImpl implements UserService{
             return message;
 
         } catch (Exception e) {
-            throw new RuntimeException();
+            throw new CustomException(CustomUserCode.SEND_EMAIL_ERROR);
         }
     }
 
-    public void verifyAuthCode(EmailVerifyRequest request) {
+    public  ResponseEntity<?> verifyAuthCode(EmailVerifyRequest request) {
         String email = request.email();
         String code = request.code();
         String validateCode = redisService.getRedisTemplateValue(email);
 
         if (!Objects.equals(code, validateCode)) {
-            throw new RuntimeException();
+            throw new CustomException(CustomUserCode.NOT_VALID_CODE);
         }
+        return ResponseEntity.ok().body(new SuccessMessageResponse(CustomUserCode.SUCCESS_CODE_CHECK.getMessage()));
     }
 
 

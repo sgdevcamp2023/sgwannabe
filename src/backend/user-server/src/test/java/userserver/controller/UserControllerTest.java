@@ -6,6 +6,8 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import userserver.domain.Role;
+import userserver.domain.Status;
 import userserver.domain.User;
 import userserver.payload.response.ProfileTestResponse;
 import userserver.repository.UserRepository;
@@ -27,8 +29,11 @@ class UserControllerTest {
         ProfileTestResponse dto = mapper.readValue(str, ProfileTestResponse.class);
 
         User user = User.builder()
-                .email("email")
-                .username("신짱구")
+                        .email("email")
+                        .password("asd")
+                        .username("신짱구")
+                        .role(Role.ROLE_USER)
+                        .status(Status.ENABLE)
                         .profile(dto.profile())
                         .build();
 

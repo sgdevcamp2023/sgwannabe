@@ -6,8 +6,8 @@ import userserver.payload.request.EmailVerifyRequest;
 import userserver.payload.request.SignUpRequest;
 
 public interface UserService {
-    void sendAuthCodeByEmail(EmailAuthCodeRequest request);
-    void verifyAuthCode(EmailVerifyRequest request);
-    void signUp(SignUpRequest request);
+    ResponseEntity<?> sendAuthCodeByEmail(EmailAuthCodeRequest request);
+    ResponseEntity<?> verifyAuthCode(EmailVerifyRequest request);
+    ResponseEntity<?> signUp(SignUpRequest request);
 
 }
