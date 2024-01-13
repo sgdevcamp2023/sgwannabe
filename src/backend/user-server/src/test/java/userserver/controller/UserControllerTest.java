@@ -21,8 +21,8 @@ class UserControllerTest {
     @Test
     void json_데이터_저장() throws Exception{
         //given
-        String str = "{\"profile\":{\"url\":\"http\", \"updated_at\":\"2024\"}}";
-        String str_update = "2024";
+        String str = "{\"profile\":[{\"url\":\"http\", \"updated_at\":\"2024.01\"}, {\"url\":\"https\", \"updated_at\":\"2024.02\"}]}";
+        String str_update = "2024.01";
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -31,7 +31,7 @@ class UserControllerTest {
         User user = User.builder()
                         .email("email")
                         .password("asd")
-                        .username("신짱구")
+                        .nickname("신짱구")
                         .role(Role.ROLE_USER)
                         .status(Status.ENABLE)
                         .profile(dto.profile())
@@ -42,7 +42,7 @@ class UserControllerTest {
         //then
         User findUser = userRepository.findByEmail(user.getEmail()).orElse(null);
 
-        JSONObject jsonObject = new JSONObject(findUser.getProfile());
+        JSONObject jsonObject = new JSONObject(findUser.getProfile().get(0));
 
         Assertions.assertThat(str_update).isEqualTo((String)jsonObject.get("updated_at"));
 

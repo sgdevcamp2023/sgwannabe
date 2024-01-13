@@ -3,7 +3,6 @@ package userserver.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import userserver.repository.UserRepository;
 
 import java.time.Duration;
 

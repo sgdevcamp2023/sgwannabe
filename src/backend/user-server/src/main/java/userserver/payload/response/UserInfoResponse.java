@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record UserInfoResponse(
-        String username,
+        String nickname,
         String email
 
 ) {

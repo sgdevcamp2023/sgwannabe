@@ -38,6 +38,9 @@ public class UserController {
         return userService.verifyAuthCode(request);
     }
 
+    /**
+     * 회원가입
+     */
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Validated @RequestBody SignUpRequest request) {
 

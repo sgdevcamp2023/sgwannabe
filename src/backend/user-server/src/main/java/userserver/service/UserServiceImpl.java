@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService{
         String encodePassword = passwordEncoder.encode(request.password());
 
         User user = User.builder()
-                .username(request.username())
+                .nickname(request.nickname())
                 .email(request.email())
                 .password(encodePassword) // bcrypt 암호화 적용
                 .role(Role.ROLE_USER)

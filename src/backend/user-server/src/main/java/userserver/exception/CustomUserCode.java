@@ -20,7 +20,7 @@ public enum CustomUserCode {
      */
     EMPTY_EMAIL(BAD_REQUEST, "200", "이메일을 입력해주세요"),
     EMPTY_PASSWORD(BAD_REQUEST, "201", "비밀번호를 입력해주세요"),
-    EMPTY_USERNAME(BAD_REQUEST, "202", "이름을 입력해주세요"),
+    EMPTY_NICKNAME(BAD_REQUEST, "202", "별명을 입력해주세요"),
     EMPTY_CODE(BAD_REQUEST, "203", "인증코드를 입력해주세요"),
 
     INVALID_EMAIL(BAD_REQUEST, "204", "이메일 형식이 올바르지 않습니다"),
