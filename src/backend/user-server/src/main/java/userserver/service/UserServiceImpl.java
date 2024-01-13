@@ -39,6 +39,7 @@ public class UserServiceImpl implements UserService{
 
     public ResponseEntity<?> sendAuthCodeByEmail(EmailAuthCodeRequest request) {
         String email = request.email();
+        // 이메일 중복 검사
         validateEmailDuplicate(email);
 
         String authCode = createAuthCode();
@@ -59,6 +60,7 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public ResponseEntity<?> signUp(SignUpRequest request) {
         // TODO 프론트에서 이메일 인증을 한 경우에만 회원가입 버튼이 활성화가 되는 건 지 논의 필요
+        // 이메일 중복 검사
         validateEmailDuplicate(request.email());
 
         String encodePassword = passwordEncoder.encode(request.password());

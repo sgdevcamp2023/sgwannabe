@@ -4,7 +4,7 @@ public record SuccessObjectResponse(
         boolean success,
         int status,
         Object data,
-        LocalDateTime timeStamp
+        LocalDateTime date_time
 ) {
     public SuccessObjectResponse(int status, Object data) {
         this(true, status, data, LocalDateTime.now());

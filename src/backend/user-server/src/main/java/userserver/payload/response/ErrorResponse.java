@@ -7,7 +7,7 @@ public record ErrorResponse(
         int status,
         String code,
         String reason,
-        LocalDateTime timeStamp,
+        LocalDateTime date_time,
         String path
 ) {
 
