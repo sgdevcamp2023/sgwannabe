@@ -38,6 +38,7 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "varchar(15) default 'ROLE_USER'")
     @Enumerated(EnumType.STRING)
     private Role role;
+
     @Column(nullable = false, columnDefinition = "varchar(10) default 'ENABLE'")
     @Enumerated(EnumType.STRING)
     private Status status;
