@@ -1,16 +1,16 @@
-import {
-  PageContainer,
-  PageWrap,
-} from "../components/shared/PageStyledComponents";
-import { H1 } from "../styles";
+import FeedListComponent from "../components/Main/FeedListComponent";
+import TopHundredComponent from "../components/Main/TopHundredComponent";
+import Header from "../components/shared/Header";
 
 function MainChartPage() {
   return (
-    <PageWrap>
-      <PageContainer>
-        <H1>LaLaLa</H1>
-      </PageContainer>
-    </PageWrap>
+    <div className="flex justify-center">
+      <div className="flex flex-col w-[1080px]">
+        <Header />
+        <FeedListComponent />
+        <TopHundredComponent />
+      </div>
+    </div>
   );
 }
 
