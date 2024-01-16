@@ -6,10 +6,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -23,24 +25,16 @@ import java.util.Map;
 @Slf4j
 @Component
 public class AuthEntryPoint implements AuthenticationEntryPoint {
+    private final HandlerExceptionResolver resolver;
+
+    public AuthEntryPoint(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
+        this.resolver = resolver;
+    }
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException, IOException {
         log.error("Unauthorized Error={}", authException.getMessage());
-
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-        final Map<String, Object> body = new HashMap<>();
-        body.put("success", false);
-        body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-        body.put("code", "205");
-        body.put("message", "인증되지 않은 사용자입니당");
-        body.put("date_time", LocalDateTime.now());
-        body.put("path", request.getServletPath());
-
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.writeValue(response.getOutputStream(), body);
+        resolver.resolveException(request, response, null, (Exception) request.getAttribute("exception"));
 
     }
 

@@ -29,10 +29,11 @@ public class User {
 
     private LocalDateTime lastAccess;
 
-    public User(String nickname, String email, String password) {
+    public User(String nickname, String email, String password, Status status) {
         this.nickname = nickname;
         this.email = email;
         this.password = password;
+        this.status = status;
     }
 
     public void changeUserRole(Role role) {

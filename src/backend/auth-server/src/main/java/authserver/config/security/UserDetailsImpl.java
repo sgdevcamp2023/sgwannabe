@@ -1,6 +1,7 @@
 package authserver.config.security;
 
 import authserver.domain.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+@Slf4j
 public class UserDetailsImpl implements UserDetails {
     private static User user;
 
@@ -72,6 +74,6 @@ public class UserDetailsImpl implements UserDetails {
      */
     @Override
     public boolean isEnabled() {
-        return true;
+        return "ENABLE".equals(user.getStatus());
     }
 }

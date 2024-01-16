@@ -38,6 +38,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 String id = jwtUtils.getIdFromAccessToken(jwt);
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(id);
+
+                // 계정 활성화 여부 확인 TODO user-service로 분리
+                if (!userDetails.isEnabled()) {
+                    log.info("잠긴 계정입니다");
+                }
+
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,
@@ -49,6 +55,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             log.error("fail authentication");
+            request.setAttribute("exception", e);	// try-catch로 예외를 감지하여 request에 추가
         }
 
         filterChain.doFilter(request, response);

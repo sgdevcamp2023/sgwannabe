@@ -35,18 +35,17 @@ public class TestDataInit {
 //        }
 
         public void dbInitUsers() {
-            extracted("신짱구", "jjangu@gmail.com", "aaaaaaaaaa");
-            extracted("신짱아", "jjanga@gmail.com", "aaaaaaaaaa");
-            extracted("봉미선", "misun@gmail.com", "aaaaaaaaaa");
-            extracted("신형만", "man@gmail.com", "aaaaaaaaaa");
-            extracted("흰둥이", "doong@gmail.com", "aaaaaaaaaa");
+            extracted("신짱구", "jjangu@gmail.com", "aaaaaaaaaa", Status.DISABLE);
+            extracted("신짱아", "jjanga@gmail.com", "aaaaaaaaaa", Status.ENABLE);
+            extracted("봉미선", "misun@gmail.com", "aaaaaaaaaa", Status.QUIT);
+            extracted("신형만", "man@gmail.com", "aaaaaaaaaa", Status.ENABLE);
+            extracted("흰둥이", "doong@gmail.com", "aaaaaaaaaa", Status.ENABLE);
         }
 
-        private void extracted(String nickname, String email, String password) {
+        private void extracted(String nickname, String email, String password, Status status) {
             String hashPassword = passwordEncoder.encode(password);
-            User user = new User(nickname, email, hashPassword);
+            User user = new User(nickname, email, hashPassword, status);
             user.changeUserRole(Role.ROLE_USER);
-            user.changeStatus(Status.ENABLE);
             authRepository.save(user);
 
         }

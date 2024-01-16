@@ -18,10 +18,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
         User user = authRepository.findById(Long.valueOf(id))
-                .orElseThrow(() -> new UsernameNotFoundException("이메일이 존재하지 않습니다"));
-//        if(!"LOCKED".equals(user.getStatus())){
-//            throw new ?
-//        }
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다"));
+
         return new UserDetailsImpl(user);
     }
 }

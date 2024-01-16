@@ -48,6 +48,8 @@ public class AuthServiceImpl implements AuthService{
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw new CustomException(CustomUserCode.FAIL_LOGIN);
         }
+        // 계정 활성화 여부 확인
+
         // AccessToken 생성
         ResponseCookie jwtAccessCookie = jwtUtils.generateAccessJwtCookie(user);
 
