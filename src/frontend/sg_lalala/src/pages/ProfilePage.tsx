@@ -37,10 +37,10 @@ function ProfilePage() {
             src={imgFile ? imgFile : person_icon}
             className="w-full h-full bg-white rounded-full group-hover:opacity-20"
           />
-          <label className="absolute inset-0 flex items-center justify-center text-lg transition-opacity opacity-0 cursor-pointer font-600 text-textBlack hover:opacity-100">
+          <label className="absolute inset-0 flex items-center justify-center text-lg text-center transition-opacity opacity-0 cursor-pointer font-600 text-textBlack hover:opacity-100">
             이미지
             <br />
-            업로드
+            {imgFile ? "변경" : "업로드"}
             <input
               type="file"
               accept="image/*"
