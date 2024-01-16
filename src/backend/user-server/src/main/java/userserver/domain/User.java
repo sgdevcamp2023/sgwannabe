@@ -35,20 +35,19 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "varchar(15)")
     private String nickname; // 사용자 이름, 닉네임 사용 가능
 
-    @Column(nullable = false, columnDefinition = "varchar(15) default 'ROLE_USER'")
+    @Column(nullable = false, columnDefinition = "char(15) default 'USER'")
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(nullable = false, columnDefinition = "varchar(10) default 'ENABLE'")
+    @Column(nullable = false, columnDefinition = "char(10) default 'ENABLE'")
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @Type(JsonType.class)
-    @Column(name = "PROFILE", columnDefinition = "json")
-//    @ColumnDefault("https://") // TODO default 이미 지정
+    @Column(name = "profile", columnDefinition = "json")
+//    @ColumnDefault("https://") // TODO default 이미지 지정
     private List<Map<String, Object>> profile;
 
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime lastAccess;
 
     public void changePassword(String newPassword) {
