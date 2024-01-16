@@ -1,8 +1,6 @@
 package authserver.config.jwt;
 
 import authserver.domain.User;
-import authserver.exception.CustomException;
-import authserver.exception.CustomUserCode;
 import authserver.service.RedisService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -109,46 +107,6 @@ public class JwtUtils {
 
         redisService.setRedisTemplate(id, refreshToken, Duration.ofMillis(jwtRefreshExpiration));
         return refreshToken;
-    }
-
-    @Transactional
-    public void deleteRefreshToken(String id) {
-        redisService.deleteRedisTemplateValue(id);
-    }
-
-
-    public String getIdFromAccessToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key())
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
-    }
-
-
-
-    public boolean validateJwtToken(String token) {
-        try {
-            Jwts.parserBuilder()
-                    .setSigningKey(key())
-                    .build()
-                    .parse(token);
-            return true;
-        } catch (MalformedJwtException e) {
-            log.error("Invalid JWT token: {}", e.getMessage());
-        } catch (ExpiredJwtException e) {
-            log.error("JWT token is expired: {}", e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            log.error("JWT token is unsupported: {}", e.getMessage());
-        } catch (IllegalArgumentException e) {
-            log.error("JWT claims string is empty: {}", e.getMessage());
-        }
-        return false;
-    }
-
-    public String getJwtFromCookies(HttpServletRequest request) {
-        return getCookieValueByName(request, jwtAccessCookie);
     }
 
     private String getCookieValueByName(HttpServletRequest request, String name) {

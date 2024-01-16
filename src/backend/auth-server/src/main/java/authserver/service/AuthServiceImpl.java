@@ -2,22 +2,14 @@ package authserver.service;
 
 import authserver.config.jwt.JwtUtils;
 import authserver.domain.User;
-import authserver.exception.CustomException;
-import authserver.exception.CustomUserCode;
 import authserver.payload.request.SignInRequest;
-import authserver.payload.response.SuccessMessageResponse;
 import authserver.payload.response.UserAndTokenResponse;
 import authserver.repository.AuthRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,11 +32,11 @@ public class AuthServiceImpl implements AuthService{
     public ResponseEntity<UserAndTokenResponse> signIn(SignInRequest request) {
         // DB에 이메일 조회
         User user = authRepository.findByEmail(request.email()).orElseThrow(
-                ()-> new CustomException(CustomUserCode.FAIL_LOGIN));
+                ()-> new UsernameNotFoundException("이메일을 찾을 수 없습니다"));
 
         // 이메일과 비밀번호 정보가 일치하는지 확인
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
-            throw new CustomException(CustomUserCode.FAIL_LOGIN);
+            throw new RuntimeException();
         }
         // 계정 활성화 여부 확인
 
