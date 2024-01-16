@@ -1,22 +1,54 @@
 import Header from "../components/shared/Header";
-import { FaUserCircle } from "react-icons/fa";
-import { colors } from "../styles";
 import Playlist from "../components/Profile/Playlist";
+import person_icon from "../assets/person.png";
+import remove_icon from "../assets/remove.png";
+import { useRef, useState } from "react";
 
 function ProfilePage() {
+  const imgRef = useRef<HTMLInputElement>(null);
+  const [imgFile, setImgFile] = useState<string>("");
+
+  const saveImgFile = () => {
+    const file = imgRef.current?.files?.[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setImgFile(result);
+      };
+    }
+  };
+
   return (
     <div className="w-full">
       <Header />
       <div className="flex flex-row items-center p-10 rounded-xl bg-gray/30">
-        <div className="flex flex-col items-center">
-          <FaUserCircle size="100" color={colors.gray} />
-          <label className="w-full py-1 my-2 text-sm text-center cursor-pointer rounded-xl bg-primaryDark/20 text-textBlack">
-            이미지 업로드
-            <input type="file" accept="image/*" className="hidden" />
+        <div className="relative w-24 h-24 rounded-full group hover:bg-gray/30">
+          {imgFile && (
+            <img
+              src={remove_icon}
+              className="absolute top-0 right-0 z-50 w-5 h-5 bg-white rounded-full cursor-pointer"
+              onClick={() => setImgFile("")}
+            />
+          )}
+          <img
+            src={imgFile ? imgFile : person_icon}
+            className="w-full h-full bg-white rounded-full group-hover:opacity-20"
+          />
+          <label className="absolute inset-0 flex items-center justify-center text-lg transition-opacity opacity-0 cursor-pointer font-600 text-textBlack hover:opacity-100">
+            이미지
+            <br />
+            업로드
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={saveImgFile}
+              ref={imgRef}
+            />
           </label>
-          <div className="w-full py-1 text-sm text-center cursor-pointer text-textBlack rounded-xl bg-primaryDark/20">
-            이미지 제거
-          </div>
         </div>
         <div className="ml-5">
           <div className="text-xl text-black font-600">콘sy1te</div>
