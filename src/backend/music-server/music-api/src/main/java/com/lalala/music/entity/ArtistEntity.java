@@ -7,10 +7,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,12 +35,27 @@ public class ArtistEntity extends BaseTimeEntity {
     @Column(nullable = false, length = 50, columnDefinition = "CHAR(50) default ''")
     String agency;
 
-    @OneToMany(mappedBy = "artist")
-    Set<MusicComposerEntity> composedMusics = new HashSet<>();
+    public ArtistEntity(
+            String name,
+            GenderType gender,
+            ArtistType type,
+            String agency
+    ) {
+        this.name = name;
+        this.gender = gender;
+        this.type = type;
+        this.agency = agency;
+    }
 
-    @OneToMany(mappedBy = "artist")
-    Set<MusicComposerEntity> writtenMusics = new HashSet<>();
-
-    @OneToMany(mappedBy = "artist")
-    Set<MusicComposerEntity> arrangedMusics = new HashSet<>();
+    public void update(
+            String name,
+            GenderType gender,
+            ArtistType type,
+            String agency
+    ) {
+        this.name = name;
+        this.gender = gender;
+        this.type = type;
+        this.agency = agency;
+    }
 }
