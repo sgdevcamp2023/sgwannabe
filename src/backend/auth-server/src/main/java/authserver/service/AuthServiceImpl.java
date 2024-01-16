@@ -78,7 +78,7 @@ public class AuthServiceImpl implements AuthService{
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String accessToken = jwtUtils.getAccessJwtFromCookies(request);
-        String id = jwtUtils.getIdFromToken(accessToken);
+        String id = jwtUtils.getIdFromAccessToken(accessToken);
 
         // redis 에 있는 Refresh Token 삭제
         if (!principal.toString().equals("anonymousUser")) {

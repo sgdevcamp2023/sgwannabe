@@ -117,7 +117,7 @@ public class JwtUtils {
     }
 
 
-    public String getIdFromToken(String token) {
+    public String getIdFromAccessToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key())
                 .build()
