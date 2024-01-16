@@ -17,7 +17,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-        show_sql: true
+#        show_sql: true
         format_sql: true
     hibernate:
       ddl-auto: update
@@ -32,3 +32,13 @@ spring:
       host: localhost
       port: 16379
 
+jwt:
+  access-cookie-name: soy-access-jwt
+  refresh-cookie-name: soy-refresh-jwt
+  secret-key: c21pbGVnYXRlLWNvbXBhbnktaXMtdG9vLWZhci1zby1pLXdhbnQtdG8td29yay1mcm9tLWhvbWUtZXZlcnktb3RoZXItZGF5Cg==
+#  access-expiration: 1800000 # 30minutes (ms)
+#  refresh-expiration: 86400000 #1day (ms)
+  cookie-max-age: 86400 #1day (s)
+    # ??? ??
+  access-expiration: 30000 # 30sec
+  refresh-expiration: 120000 # 2minutes

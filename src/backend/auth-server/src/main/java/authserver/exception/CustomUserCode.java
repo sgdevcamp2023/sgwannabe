@@ -2,7 +2,7 @@ package authserver.exception;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import static authserver.common.UserStatic.*;
+import static authserver.common.AuthStatic.*;
 
 @Getter
 @RequiredArgsConstructor
@@ -23,6 +23,9 @@ public enum CustomUserCode {
     INVALID_EMAIL(BAD_REQUEST, "204", "이메일 형식이 올바르지 않습니다"),
     INVALID_PASSWORD(BAD_REQUEST, "205", "비밀번호 형식이 올바르지 않습니다"),
 
+    FAIL_LOGIN(BAD_REQUEST, "206", "이메일 또는 비밀번호를 확인해주세요"),
+
+    FAIL_AUTH_FILTER(UNAUTHORIZED, "211", "Authentication 설정에 실패했습니다"),
 
     INTERNAL_SERVER_ERROR(INTERNAL_SERVER, "210", "서버에 에러가 발생했습니다");
 

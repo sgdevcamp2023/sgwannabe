@@ -1,5 +1,6 @@
 package authserver.config.jwt;
 
+import authserver.exception.CustomUserCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.ServletException;
@@ -7,42 +8,35 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 인증 오류 catch
- */
 @Slf4j
 @Component
-public class AuthEntryPoint implements AuthenticationEntryPoint {
-
+public class JwtDeniedHandler implements AccessDeniedHandler {
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException, IOException {
-        log.error("Unauthorized Error={}", authException.getMessage());
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+        log.error("Denied Error={}", accessDeniedException.getMessage());
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         final Map<String, Object> body = new HashMap<>();
         body.put("success", false);
-        body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-        body.put("code", "205");
-        body.put("message", "인증되지 않은 사용자입니당");
-//        body.put("date_time", LocalDateTime.now());
+        body.put("status", HttpServletResponse.SC_FORBIDDEN);
+        body.put("code", "201"); // AuthErrorCode 맞춰서 변경
+        body.put("message", "접근 권한이 없습니다");
+        body.put("date_time", LocalDateTime.now());
         body.put("path", request.getServletPath());
 
         final ObjectMapper mapper = new ObjectMapper();
-//        mapper.registerMo
-//         dule(new JavaTimeModule());
+        mapper.registerModule(new JavaTimeModule());
         mapper.writeValue(response.getOutputStream(), body);
 
     }
-
 }

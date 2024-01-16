@@ -1,6 +1,8 @@
 package authserver.config.security;
 
 import authserver.config.jwt.AuthEntryPoint;
+import authserver.config.jwt.AuthTokenFilter;
+import authserver.config.jwt.JwtDeniedHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -16,6 +18,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 /**
@@ -29,12 +32,12 @@ public class WebSecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final AuthEntryPoint authEntryPointHandler;
+    private final JwtDeniedHandler jwtDeniedHandler;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
-
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -45,16 +48,28 @@ public class WebSecurityConfig {
         return authProvider;
     }
 
+
+    // Custom AuthToken Filter 등록
+    @Bean
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter();
+    }
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.csrf(csrf -> csrf.disable()) // TODO 토큰을 사용하므로 csrf disable?
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointHandler))
+//                .exceptionHandling(exception -> exception.accessDeniedHandler(jwtDeniedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // JWT 사용 -> 세션 정책 비활성화
                 .authorizeHttpRequests(auth->
                         auth.requestMatchers("/v1/auth-service/**").permitAll()
                                 .anyRequest().authenticated()
                         );
         http.authenticationProvider(authenticationProvider());
+
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 

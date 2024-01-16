@@ -1,6 +1,8 @@
 package authserver.common;
 
-public class UserStatic {
+public class AuthStatic {
+    public static final String AUTH_HEADER = "Authorization";
+    public static final String BEARER = "Bearer ";
 
     public static final int SUCCESS = 200;
     public static final int BAD_REQUEST = 400;

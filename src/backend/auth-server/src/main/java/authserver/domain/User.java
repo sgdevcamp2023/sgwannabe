@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Test data 때만 사용
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // h2로 테스트할 때만 사용
     private Long id;
     private String nickname;
     private String email;
