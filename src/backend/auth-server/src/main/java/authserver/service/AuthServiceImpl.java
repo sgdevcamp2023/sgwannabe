@@ -34,8 +34,6 @@ public class AuthServiceImpl implements AuthService{
     private final AuthRepository authRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
-    private final RedisService redisService; //TODO redisservice jwtutils로 분리
-    private final AuthenticationManager authenticationManager;
 
     @Override
     @Transactional
@@ -68,7 +66,7 @@ public class AuthServiceImpl implements AuthService{
                         .body(UserAndTokenResponse.builder()
                                 .id(user.getId())
                                 .nickname(user.getNickname())
-                                .accessToken(jwtAccessCookie.toString()) //TODO accessToken 파싱
+                                .accessToken(jwtAccessCookie.toString())
                                 .refreshToken(refreshToken)
                                 .build());
     }
