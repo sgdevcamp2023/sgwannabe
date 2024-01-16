@@ -16,8 +16,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final AuthRepository authRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = authRepository.findByEmail(email)
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+        User user = authRepository.findById(Long.valueOf(id))
                 .orElseThrow(() -> new UsernameNotFoundException("이메일이 존재하지 않습니다"));
 //        if(!"LOCKED".equals(user.getStatus())){
 //            throw new ?

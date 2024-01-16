@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthService{
         ResponseCookie jwtAccessCookie = jwtUtils.generateAccessJwtCookie(user);
 
         // Refresh Token 생성 후 redis에 저장
-        String refreshToken = jwtUtils.generateRefreshToken(user.getEmail());
+        String refreshToken = jwtUtils.generateRefreshToken(String.valueOf(user.getId()));
         ResponseCookie jwtRefreshCookie = jwtUtils.generateRefreshJwtCookie(refreshToken);
 
         // DB에 최근 접속 시각 업데이트
@@ -77,11 +77,12 @@ public class AuthServiceImpl implements AuthService{
     public ResponseEntity<?> signOut(HttpServletRequest request) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        String refreshToken = jwtUtils.getRefreshJwtFromCookies(request);
+        String accessToken = jwtUtils.getAccessJwtFromCookies(request);
+        String id = jwtUtils.getIdFromToken(accessToken);
 
-        // redis에 있는 Refresh Token 삭제
+        // redis 에 있는 Refresh Token 삭제
         if (!principal.toString().equals("anonymousUser")) {
-            jwtUtils.deleteRefreshToken(refreshToken);
+            jwtUtils.deleteRefreshToken(id);
         }
 
         // 쿠키 초기화

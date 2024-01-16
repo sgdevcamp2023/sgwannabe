@@ -17,7 +17,7 @@ import java.io.IOException;
 
 
 /**
- * 토큰 인증을 위한 필터
+ * 토큰 유효성 검사를 위한 필터
  */
 @Slf4j
 public class AuthTokenFilter extends OncePerRequestFilter {
@@ -35,9 +35,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             String jwt = parseJwt(request);
 
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                String email = jwtUtils.getEmailFromToken(jwt);
+                String id = jwtUtils.getIdFromToken(jwt);
 
-                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(id);
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,

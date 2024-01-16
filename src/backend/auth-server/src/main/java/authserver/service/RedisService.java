@@ -20,7 +20,7 @@ public class RedisService {
 
     private final AuthRepository authRepository;
 
-    // key: refreshToken, value: email -> 시간복잡도 (O(1))
+    // key: id, value: refreshToken
     public String getRedisTemplateValue(String key) {
         return redisTemplate.opsForValue().get(key);
     }

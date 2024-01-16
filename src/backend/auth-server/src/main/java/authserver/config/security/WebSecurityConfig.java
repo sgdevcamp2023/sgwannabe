@@ -2,7 +2,6 @@ package authserver.config.security;
 
 import authserver.config.jwt.AuthEntryPoint;
 import authserver.config.jwt.AuthTokenFilter;
-import authserver.config.jwt.JwtDeniedHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -15,6 +14,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -32,7 +32,10 @@ public class WebSecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final AuthEntryPoint authEntryPointHandler;
-    private final JwtDeniedHandler jwtDeniedHandler;
+
+    private static final String[] AUTH_WHITELIST={
+            "/v1/auth-service/**", "/h2-console/**"
+    };
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
@@ -58,28 +61,19 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        http.csrf(csrf -> csrf.disable()) // TODO 토큰을 사용하므로 csrf disable?
+        http.csrf(AbstractHttpConfigurer::disable) // when-to-use-csrf-protection for non-browser APIs there is no need to use csrf protection
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointHandler))
-//                .exceptionHandling(exception -> exception.accessDeniedHandler(jwtDeniedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // JWT 사용 -> 세션 정책 비활성화
                 .authorizeHttpRequests(auth->
-                        auth.requestMatchers("/v1/auth-service/**").permitAll()
+                        auth.requestMatchers(AUTH_WHITELIST).permitAll()
                                 .anyRequest().authenticated()
                         );
+        http.headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)); // h2-console 사용
+
         http.authenticationProvider(authenticationProvider());
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-    }
-
-    /**
-     * spring security 에서 h2-console 사용
-     */
-    @Bean
-    @ConditionalOnProperty(name = "spring.h2.console.enabled",havingValue = "true")
-    public WebSecurityCustomizer configureH2ConsoleEnable() {
-        return web -> web.ignoring()
-                .requestMatchers(PathRequest.toH2Console());
     }
 }

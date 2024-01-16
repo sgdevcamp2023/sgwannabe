@@ -35,12 +35,11 @@ public class AuthEntryPoint implements AuthenticationEntryPoint {
         body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
         body.put("code", "205");
         body.put("message", "인증되지 않은 사용자입니당");
-//        body.put("date_time", LocalDateTime.now());
+        body.put("date_time", LocalDateTime.now());
         body.put("path", request.getServletPath());
 
         final ObjectMapper mapper = new ObjectMapper();
-//        mapper.registerMo
-//         dule(new JavaTimeModule());
+        mapper.registerModule(new JavaTimeModule());
         mapper.writeValue(response.getOutputStream(), body);
 
     }

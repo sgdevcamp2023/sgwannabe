@@ -61,7 +61,7 @@ public class JwtUtils {
      * 클라이언트 http cookie 관리
      */
     public ResponseCookie generateAccessJwtCookie(User user) {
-        String jwt = generateAccessTokenFromEmail(user.getEmail());
+        String jwt = generateAccessTokenFromId(String.valueOf(user.getId()));
         return generateCookie(jwtAccessCookie, jwt, "/v1");
     }
 
@@ -94,9 +94,9 @@ public class JwtUtils {
     /**
      * Token 관리
      */
-    public String generateAccessTokenFromEmail(String email) {
+    public String generateAccessTokenFromId(String id) {
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(id)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtAccessExpiration))
                 .signWith(key(), SignatureAlgorithm.HS512)
@@ -104,20 +104,20 @@ public class JwtUtils {
     }
 
     @Transactional
-    public String generateRefreshToken(String email) {
+    public String generateRefreshToken(String id) {
         String refreshToken = UUID.randomUUID().toString();
 
-        redisService.setRedisTemplate(refreshToken, email, Duration.ofMillis(jwtRefreshExpiration));
+        redisService.setRedisTemplate(id, refreshToken, Duration.ofMillis(jwtRefreshExpiration));
         return refreshToken;
     }
 
     @Transactional
-    public void deleteRefreshToken(String refreshToken) {
-        redisService.deleteRedisTemplateValue(refreshToken);
+    public void deleteRefreshToken(String id) {
+        redisService.deleteRedisTemplateValue(id);
     }
 
 
-    public String getEmailFromToken(String token) {
+    public String getIdFromToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key())
                 .build()
