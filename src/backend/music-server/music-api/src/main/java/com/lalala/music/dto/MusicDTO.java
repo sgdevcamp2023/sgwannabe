@@ -16,8 +16,7 @@ public class MusicDTO {
     private final String title;
     private final short playTime;
     private final AlbumDTO album;
-    private final String fileUrl;
-    private final FormatType formatType;
+    private final FileDTO file;
     private final ArtistDTO artist;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
@@ -32,8 +31,7 @@ public class MusicDTO {
                 music.getTitle(),
                 music.getPlayTime(),
                 AlbumDTO.from(album, artist),
-                music.getFile().getFileUrl(),
-                music.getFile().getFormatType(),
+                FileDTO.from(music.getFile()),
                 ArtistDTO.from(artist),
                 music.getCreatedAt(),
                 music.getUpdatedAt()
