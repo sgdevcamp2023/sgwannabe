@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.WebUtils;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.time.Duration;
 import java.util.Date;
@@ -45,12 +46,11 @@ public class JwtUtils {
 
     private final RedisService redisService;
 
-    private final String cookiePath = "/v1";
 
     /**
      * 문자열 secret key를 객체로 변환
      */
-    public Key key() {
+    public SecretKey key() {
         return Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(secretKey));
     }
 
@@ -67,37 +67,21 @@ public class JwtUtils {
         return generateCookie(jwtRefreshCookie, refreshToken, "/v1/auth-service");
     }
 
-    public String getAccessJwtFromCookies(HttpServletRequest request) {
-        return getCookieValueByName(request, jwtAccessCookie);
-    }
-
-    public String getRefreshJwtFromCookies(HttpServletRequest request) {
-        return getCookieValueByName(request, jwtRefreshCookie);
-    }
 
     private ResponseCookie generateCookie(String name, String value, String path) {
         return ResponseCookie.from(name, value).path(path).maxAge(cookieMaxAge).httpOnly(true).build(); // 1일
     }
 
 
-    public ResponseCookie getCleanAccessJwtCookie() {
-        ResponseCookie cookie = ResponseCookie.from(jwtAccessCookie, null).path("/v1").build();
-        return cookie;
-    }
-    public ResponseCookie getCleanRefreshJwtCookie() {
-        ResponseCookie cookie = ResponseCookie.from(jwtRefreshCookie, null).path("/v1/auth-service").build();
-        return cookie;
-    }
-
     /**
      * Token 관리
      */
     public String generateAccessTokenFromId(String id) {
         return Jwts.builder()
-                .setSubject(id)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtAccessExpiration))
-                .signWith(key(), SignatureAlgorithm.HS512)
+                .subject(id)
+                .issuedAt(new Date())
+                .expiration(new Date((new Date()).getTime() + jwtAccessExpiration))
+                .signWith(key(), Jwts.SIG.HS512)
                 .compact();
     }
 
@@ -108,15 +92,5 @@ public class JwtUtils {
         redisService.setRedisTemplate(id, refreshToken, Duration.ofMillis(jwtRefreshExpiration));
         return refreshToken;
     }
-
-    private String getCookieValueByName(HttpServletRequest request, String name) {
-        Cookie cookie = WebUtils.getCookie(request, name);
-        if (cookie != null) {
-            return cookie.getValue();
-        }else{
-            return null;
-        }
-    }
-
 
 }
