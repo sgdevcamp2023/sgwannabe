@@ -7,6 +7,4 @@ import org.springframework.http.ResponseEntity;
 
 public interface AuthService {
     ResponseEntity<UserAndTokenResponse> signIn(SignInRequest request);
-
-    ResponseEntity<?> signOut(HttpServletRequest request);
 }

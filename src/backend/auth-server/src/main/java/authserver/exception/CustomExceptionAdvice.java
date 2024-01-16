@@ -24,25 +24,4 @@ public class CustomExceptionAdvice extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.valueOf(code.getStatus())).body(errorResponse);
     }
-
-    @ExceptionHandler(SignatureException.class)
-    public ResponseEntity<ErrorResponse> handleSignatureException(HttpServletRequest request) {
-        CustomUserCode invalidSignature = CustomUserCode.INVALID_SIGNATURE_TOKEN;
-        ErrorResponse errorResponse = new ErrorResponse(invalidSignature.getStatus(), invalidSignature.getCode(), invalidSignature.getMessage(), request.getRequestURI().toString());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-    }
-
-    @ExceptionHandler(MalformedJwtException.class)
-    public ResponseEntity<ErrorResponse> handleMalformedJwtException(HttpServletRequest request) {
-        CustomUserCode malformedToken = CustomUserCode.MALFORMED_TOKEN;
-        ErrorResponse errorResponse = new ErrorResponse(malformedToken.getStatus(), malformedToken.getCode(), malformedToken.getMessage(), request.getRequestURI().toString());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-    }
-
-    @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<ErrorResponse> handleExpiredJwtException(HttpServletRequest request) {
-        CustomUserCode expiredToken = CustomUserCode.EXPIRED_TOKEN;
-        ErrorResponse errorResponse = new ErrorResponse(expiredToken.getStatus(), expiredToken.getCode(), expiredToken.getMessage(), request.getRequestURI().toString());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-    }
 }

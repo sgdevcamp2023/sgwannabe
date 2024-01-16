@@ -25,11 +25,6 @@ public enum CustomUserCode {
 
     FAIL_LOGIN(HttpStatus.BAD_REQUEST.value(), "206", "이메일 또는 비밀번호를 확인해주세요"),
 
-    FAIL_AUTH_FILTER(HttpStatus.UNAUTHORIZED.value(), "211", "Authentication 설정에 실패했습니다"),
-    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED.value(), "212", "만료된 토큰입니다"),
-    MALFORMED_TOKEN(HttpStatus.UNAUTHORIZED.value(), "213", "변형된 토큰입니다"),
-    INVALID_SIGNATURE_TOKEN(HttpStatus.UNAUTHORIZED.value(), "214", "토큰의 시그니쳐가 유효하지 않습니다"),
-
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "210", "서버에 에러가 발생했습니다");
 

@@ -61,7 +61,6 @@ public class AuthServiceImpl implements AuthService{
         user.changeLastAccess(LocalDateTime.now());
         authRepository.save(user);
 
-        //TODO 여기서 UsernamePasswordAuthenticationToken 으로 contextholder 에 set하는게 아니라 filter를 통해 설정
 
         return ResponseEntity.ok()
                         .header(HttpHeaders.SET_COOKIE, jwtAccessCookie.toString())
@@ -74,26 +73,5 @@ public class AuthServiceImpl implements AuthService{
                                 .build());
     }
 
-    // failauthfilter TODO
-    @Override
-    public ResponseEntity<?> signOut(HttpServletRequest request) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        String accessToken = jwtUtils.getAccessJwtFromCookies(request);
-        String id = jwtUtils.getIdFromAccessToken(accessToken);
-
-        // redis 에 있는 Refresh Token 삭제
-        if (!principal.toString().equals("anonymousUser")) {
-            jwtUtils.deleteRefreshToken(id);
-        }
-
-        // 쿠키 초기화
-        ResponseCookie cleanJwtAccessCookie = jwtUtils.getCleanAccessJwtCookie();
-        ResponseCookie cleanJwtRefreshCookie = jwtUtils.getCleanRefreshJwtCookie();
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cleanJwtAccessCookie.toString())
-                .header(HttpHeaders.SET_COOKIE, cleanJwtRefreshCookie.toString())
-                .body(new SuccessMessageResponse(CustomUserCode.SUCCESS_SIGNOUT.getMessage()));
-    }
 }

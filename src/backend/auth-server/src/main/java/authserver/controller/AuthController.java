@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpServerErrorException;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600) //TODO 이거 왜 넣었는지 설명
 @RequiredArgsConstructor
 @RequestMapping("/v1/auth-service")
 public class AuthController {
@@ -22,11 +21,6 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<UserAndTokenResponse> singInUser(@Validated @RequestBody SignInRequest request) {
         return authService.signIn(request);
-    }
-
-    @PostMapping("/signout")
-    public ResponseEntity<?> signOutUser(HttpServletRequest request) {
-        return authService.signOut(request);
     }
 
 }

@@ -1,10 +1,6 @@
 package authserver.config.security;
 
-import authserver.config.jwt.AuthEntryPoint;
-import authserver.config.jwt.AuthTokenFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,7 +8,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,7 +26,6 @@ public class WebSecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final PasswordEncoder passwordEncoder;
-    private final AuthEntryPoint authEntryPointHandler;
 
     private static final String[] AUTH_WHITELIST={
             "/v1/auth-service/**", "/h2-console/**"
@@ -52,17 +46,10 @@ public class WebSecurityConfig {
     }
 
 
-    // Custom AuthToken Filter 등록
-    @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
-    }
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.csrf(AbstractHttpConfigurer::disable) // when-to-use-csrf-protection for non-browser APIs there is no need to use csrf protection
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // JWT 사용 -> 세션 정책 비활성화
                 .authorizeHttpRequests(auth->
                         auth.requestMatchers(AUTH_WHITELIST).permitAll()
@@ -71,8 +58,6 @@ public class WebSecurityConfig {
         http.headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)); // h2-console 사용
 
         http.authenticationProvider(authenticationProvider());
-
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
