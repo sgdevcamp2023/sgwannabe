@@ -6,8 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,18 +24,49 @@ public class MusicEntity extends BaseTimeEntity {
     String title;
 
     @Column(name = "play_time", nullable = false, columnDefinition = "SMALLINT UNSIGNED default 0")
-    short playTime;
+    Short playTime;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     String lyrics;
 
-    @ManyToOne
-    @JoinColumn(name = "album_id", nullable = false)
-    AlbumEntity album;
+    @Column(name = "album_id", nullable = false)
+    Long albumId;
+
+    @Column(name = "artist_id", nullable = false)
+    Long artistId;
 
     @Embedded
-    MusicFile file;
+    MusicFile file = new MusicFile();
 
-    @Embedded
-    MusicParticipants participants;
+    public MusicEntity(
+            String title,
+            Short playTime,
+            String lyrics
+    ) {
+        this.title = title;
+        this.playTime = playTime;
+        this.lyrics = lyrics;
+    }
+
+    public void update(
+            String title,
+            Short playTime,
+            String lyrics
+    ) {
+        this.title = title;
+        this.playTime = playTime;
+        this.lyrics = lyrics;
+    }
+
+    public void updateFile(MusicFile file) {
+        this.file = file;
+    }
+
+    public void updateAlbum(Long albumId) {
+        this.albumId = albumId;
+    }
+
+    public void updateArtist(Long artistId) {
+        this.artistId = artistId;
+    }
 }
