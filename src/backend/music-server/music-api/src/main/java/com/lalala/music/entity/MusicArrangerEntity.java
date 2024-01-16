@@ -1,11 +1,10 @@
 package com.lalala.music.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,11 +19,14 @@ public class MusicArrangerEntity extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "music_id", nullable = false)
-    MusicEntity music;
+    @Column(name = "music_id", nullable = false)
+    Long musicId;
 
-    @ManyToOne
-    @JoinColumn(name = "artist_id", nullable = false)
-    ArtistEntity artist;
+    @Column(name = "artist_id", nullable = false)
+    Long artistId;
+
+    public MusicArrangerEntity(Long musicId, Long artistId) {
+        this.musicId = musicId;
+        this.artistId = artistId;
+    }
 }
