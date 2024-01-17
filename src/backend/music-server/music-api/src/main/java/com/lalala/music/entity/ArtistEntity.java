@@ -21,18 +21,18 @@ public class ArtistEntity extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(nullable = false, length = 50, columnDefinition = "CHAR(50) default ''")
+    @Column(nullable = false, length = 50, columnDefinition = "VARCHAR(50) default ''")
     String name;
 
-    @Column(nullable = false, length = 6, columnDefinition = "CHAR(6) default 'MALE'")
+    @Column(nullable = false, length = 6, columnDefinition = "VARCHAR(6) default 'MALE'")
     @Enumerated(EnumType.STRING)
     GenderType gender;
 
-    @Column(nullable = false, length = 5, columnDefinition = "CHAR(5) default 'SOLO'")
+    @Column(nullable = false, length = 5, columnDefinition = "VARCHAR(5) default 'SOLO'")
     @Enumerated(EnumType.STRING)
     ArtistType type;
 
-    @Column(nullable = false, length = 50, columnDefinition = "CHAR(50) default ''")
+    @Column(nullable = false, length = 50, columnDefinition = "VARCHAR(50) default ''")
     String agency;
 
     public ArtistEntity(

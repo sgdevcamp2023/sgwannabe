@@ -17,7 +17,7 @@ public class MusicFile {
     @Column(name = "file_url", nullable = false, columnDefinition = "VARCHAR(255) default ''")
     String fileUrl;
 
-    @Column(name = "format_type", nullable = false, length = 5, columnDefinition = "CHAR(5) default 'MP3'")
+    @Column(name = "format_type", nullable = false, length = 5, columnDefinition = "VARCHAR(5) default 'MP3'")
     @Enumerated(EnumType.STRING)
     FormatType formatType;
 }

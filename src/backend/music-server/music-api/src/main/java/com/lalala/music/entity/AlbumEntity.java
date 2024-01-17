@@ -25,7 +25,7 @@ public class AlbumEntity extends BaseTimeEntity {
     @Column(nullable = false, length = 50, columnDefinition = "VARCHAR(50) default ''")
     String title;
 
-    @Column(nullable = false, length = 7, columnDefinition = "CHAR(7) default 'SINGLE'")
+    @Column(nullable = false, length = 7, columnDefinition = "VARCHAR(7) default 'SINGLE'")
     @Enumerated(EnumType.STRING)
     AlbumType type;
 
