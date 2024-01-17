@@ -7,4 +7,3 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface MusicRepository extends JpaRepository<MusicEntity, Long> {
     List<MusicEntity> findAllByAlbumId(Long albumId);
 }
-
