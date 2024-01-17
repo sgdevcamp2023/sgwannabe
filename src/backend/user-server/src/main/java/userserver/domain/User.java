@@ -39,7 +39,7 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(nullable = false, columnDefinition = "char(10) default 'ENABLE'")
+    @Column(nullable = false, columnDefinition = "char(10) default 'ACTIVE'")
     @Enumerated(EnumType.STRING)
     private Status status;
 

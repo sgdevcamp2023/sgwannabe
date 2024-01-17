@@ -33,7 +33,7 @@ class UserControllerTest {
                         .password("asd")
                         .nickname("신짱구")
                         .role(Role.USER)
-                        .status(Status.ENABLE)
+                        .status(Status.ACTIVE)
                         .profile(dto.profile())
                         .build();
 

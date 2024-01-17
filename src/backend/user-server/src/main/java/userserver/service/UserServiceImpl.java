@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService{
                 .email(request.email())
                 .password(encodePassword) // bcrypt 암호화 적용
                 .role(Role.USER)
-                .status(Status.ENABLE)
+                .status(Status.ACTIVE)
                 .build();
 
         userRepository.save(user);
