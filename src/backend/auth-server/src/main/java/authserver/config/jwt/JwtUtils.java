@@ -93,4 +93,47 @@ public class JwtUtils {
         return refreshToken;
     }
 
+    @Transactional
+    public void deleteRefreshToken(String id) {
+        redisService.deleteRedisTemplateValue(id);
+    }
+
+    public String getAccessJwtFromCookies(HttpServletRequest request) {
+        return getCookieValueByName(request, jwtAccessCookie);
+    }
+
+    private String getCookieValueByName(HttpServletRequest request, String name) {
+        Cookie cookie = WebUtils.getCookie(request, name);
+        if (cookie != null) {
+            return cookie.getValue();
+        }else{
+            return null;
+        }
+    }
+
+    public ResponseCookie getCleanAccessJwtCookie() {
+        ResponseCookie cookie = ResponseCookie.from(jwtAccessCookie, null).path("/api").build();
+        return cookie;
+    }
+    public ResponseCookie getCleanRefreshJwtCookie() {
+        ResponseCookie cookie = ResponseCookie.from(jwtRefreshCookie, null).path("/api").build();
+        return cookie;
+    }
+
+
+    public String getIdFromToken(String token) {
+        return Jwts.parser()
+                .verifyWith(key())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
+//                .setSigningKey(key())
+//                .build()
+//                .parseClaimsJws(token)
+//                .getBody()
+//                .getSubject();
+    }
+
+
 }

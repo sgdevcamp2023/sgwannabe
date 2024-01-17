@@ -5,11 +5,14 @@ import authserver.domain.User;
 import authserver.payload.request.SignInRequest;
 import authserver.payload.response.UserAndTokenResponse;
 import authserver.repository.AuthRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jdk.jfr.Frequency;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,7 +41,6 @@ public class AuthServiceImpl implements AuthService{
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw new RuntimeException();
         }
-        // 계정 활성화 여부 확인
 
         // AccessToken 생성
         ResponseCookie jwtAccessCookie = jwtUtils.generateAccessJwtCookie(user);
@@ -63,5 +65,24 @@ public class AuthServiceImpl implements AuthService{
                                 .build());
     }
 
+    @Override
+    public ResponseEntity<?> signOut(HttpServletRequest request) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String accessToken = jwtUtils.getAccessJwtFromCookies(request);
+        String id = jwtUtils.getIdFromToken(accessToken);
 
+        // redis 에 있는 Refresh Token 삭제
+        if (!principal.toString().equals("anonymousUser")) {
+            jwtUtils.deleteRefreshToken(id);
+        }
+
+        // 쿠키 초기화
+        ResponseCookie cleanJwtAccessCookie = jwtUtils.getCleanAccessJwtCookie();
+        ResponseCookie cleanJwtRefreshCookie = jwtUtils.getCleanRefreshJwtCookie();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cleanJwtAccessCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, cleanJwtRefreshCookie.toString())
+                .body(null);
+    }
 }
