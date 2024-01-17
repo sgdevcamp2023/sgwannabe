@@ -46,3 +46,9 @@ spring:
             enable: true
             required: true
     protocol: smtps
+
+
+
+jwt:
+  cookie-max-age: 86400 #1day
+  secret-key: c21pbGVnYXRlLWNvbXBhbnktaXMtdG9vLWZhci1zby1pLXdhbnQtdG8td29yay1mcm9tLWhvbWUtZXZlcnktb3RoZXItZGF5Cg==
