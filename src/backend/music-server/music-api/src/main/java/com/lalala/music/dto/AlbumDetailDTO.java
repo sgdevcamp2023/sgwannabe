@@ -19,7 +19,7 @@ public class AlbumDetailDTO {
     private final LocalDateTime releasedAt;
 
     private final ArtistDTO artist;
-    private final List<MusicDTO> tracks;
+    private final List<MusicDTO> musics;
 
     public static AlbumDetailDTO from(
             AlbumEntity album,
