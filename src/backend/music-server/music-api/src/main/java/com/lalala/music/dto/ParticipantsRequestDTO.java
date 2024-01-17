@@ -11,8 +11,4 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ParticipantsRequestDTO {
     private Long artistId;
-
-    private List<Long> composerIds;
-    private List<Long> lyricistIds;
-    private List<Long> arrangerIds;
 }

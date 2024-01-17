@@ -6,16 +6,10 @@ import com.lalala.music.dto.MusicDetailDTO;
 import com.lalala.music.dto.UpdateMusicRequestDTO;
 import com.lalala.music.entity.AlbumEntity;
 import com.lalala.music.entity.ArtistEntity;
-import com.lalala.music.entity.MusicArrangerEntity;
-import com.lalala.music.entity.MusicComposerEntity;
 import com.lalala.music.entity.MusicEntity;
 import com.lalala.music.entity.MusicFile;
-import com.lalala.music.entity.MusicLyricistEntity;
 import com.lalala.music.repository.AlbumRepository;
 import com.lalala.music.repository.ArtistRepository;
-import com.lalala.music.repository.MusicArrangerRepository;
-import com.lalala.music.repository.MusicComposerRepository;
-import com.lalala.music.repository.MusicLyricistRepository;
 import com.lalala.music.repository.MusicRepository;
 import com.lalala.music.util.AlbumUtils;
 import com.lalala.music.util.ArtistUtils;
@@ -39,9 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class MusicService {
     private final MusicRepository repository;
-    private final MusicComposerRepository composerRepository;
-    private final MusicLyricistRepository lyricistRepository;
-    private final MusicArrangerRepository arrangerRepository;
     private final ArtistRepository artistRepository;
     private final AlbumRepository albumRepository;
 
@@ -66,37 +57,10 @@ public class MusicService {
 
         repository.save(music);
 
-        Set<ArtistEntity> composers = new HashSet<>(
-                artistRepository.findAllById(request.getParticipants().getComposerIds()));
-
-        List<MusicComposerEntity> composerEntities = composers.stream().map(composer ->
-            new MusicComposerEntity(music.getId(), composer.getId())
-        ).toList();
-        composerRepository.saveAll(composerEntities);
-
-        Set<ArtistEntity> lyricists = new HashSet<>(
-                artistRepository.findAllById(request.getParticipants().getLyricistIds()));
-
-        List<MusicLyricistEntity> lyricistEntities = lyricists.stream().map(lyricist ->
-                new MusicLyricistEntity(music.getId(), lyricist.getId())
-        ).toList();
-        lyricistRepository.saveAll(lyricistEntities);
-
-        Set<ArtistEntity> arrangers = new HashSet<>(
-                artistRepository.findAllById(request.getParticipants().getArrangerIds()));
-
-        List<MusicArrangerEntity> arrangerEntities = arrangers.stream().map(arranger ->
-                new MusicArrangerEntity(music.getId(), arranger.getId())
-        ).toList();
-        arrangerRepository.saveAll(arrangerEntities);
-
         return MusicDetailDTO.from(
                 music,
                 artist,
-                album,
-                composers,
-                lyricists,
-                arrangers
+                album
         );
     }
 
@@ -147,34 +111,10 @@ public class MusicService {
         AlbumEntity album = AlbumUtils.findById(music.getAlbumId(), albumRepository);
         ArtistEntity artist = ArtistUtils.findById(music.getArtistId(), artistRepository);
 
-        List<Long> composerIds = composerRepository.findAllByMusicId(id).stream()
-                .map(MusicComposerEntity::getArtistId)
-                .toList();
-        Set<ArtistEntity> composers = new HashSet<>(
-                artistRepository.findAllById(composerIds)
-        );
-
-        List<Long> lyricistIds = lyricistRepository.findAllByMusicId(id).stream()
-                .map(MusicLyricistEntity::getArtistId)
-                .toList();
-        Set<ArtistEntity> lyricists = new HashSet<>(
-                artistRepository.findAllById(lyricistIds)
-        );
-
-        List<Long> arrangerIds = arrangerRepository.findAllByMusicId(id).stream()
-                .map(MusicArrangerEntity::getArtistId)
-                .toList();
-        Set<ArtistEntity> arrangers = new HashSet<>(
-                artistRepository.findAllById(arrangerIds)
-        );
-
         return MusicDetailDTO.from(
                 music,
                 artist,
-                album,
-                composers,
-                lyricists,
-                arrangers
+                album
         );
     }
 
@@ -200,37 +140,10 @@ public class MusicService {
 
         repository.save(music);
 
-        Set<ArtistEntity> composers = new HashSet<>(
-                artistRepository.findAllById(request.getParticipants().getComposerIds()));
-
-        List<MusicComposerEntity> composerEntities = composers.stream().map(composer ->
-                new MusicComposerEntity(music.getId(), composer.getId())
-        ).toList();
-        composerRepository.saveAll(composerEntities);
-
-        Set<ArtistEntity> lyricists = new HashSet<>(
-                artistRepository.findAllById(request.getParticipants().getLyricistIds()));
-
-        List<MusicLyricistEntity> lyricistEntities = lyricists.stream().map(lyricist ->
-                new MusicLyricistEntity(music.getId(), lyricist.getId())
-        ).toList();
-        lyricistRepository.saveAll(lyricistEntities);
-
-        Set<ArtistEntity> arrangers = new HashSet<>(
-                artistRepository.findAllById(request.getParticipants().getArrangerIds()));
-
-        List<MusicArrangerEntity> arrangerEntities = arrangers.stream().map(arranger ->
-                new MusicArrangerEntity(music.getId(), arranger.getId())
-        ).toList();
-        arrangerRepository.saveAll(arrangerEntities);
-
         return MusicDetailDTO.from(
                 music,
                 artist,
-                album,
-                composers,
-                lyricists,
-                arrangers
+                album
         );
     }
 
@@ -240,36 +153,12 @@ public class MusicService {
         AlbumEntity album = AlbumUtils.findById(music.getAlbumId(), albumRepository);
         ArtistEntity artist = ArtistUtils.findById(music.getArtistId(), artistRepository);
 
-        List<Long> composerIds = composerRepository.findAllByMusicId(id).stream()
-                .map(MusicComposerEntity::getArtistId)
-                .toList();
-        Set<ArtistEntity> composers = new HashSet<>(
-                artistRepository.findAllById(composerIds)
-        );
-
-        List<Long> lyricistIds = lyricistRepository.findAllByMusicId(id).stream()
-                .map(MusicLyricistEntity::getArtistId)
-                .toList();
-        Set<ArtistEntity> lyricists = new HashSet<>(
-                artistRepository.findAllById(lyricistIds)
-        );
-
-        List<Long> arrangerIds = arrangerRepository.findAllByMusicId(id).stream()
-                .map(MusicArrangerEntity::getArtistId)
-                .toList();
-        Set<ArtistEntity> arrangers = new HashSet<>(
-                artistRepository.findAllById(arrangerIds)
-        );
-
         repository.delete(music);
 
         return MusicDetailDTO.from(
                 music,
                 artist,
-                album,
-                composers,
-                lyricists,
-                arrangers
+                album
         );
     }
 }

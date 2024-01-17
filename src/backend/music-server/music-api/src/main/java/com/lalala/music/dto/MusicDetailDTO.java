@@ -25,10 +25,7 @@ public class MusicDetailDTO {
     public static MusicDetailDTO from(
             MusicEntity music,
             ArtistEntity artist,
-            AlbumEntity album,
-            Set<ArtistEntity> composers,
-            Set<ArtistEntity> lyricists,
-            Set<ArtistEntity> arrangers
+            AlbumEntity album
     ) {
         return new MusicDetailDTO(
                 music.getId(),
@@ -38,10 +35,7 @@ public class MusicDetailDTO {
                 AlbumDTO.from(album, artist),
                 FileDTO.from(music.getFile()),
                 ParticipantsDetailDTO.from(
-                        artist,
-                        composers,
-                        lyricists,
-                        arrangers
+                        artist
                 ),
                 music.getCreatedAt(),
                 music.getUpdatedAt()
