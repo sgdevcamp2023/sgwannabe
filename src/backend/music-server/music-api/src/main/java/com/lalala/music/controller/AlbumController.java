@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/albums")
+@RequestMapping("/api/v1/albums")
 public class AlbumController {
     private final AlbumService service;
 

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/artists")
+@RequestMapping("/api/v1/artists")
 public class ArtistController {
     private final ArtistService service;
 

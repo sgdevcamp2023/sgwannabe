@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/musics")
+@RequestMapping("/api/v1/musics")
 public class MusicController {
     private final MusicService service;
 
