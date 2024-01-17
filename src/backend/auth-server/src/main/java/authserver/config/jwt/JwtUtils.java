@@ -85,7 +85,6 @@ public class JwtUtils {
                 .compact();
     }
 
-    @Transactional
     public String generateRefreshToken(String id) {
         String refreshToken = UUID.randomUUID().toString();
 
@@ -93,7 +92,6 @@ public class JwtUtils {
         return refreshToken;
     }
 
-    @Transactional
     public void deleteRefreshToken(String id) {
         redisService.deleteRedisTemplateValue(id);
     }
@@ -112,11 +110,11 @@ public class JwtUtils {
     }
 
     public ResponseCookie getCleanAccessJwtCookie() {
-        ResponseCookie cookie = ResponseCookie.from(jwtAccessCookie, null).path("/api").build();
+        ResponseCookie cookie = ResponseCookie.from(jwtAccessCookie, null).path("/v1").build();
         return cookie;
     }
     public ResponseCookie getCleanRefreshJwtCookie() {
-        ResponseCookie cookie = ResponseCookie.from(jwtRefreshCookie, null).path("/api").build();
+        ResponseCookie cookie = ResponseCookie.from(jwtRefreshCookie, null).path("/v1/auth-service").build();
         return cookie;
     }
 

@@ -10,7 +10,6 @@ import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
-//@Transactional
 public class RedisService {
 
     @Value("${jwt.refresh-expiration}") //30초
@@ -34,7 +33,7 @@ public class RedisService {
         if (getRedisTemplateValue(key) != null) {
             deleteRedisTemplateValue(key);
         }
-        redisTemplate.opsForValue().set(key, value, duration); // ttl 설정
+        redisTemplate.opsForValue().set(key, value, duration);
     }
 
     public Boolean isExistKey(String key) {
