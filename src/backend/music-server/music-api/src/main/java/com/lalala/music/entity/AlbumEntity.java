@@ -25,6 +25,9 @@ public class AlbumEntity extends BaseTimeEntity {
     @Column(nullable = false, length = 50, columnDefinition = "VARCHAR(50) default ''")
     String title;
 
+    @Column(name = "cover_url", nullable = false, columnDefinition = "VARCHAR(255) default ''")
+    String coverURL;
+
     @Column(nullable = false, length = 7, columnDefinition = "VARCHAR(7) default 'SINGLE'")
     @Enumerated(EnumType.STRING)
     AlbumType type;
@@ -37,10 +40,12 @@ public class AlbumEntity extends BaseTimeEntity {
 
     public AlbumEntity(
             String title,
+            String coverURL,
             AlbumType type,
             LocalDateTime releasedAt
     ) {
         this.title = title;
+        this.coverURL = coverURL;
         this.type = type;
         this.releasedAt = releasedAt;
     }
@@ -51,10 +56,12 @@ public class AlbumEntity extends BaseTimeEntity {
 
     public void update(
             String title,
+            String coverURL,
             AlbumType type,
             LocalDateTime releasedAt
     ) {
         this.title = title;
+        this.coverURL = coverURL;
         this.type = type;
         this.releasedAt = releasedAt;
     }

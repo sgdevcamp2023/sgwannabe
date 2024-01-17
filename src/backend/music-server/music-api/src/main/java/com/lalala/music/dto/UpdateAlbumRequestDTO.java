@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateAlbumRequestDTO {
     private String title;
+    private String coverURL;
     private AlbumType type;
     private LocalDateTime releasedAt;
     private Long artistId;

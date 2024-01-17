@@ -38,6 +38,7 @@ public class AlbumService {
 
         AlbumEntity album = new AlbumEntity(
                 request.getTitle(),
+                request.getCoverURL(),
                 request.getType(),
                 request.getReleasedAt()
         );
@@ -97,6 +98,7 @@ public class AlbumService {
 
         album.update(
                 request.getTitle(),
+                request.getCoverURL(),
                 request.getType(),
                 request.getReleasedAt()
         );

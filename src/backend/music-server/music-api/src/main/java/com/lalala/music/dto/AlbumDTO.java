@@ -15,6 +15,7 @@ public class AlbumDTO {
     private final Long id;
     private final AlbumType type;
     private final String title;
+    private final String coverURL;
     private final LocalDateTime releasedAt;
 
     private final ArtistDTO artist;
@@ -27,6 +28,7 @@ public class AlbumDTO {
                 album.getId(),
                 album.getType(),
                 album.getTitle(),
+                album.getCoverURL(),
                 album.getReleasedAt(),
                 ArtistDTO.from(artist)
         );
