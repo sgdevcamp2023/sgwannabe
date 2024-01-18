@@ -3,7 +3,6 @@ package userserver.config.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,25 +40,4 @@ public class JwtUtils {
                 .getPayload();
     }
 
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parser()
-                    .verifyWith(key())
-                    .build()
-                    .parseSignedClaims(token);
-
-            return true;
-        } catch (SignatureException ex) {
-            log.error("Invalid JWT signature");
-        } catch (MalformedJwtException ex) {
-            log.error("Invalid JWT token");
-        } catch (ExpiredJwtException ex) {
-            log.error("Expired JWT token");
-        } catch (UnsupportedJwtException ex) {
-            log.error("Unsupported JWT token");
-        } catch (IllegalArgumentException ex) {
-            log.error("JWT claims string is empty.");
-        }
-        return false;
-    }
 }

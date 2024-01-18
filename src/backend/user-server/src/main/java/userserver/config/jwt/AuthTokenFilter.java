@@ -1,7 +1,6 @@
 package userserver.config.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +18,7 @@ import userserver.config.security.UserDetailsServiceImpl;
 import userserver.service.UserService;
 
 import java.io.IOException;
+import java.security.SignatureException;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -28,7 +28,6 @@ import static java.util.stream.Collectors.toList;
 public class AuthTokenFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
-    private final UserService userService;
     private final UserDetailsServiceImpl userDetailsService;
 
     @Override
@@ -43,7 +42,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         String token = header.replace(jwtUtils.getPrefix(), "");
 
-        if (jwtUtils.validateToken(token)) {
+        try {
             Claims claims = jwtUtils.getClaimsFromToken(token);
             String id = claims.getSubject();
 
@@ -54,11 +53,23 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+        } catch (ExpiredJwtException e) {
+            log.error("JWT token is expired: {}", e.getMessage());
+            request.setAttribute("exception", e);
+        } catch (MalformedJwtException e) {
+            log.error("Invalid JWT token: {}", e.getMessage());
+            request.setAttribute("exception", e);
+        } catch (UnsupportedJwtException e) {
+            log.error("JWT token is unsupported: {}", e.getMessage());
+            request.setAttribute("exception", e);
+        } catch (IllegalArgumentException e) {
+            log.error("JWT claims string is empty: {}", e.getMessage());
+            request.setAttribute("exception", e);
 
-        }else{
-            SecurityContextHolder.clearContext();
         }
 
         chain.doFilter(request, response);
     }
 }
+
+
