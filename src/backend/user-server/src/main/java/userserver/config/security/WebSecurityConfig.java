@@ -29,6 +29,9 @@ public class WebSecurityConfig {
     private final AuthEntryPoint authEntryPointHandler;
 //    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
+    private static final String[] USER_WHITELIST={
+            "/v1/api/email","/v1/api/verification","/v1/api/signup", "/h2-console/**"
+    };
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter(jwtUtils, userDetailsService); // TODO 여기서 주입하는게 필요할까?
@@ -48,7 +51,7 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointHandler))
 //                .exceptionHandling(exception -> exception.accessDeniedHandler(jwtAccessDeniedHandler))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers( "/h2-console/**").permitAll()
+                        auth.requestMatchers( USER_WHITELIST).permitAll()
                                 .anyRequest().authenticated());
 
         http.headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)); // h2-console 사용
