@@ -14,7 +14,7 @@ import org.springframework.web.client.HttpServerErrorException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/auth-service")
+@RequestMapping("/v1/api")
 public class AuthController {
     private final AuthService authService;
 
