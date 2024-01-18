@@ -64,7 +64,7 @@ public class JwtUtils {
     }
 
     public ResponseCookie generateRefreshJwtCookie(String refreshToken) {
-        return generateCookie(jwtRefreshCookie, refreshToken, "/v1/auth-service");
+        return generateCookie(jwtRefreshCookie, refreshToken, "/v1/api");
     }
 
 
@@ -114,7 +114,7 @@ public class JwtUtils {
         return cookie;
     }
     public ResponseCookie getCleanRefreshJwtCookie() {
-        ResponseCookie cookie = ResponseCookie.from(jwtRefreshCookie, null).path("/v1/auth-service").build();
+        ResponseCookie cookie = ResponseCookie.from(jwtRefreshCookie, null).path("/v1/api").build();
         return cookie;
     }
 

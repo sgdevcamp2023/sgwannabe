@@ -25,7 +25,7 @@ public class WebSecurityConfig {
     private final PasswordEncoder passwordEncoder;
 
     private static final String[] AUTH_WHITELIST={
-            "/v1/auth-service/**", "/h2-console/**"
+            "/v1/api/**", "/h2-console/**"
     };
 
     @Bean
