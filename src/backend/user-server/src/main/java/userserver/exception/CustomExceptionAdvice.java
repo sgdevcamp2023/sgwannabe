@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import userserver.payload.response.ErrorResponse;
@@ -31,38 +32,28 @@ public class CustomExceptionAdvice extends ResponseEntityExceptionHandler {
     }
 
 
-    @ExceptionHandler(SignatureException.class)
-    public ResponseEntity<ErrorResponse> handleSignatureException(HttpServletRequest request) {
-        CustomUserCode invalidSignature = CustomUserCode.INVALID_SIGNATURE_TOKEN;
-        ErrorResponse errorResponse = new ErrorResponse(invalidSignature.getStatus(), invalidSignature.getCode(), invalidSignature.getMessage(), request.getRequestURI().toString());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-    }
+    @ExceptionHandler({MalformedJwtException.class, ExpiredJwtException.class, AuthenticationCredentialsNotFoundException.class, AccessDeniedException.class})
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<ErrorResponse> handleJwtExceptions(Exception exception, HttpServletRequest request) {
+        CustomUserCode customUserCode = null;
 
-    @ExceptionHandler(MalformedJwtException.class)
-    public ResponseEntity<ErrorResponse> handleMalformedJwtException(HttpServletRequest request) {
-        CustomUserCode malformedToken = CustomUserCode.MALFORMED_TOKEN;
-        ErrorResponse errorResponse = new ErrorResponse(malformedToken.getStatus(), malformedToken.getCode(), malformedToken.getMessage(), request.getRequestURI().toString());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-    }
+        if (exception instanceof MalformedJwtException) {
+            customUserCode = CustomUserCode.MALFORMED_TOKEN;
+        } else if (exception instanceof ExpiredJwtException) {
+            customUserCode = CustomUserCode.EXPIRED_TOKEN;
+        } else if (exception instanceof AuthenticationCredentialsNotFoundException) {
+            customUserCode = CustomUserCode.NOT_EXIST_TOKEN;
+        } else if (exception instanceof AccessDeniedException) {
+            customUserCode = CustomUserCode.NOT_AUTHORIZED_TOKEN;
+        }
 
-    @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<ErrorResponse> handleExpiredJwtException(HttpServletRequest request) {
-        CustomUserCode expiredToken = CustomUserCode.EXPIRED_TOKEN;
-        ErrorResponse errorResponse = new ErrorResponse(expiredToken.getStatus(), expiredToken.getCode(), expiredToken.getMessage(), request.getRequestURI().toString());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-    }
+        ErrorResponse errorResponse = new ErrorResponse(
+                customUserCode.getStatus(),
+                customUserCode.getCode(),
+                customUserCode.getMessage(),
+                request.getRequestURI()
+        );
 
-    @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFoundJwtException(HttpServletRequest request) {
-        CustomUserCode expiredToken = CustomUserCode.NOT_EXIST_TOKEN;
-        ErrorResponse errorResponse = new ErrorResponse(expiredToken.getStatus(), expiredToken.getCode(), expiredToken.getMessage(), request.getRequestURI().toString());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-    }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponse> handleNotAuthorizedJwtException(HttpServletRequest request) {
-        CustomUserCode expiredToken = CustomUserCode.NOT_AUTHORIZED_TOKEN;
-        ErrorResponse errorResponse = new ErrorResponse(expiredToken.getStatus(), expiredToken.getCode(), expiredToken.getMessage(), request.getRequestURI().toString());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 }
