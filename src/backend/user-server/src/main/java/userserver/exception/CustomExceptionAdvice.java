@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -43,6 +44,14 @@ public class CustomExceptionAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ErrorResponse> handleExpiredJwtException(HttpServletRequest request) {
         CustomUserCode expiredToken = CustomUserCode.EXPIRED_TOKEN;
+        ErrorResponse errorResponse = new ErrorResponse(expiredToken.getStatus(), expiredToken.getCode(), expiredToken.getMessage(), request.getRequestURI().toString());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
+    //    AuthenticationCredentialsNotFoundException
+    @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundJwtException(HttpServletRequest request) {
+        CustomUserCode expiredToken = CustomUserCode.NOT_FOUND_TOKEN;
         ErrorResponse errorResponse = new ErrorResponse(expiredToken.getStatus(), expiredToken.getCode(), expiredToken.getMessage(), request.getRequestURI().toString());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
