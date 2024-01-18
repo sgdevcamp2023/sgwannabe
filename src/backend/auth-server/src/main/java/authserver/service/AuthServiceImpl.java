@@ -53,8 +53,8 @@ public class AuthServiceImpl implements AuthService{
                         .body(UserAndTokenResponse.builder()
                                 .id(user.getId())
                                 .nickname(user.getNickname())
-                                .accessToken(jwtAccessCookie.toString())
-                                .refreshToken(refreshToken)
+                                .access_token(jwtAccessCookie.toString())
+                                .refresh_token(refreshToken)
                                 .build());
     }
 

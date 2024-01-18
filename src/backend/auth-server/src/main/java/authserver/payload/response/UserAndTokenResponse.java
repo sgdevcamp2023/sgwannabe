@@ -6,7 +6,7 @@ import lombok.Builder;
 public record UserAndTokenResponse(
         Long id,
         String nickname,
-        String accessToken,
-        String refreshToken
+        String access_token,
+        String refresh_token
 ) {
 }
