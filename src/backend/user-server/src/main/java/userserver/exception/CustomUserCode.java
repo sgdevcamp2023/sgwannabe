@@ -35,7 +35,8 @@ public enum CustomUserCode {
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED.value(), "212", "만료된 토큰입니다"),
     MALFORMED_TOKEN(HttpStatus.UNAUTHORIZED.value(), "213", "변형된 토큰입니다"),
     INVALID_SIGNATURE_TOKEN(HttpStatus.UNAUTHORIZED.value(), "214", "토큰의 시그니쳐가 유효하지 않습니다"),
-    NOT_FOUND_TOKEN(HttpStatus.UNAUTHORIZED.value(), "215", "헤더에 토큰이 존재하지 않습니다"),
+    NOT_EXIST_TOKEN(HttpStatus.UNAUTHORIZED.value(), "215", "헤더에 토큰이 존재하지 않습니다"),
+    NOT_AUTHORIZED_TOKEN(HttpStatus.UNAUTHORIZED.value(), "216", "접근권한이 없습니다"),
 
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(),  "210", "서버에 에러가 발생했습니다");

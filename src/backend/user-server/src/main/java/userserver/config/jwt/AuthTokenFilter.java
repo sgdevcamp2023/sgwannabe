@@ -20,6 +20,7 @@ import userserver.config.security.UserDetailsServiceImpl;
 import userserver.service.UserService;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.security.SignatureException;
 import java.util.List;
 
@@ -41,7 +42,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             try {
                 String id = jwtUtils.getIdFromToken(token);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(id);
-
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

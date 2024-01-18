@@ -5,6 +5,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import userserver.payload.response.ErrorResponse;
 
+import java.nio.file.AccessDeniedException;
+
+@Slf4j
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class CustomExceptionAdvice extends ResponseEntityExceptionHandler {
@@ -48,10 +52,16 @@ public class CustomExceptionAdvice extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
-    //    AuthenticationCredentialsNotFoundException
     @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFoundJwtException(HttpServletRequest request) {
-        CustomUserCode expiredToken = CustomUserCode.NOT_FOUND_TOKEN;
+        CustomUserCode expiredToken = CustomUserCode.NOT_EXIST_TOKEN;
+        ErrorResponse errorResponse = new ErrorResponse(expiredToken.getStatus(), expiredToken.getCode(), expiredToken.getMessage(), request.getRequestURI().toString());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleNotAuthorizedJwtException(HttpServletRequest request) {
+        CustomUserCode expiredToken = CustomUserCode.NOT_AUTHORIZED_TOKEN;
         ErrorResponse errorResponse = new ErrorResponse(expiredToken.getStatus(), expiredToken.getCode(), expiredToken.getMessage(), request.getRequestURI().toString());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }

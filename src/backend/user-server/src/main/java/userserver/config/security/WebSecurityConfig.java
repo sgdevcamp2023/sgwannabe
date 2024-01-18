@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import userserver.config.jwt.AuthEntryPoint;
 import userserver.config.jwt.AuthTokenFilter;
 //import userserver.config.jwt.JwtAccessDeniedHandler;
+import userserver.config.jwt.JwtAccessDeniedHandler;
 import userserver.config.jwt.JwtUtils;
 import userserver.service.UserService;
 
@@ -27,10 +28,10 @@ public class WebSecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtUtils jwtUtils;
     private final AuthEntryPoint authEntryPointHandler;
-//    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     private static final String[] USER_WHITELIST={
-            "/v1/api/email","/v1/api/verification","/v1/api/signup", "/h2-console/**"
+            "/v1/api/email","/v1/api/verification","/v1/api/signup", "/v1/api/test/all", "/v1/api/test/user", "/h2-console/**"
     };
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -38,26 +39,17 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        return authProvider;
-    }
-
-    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointHandler))
-//                .exceptionHandling(exception -> exception.accessDeniedHandler(jwtAccessDeniedHandler))
+                .exceptionHandling(exception -> exception.accessDeniedHandler(jwtAccessDeniedHandler))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers( USER_WHITELIST).permitAll()
                                 .anyRequest().authenticated());
 
         http.headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)); // h2-console 사용
 
-        // TODO 필요없는 듯?
-        http.authenticationProvider(authenticationProvider());
         // TODO Before? After?
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
