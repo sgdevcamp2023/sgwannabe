@@ -1,0 +1,10 @@
+version: '3.9'
+
+services:
+  app:
+    container_name: streaming-server
+    ports:
+      - "22000:22000"
+    build:
+      context: .
+      dockerfile: Dockerfile
