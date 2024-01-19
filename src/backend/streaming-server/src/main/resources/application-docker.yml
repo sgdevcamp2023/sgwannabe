@@ -2,4 +2,4 @@ server:
   port: 22000
 
 file-server:
-   url: http://host.docker.internal:20000
+  url: http://host.docker.internal:20000
