@@ -1,9 +1,8 @@
 package spring.feed.dto;
 
 public record FollowPayload(
-        Long userId,
-        String username,
-
+        String userId,
+        String nickname,
         String email
 ) {
 }

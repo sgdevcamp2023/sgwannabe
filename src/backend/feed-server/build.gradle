@@ -27,6 +27,7 @@ dependencies {
 	// Graph DB
 	implementation 'org.neo4j:neo4j-ogm-spring-boot-starter:1.0.3'
 
+	implementation 'com.fasterxml.jackson.module:jackson-module-jakarta-xmlbind-annotations' // json 파싱(jackson)
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
