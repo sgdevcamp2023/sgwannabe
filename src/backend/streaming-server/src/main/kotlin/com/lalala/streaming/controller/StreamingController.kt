@@ -1,6 +1,7 @@
 package com.lalala.streaming.controller
 
 import lombok.RequiredArgsConstructor
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.core.io.UrlResource
 import org.springframework.http.*
@@ -14,7 +15,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/streaming")
 class StreamingController(
-    val audioLocation: String = "http://localhost:20000"
+    @Value("\${file-server.url}")
+    val audioLocation: String
 ) {
     @GetMapping
     fun getAudio(@RequestParam("name") name: String): ResponseEntity<ByteArrayResource> {
