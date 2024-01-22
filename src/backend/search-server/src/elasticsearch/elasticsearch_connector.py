@@ -5,9 +5,10 @@ class ElasticsearchConnector:
     def __init__(self, host, port):
         self.es = Elasticsearch([{'host': host, 'port': port, 'scheme': 'http'}])
 
-    def index_data(self, index, data):
-        bulk(self.es, data, index=index)
+    def index(self, index, data):
+        # bulk(self.es, data, index=index)
+        self.es.index(index=index, body=data)
 
-    def search_data(self, index, query):
+    def search(self, index, query):
         result = self.es.search(index=index, body=query)
         return result

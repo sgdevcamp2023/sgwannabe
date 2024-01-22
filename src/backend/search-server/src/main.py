@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .api import client_api, query_api, indexing_api;
+from .api import client, indexing, query;
 
 app = FastAPI()
 
@@ -7,6 +7,6 @@ app = FastAPI()
 async def read_root():
     return {"Hello": "Search Server!"}
 
-app.include_router(client_api.router)
-app.include_router(query_api.router)
-app.include_router(indexing_api.router)
+app.include_router(client.router)
+app.include_router(query.router)
+app.include_router(indexing.router)
