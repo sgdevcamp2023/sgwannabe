@@ -15,7 +15,7 @@ import userserver.service.UserService;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/user-service")
+@RequestMapping("/v1/api")
 @RequiredArgsConstructor
 public class UserController {
 
