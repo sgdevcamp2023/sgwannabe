@@ -75,4 +75,5 @@ public class UserController {
     public ResponseEntity<?> findFollowers(@PathVariable String userId) {
         return ResponseEntity.ok(userService.findFollowers(userId));
     }
+
 }

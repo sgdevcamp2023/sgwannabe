@@ -11,6 +11,7 @@ import spring.feed.repository.UserRepository;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -59,6 +60,7 @@ public class UserService {
 
         userRepository.save(savedFromUser);
     }
+
 
     public List<User> findFollowing(String userId) {
         List<User> following = userRepository.findFollowing(userId);

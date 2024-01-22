@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public interface UserRepository extends Neo4jRepository<User, Long> {
 
+    @Query(value= "MATCH (a:User) WHERE a.userId = $userId RETURN a")
     Optional<User> findByUserId(String userId);
     Optional<User> findByNickname(String nickname);
 
