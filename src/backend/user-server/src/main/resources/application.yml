@@ -1,0 +1,48 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: user-server
+  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    username: root
+#    password: 12345678
+#    url: jdbc:mysql://localhost:3306/test_db?useSSL=false&allowPublicKeyRetrieval=true
+
+    url: jdbc:h2:mem:local;MODE=MySQL;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        show_sql: true
+        format_sql: true
+
+    hibernate:
+      ddl-auto: update
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+  data:
+    redis:
+      host: localhost
+      port: 16379
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+    protocol: smtps
