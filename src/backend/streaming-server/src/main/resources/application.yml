@@ -1,0 +1,5 @@
+server:
+  port: 22000
+
+file-server:
+  url: http://localhost:20000
