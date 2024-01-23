@@ -6,6 +6,8 @@ import { PlaylistArrayType } from "../../types/playlist";
 function Playlist() {
   const dragItem = useRef<number | null>(null);
   const dragOverItem = useRef<number | null>(null);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+
   const [list, setList] = useState<PlaylistArrayType>([
     {
       id: 1,
@@ -38,24 +40,24 @@ function Playlist() {
 
   const dragStart = (e: React.DragEvent<HTMLDivElement>, position: number) => {
     dragItem.current = position;
-    console.log(e.target);
+    setIsDragging(true);
   };
 
   const dragEnter = (e: React.DragEvent<HTMLDivElement>, position: number) => {
     dragOverItem.current = position;
-    console.log(e.target);
-  };
-
-  const drop = (e: React.DragEvent<HTMLDivElement>) => {
-    if (dragItem.current === null || dragOverItem.current === null) return;
 
     const newList = [...list];
     const dragItemValue = newList[dragItem.current as number]; // Type assertion here
     newList.splice(dragItem.current as number, 1);
     newList.splice(dragOverItem.current as number, 0, dragItemValue);
-    dragItem.current = null;
+    dragItem.current = dragOverItem.current;
     dragOverItem.current = null;
     setList(newList);
+  };
+
+  const drop = (e: React.DragEvent<HTMLDivElement>) => {
+    dragItem.current = null;
+    setIsDragging(false);
   };
 
   return (
@@ -77,12 +79,17 @@ function Playlist() {
         <div>
           {list.map((item, idx) => (
             <div
-              key={idx}
+              key={item.id}
               draggable
               onDragStart={(e) => dragStart(e, idx)}
               onDragEnter={(e) => dragEnter(e, idx)}
               onDragEnd={drop}
               onDragOver={(e) => e.preventDefault()}
+              className={`transition duration-200 ${
+                dragItem.current === idx && isDragging
+                  ? "bg-primary/20 opacity-0 scale-50"
+                  : ""
+              }`}
             >
               <PlaylistTrack item={item} />
             </div>
