@@ -1,0 +1,13 @@
+spring:
+  data:
+    mongodb:
+      host: mongodb
+      port: 16000
+      database: mydatabase
+
+    redis:
+      host: redis
+      port: 16001
+
+server:
+  port: 16002
