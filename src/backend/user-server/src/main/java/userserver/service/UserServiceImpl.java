@@ -10,10 +10,7 @@ import userserver.domain.Status;
 import userserver.domain.User;
 import userserver.exception.CustomException;
 import userserver.exception.CustomUserCode;
-import userserver.payload.request.EmailAuthCodeRequest;
-import userserver.payload.request.EmailVerifyRequest;
-import userserver.payload.request.PasswordChangeRequest;
-import userserver.payload.request.SignUpRequest;
+import userserver.payload.request.*;
 import userserver.payload.response.SuccessMessageResponse;
 import userserver.repository.UserRepository;
 
@@ -109,6 +106,7 @@ public class UserServiceImpl implements UserService{
         return ResponseEntity.ok().body(new SuccessMessageResponse(CustomUserCode.SUCCESS_CODE_CHECK.getMessage()));
     }
 
+    @Transactional
     public ResponseEntity<?> passwordChange(User user, PasswordChangeRequest request) {
         String encodePassword = passwordEncoder.encode(request.password());
         user.changePassword(encodePassword);
@@ -118,5 +116,13 @@ public class UserServiceImpl implements UserService{
         return ResponseEntity.ok().body(new SuccessMessageResponse(CustomUserCode.SUCCESS_PASSWORD_CHANGE.getMessage()));
     }
 
+    @Transactional
+    public ResponseEntity<?> profileChange(User user, ProfileChangeRequest request) {
+        user.changeProfile(request.profile());
+
+        userRepository.save(user);
+
+        return ResponseEntity.ok().body(new SuccessMessageResponse(CustomUserCode.SUCCESS_PROFILE_CHANGE.getMessage()));
+    }
 
 }

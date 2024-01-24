@@ -15,6 +15,7 @@ public enum CustomUserCode {
     SUCCESS_CODE_CHECK(HttpStatus.OK.value(), "101", "인증코드가 일치합니다"),
     SUCCESS_MAIL_SEND(HttpStatus.OK.value(), "102", "메일 전송에 성공했습니다"),
     SUCCESS_PASSWORD_CHANGE(HttpStatus.OK.value(), "103", "비밀번호 변경에 성공했습니다"),
+    SUCCESS_PROFILE_CHANGE(HttpStatus.OK.value(), "104", "프로필 이미지 변경에 성공했습니다"),
     /**
      * 실패
      */

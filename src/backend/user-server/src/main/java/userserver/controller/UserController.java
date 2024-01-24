@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import userserver.config.security.UserDetailsImpl;
 import userserver.exception.CustomException;
 import userserver.exception.CustomUserCode;
-import userserver.payload.request.EmailAuthCodeRequest;
-import userserver.payload.request.EmailVerifyRequest;
-import userserver.payload.request.PasswordChangeRequest;
-import userserver.payload.request.SignUpRequest;
+import userserver.payload.request.*;
 import userserver.service.UserService;
 
 
@@ -61,5 +58,16 @@ public class UserController {
             throw new CustomException(CustomUserCode.CLIENT_UNAUTHORIZED);
         }
         return userService.passwordChange(userDetails.getUser(), request);
+    }
+
+    /**
+     * 프로필 이미지 변경
+     */
+    @PostMapping("/profile-change")
+    public ResponseEntity<?> profileChange(@AuthenticationPrincipal UserDetailsImpl userDetails, @Validated @RequestBody ProfileChangeRequest request) {
+        if (userDetails == null) {
+            throw new CustomException(CustomUserCode.CLIENT_UNAUTHORIZED);
+        }
+        return userService.profileChange(userDetails.getUser(), request);
     }
 }

@@ -45,7 +45,7 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointHandler))
                 .exceptionHandling(exception -> exception.accessDeniedHandler(jwtAccessDeniedHandler))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers( USER_WHITELIST).permitAll()
+                        auth.requestMatchers(USER_WHITELIST).permitAll()
                                 .anyRequest().authenticated());
 
         http.headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)); // h2-console 사용

@@ -1,16 +1,11 @@
 package userserver.domain;
 
-import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
 
 
 @Builder
@@ -18,6 +13,7 @@ import java.util.Map;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.MODULE)
+@DynamicInsert
 @Table(name="\"user\"", uniqueConstraints={@UniqueConstraint(name="EMAIL_UNIQUE", columnNames = "email")})
 public class User extends BaseTimeEntity {
 
@@ -43,10 +39,8 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Type(JsonType.class)
-    @Column(name = "profile", columnDefinition = "json")
-//    @ColumnDefault("https://") // TODO default 이미지 지정
-    private List<Map<String, Object>> profile;
+    @ColumnDefault("''")
+    private String profile;
 
     private LocalDateTime lastAccess;
 
@@ -60,6 +54,10 @@ public class User extends BaseTimeEntity {
 
     public void changeUserRole(Role role) {
         this.role = role;
+    }
+
+    public void changeProfile(String profile) {
+        this.profile = profile;
     }
 
     public User(String nickname, String email, String password, Status status) {

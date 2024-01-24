@@ -2,10 +2,7 @@ package userserver.service;
 
 import org.springframework.http.ResponseEntity;
 import userserver.domain.User;
-import userserver.payload.request.EmailAuthCodeRequest;
-import userserver.payload.request.EmailVerifyRequest;
-import userserver.payload.request.PasswordChangeRequest;
-import userserver.payload.request.SignUpRequest;
+import userserver.payload.request.*;
 
 public interface UserService {
     ResponseEntity<?> sendAuthCodeByEmail(EmailAuthCodeRequest request);
@@ -13,5 +10,7 @@ public interface UserService {
     ResponseEntity<?> signUp(SignUpRequest request);
 
     ResponseEntity<?> passwordChange(User user, PasswordChangeRequest request);
+
+    ResponseEntity<?> profileChange(User user, ProfileChangeRequest request);
 
 }
