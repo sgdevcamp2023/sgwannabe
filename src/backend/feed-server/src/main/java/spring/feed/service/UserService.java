@@ -11,7 +11,6 @@ import spring.feed.repository.UserRepository;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,17 +36,16 @@ public class UserService {
         User savedFromUser = userRepository
                 .findByUserId(fromUser.getUserId())
                 .orElseGet(() -> {
-                    log.info("{} 없음", fromUser.getNickname());
-                    return this.addUser(fromUser);});
+                    return this.addUser(fromUser);
+                });
 
         User savedToUser = userRepository
                 .findByUserId(toUser.getUserId())
                 .orElseGet(() -> {
-                    log.info("{} 없음", toUser.getNickname());
-                    return this.addUser(toUser);});
+                    return this.addUser(toUser);
+                });
 
         if (savedFromUser.getFriendships() == null) {
-            log.info("저장된 유저의 friendship 없음");
             savedFromUser.setFriendships(new HashSet<>());
         }
 
@@ -56,20 +54,17 @@ public class UserService {
                 startNode(savedFromUser).
                 endNode(savedToUser).
                 build());
-        log.info("노드 연결 완료");
 
         userRepository.save(savedFromUser);
     }
 
 
     public List<User> findFollowing(String userId) {
-        List<User> following = userRepository.findFollowing(userId);
-        log.info("{} 가 팔로잉 하는 사람들 {}", userId, following);
 
-        return following;
+        return userRepository.findFollowing(userId);
     }
 
-        public boolean isFollowing(String fromUserId, String toUserId) {
+    public boolean isFollowing(String fromUserId, String toUserId) {
         return userRepository.isFollowing(fromUserId, toUserId);
     }
 
@@ -78,7 +73,6 @@ public class UserService {
     }
 
 
-    @Transactional
     public void stopFollowing(String fromUserId, String toUserId) {
         userRepository.stopFollowing(fromUserId, toUserId);
     }

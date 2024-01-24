@@ -9,7 +9,7 @@ import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.Set;
 
-@NodeEntity(label="User")
+@NodeEntity(label = "User")
 @Builder
 @Data
 public class User {
@@ -24,7 +24,7 @@ public class User {
 
     private String nickname;
 
-    @Relationship(type="IS_FOLLOWING")
+    @Relationship(type = "IS_FOLLOWING")
     private Set<Friendship> friendships;
 
 }
