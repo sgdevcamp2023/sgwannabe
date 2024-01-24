@@ -72,7 +72,7 @@ public class UserService {
         return userRepository.findFollowers(userId);
     }
 
-
+    @Transactional
     public void stopFollowing(String fromUserId, String toUserId) {
         userRepository.stopFollowing(fromUserId, toUserId);
     }
