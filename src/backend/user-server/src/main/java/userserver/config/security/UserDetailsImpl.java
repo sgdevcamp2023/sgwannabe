@@ -4,12 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import userserver.domain.Role;
 import userserver.domain.User;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 @Slf4j
 public class UserDetailsImpl implements UserDetails {

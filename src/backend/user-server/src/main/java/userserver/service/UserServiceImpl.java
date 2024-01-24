@@ -12,6 +12,7 @@ import userserver.exception.CustomException;
 import userserver.exception.CustomUserCode;
 import userserver.payload.request.EmailAuthCodeRequest;
 import userserver.payload.request.EmailVerifyRequest;
+import userserver.payload.request.PasswordChangeRequest;
 import userserver.payload.request.SignUpRequest;
 import userserver.payload.response.SuccessMessageResponse;
 import userserver.repository.UserRepository;
@@ -106,6 +107,15 @@ public class UserServiceImpl implements UserService{
             throw new CustomException(CustomUserCode.NOT_VALID_CODE);
         }
         return ResponseEntity.ok().body(new SuccessMessageResponse(CustomUserCode.SUCCESS_CODE_CHECK.getMessage()));
+    }
+
+    public ResponseEntity<?> passwordChange(User user, PasswordChangeRequest request) {
+        String encodePassword = passwordEncoder.encode(request.password());
+        user.changePassword(encodePassword);
+
+        userRepository.save(user);
+
+        return ResponseEntity.ok().body(new SuccessMessageResponse(CustomUserCode.SUCCESS_PASSWORD_CHANGE.getMessage()));
     }
 
 
