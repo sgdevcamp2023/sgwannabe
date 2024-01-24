@@ -44,13 +44,13 @@ public class NotificationEntity extends BaseTimeEntity {
     })
     private User receiver;
 
-    @Column(name = "is_viewed", nullable = false)
+    @Column(name = "is_viewed", nullable = false, columnDefinition = "TINYINT")
     private Boolean isViewed = false;
 
     @Column(name = "viewed_at")
     private LocalDateTime viewedAt;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(10)")
     @Enumerated(EnumType.STRING)
     private NotificationType type = NotificationType.NORMAL;
 
