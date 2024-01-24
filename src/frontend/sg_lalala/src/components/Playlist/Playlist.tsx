@@ -1,42 +1,16 @@
 import PlaylistTrack from "./PlaylistTrack";
-import data from "../../data/playlist_data.json";
 import { useRef, useState } from "react";
 import { PlaylistArrayType } from "../../types/playlist";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { nowPlayingList, playingMusic } from "../../state";
 
 function Playlist() {
   const dragItem = useRef<number | null>(null);
   const dragOverItem = useRef<number | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
-  const [list, setList] = useState<PlaylistArrayType>([
-    {
-      id: 1,
-      img_url:
-        "https://cdnimg.melon.co.kr/cm2/album/images/113/52/904/11352904_20231027101104_500.jpg/melon/resize/120/quality/80/optimize",
-      title: "Perfect Night",
-      artist: "LE SSERAFIM (르세라핌)",
-      albumName: "Perfect Night",
-      time: "04:03",
-    },
-    {
-      id: 2,
-      img_url:
-        "https://cdnimg.melon.co.kr/cm2/album/images/113/52/904/11352904_20231027101104_500.jpg/melon/resize/120/quality/80/optimize",
-      title: "Perfect Night",
-      artist: "SG 워너비",
-      albumName: "Perfect Night",
-      time: "04:03",
-    },
-    {
-      id: 3,
-      img_url:
-        "https://cdnimg.melon.co.kr/cm2/album/images/113/52/904/11352904_20231027101104_500.jpg/melon/resize/120/quality/80/optimize",
-      title: "Perfect Night",
-      artist: "라라라",
-      albumName: "Perfect Night",
-      time: "04:03",
-    },
-  ]);
+  const [list, setList] = useRecoilState(nowPlayingList);
+  const nowMusic = useRecoilValue(playingMusic);
 
   const dragStart = (e: React.DragEvent<HTMLDivElement>, position: number) => {
     dragItem.current = position;
@@ -63,7 +37,7 @@ function Playlist() {
   return (
     <div
       style={{
-        backgroundImage: `url(${"https://cdnimg.melon.co.kr/cm2/album/images/113/52/904/11352904_20231027101104_500.jpg/melon/resize/120/quality/80/optimize"})`,
+        backgroundImage: `url(${nowMusic.img_url})`,
       }}
       className="flex flex-col w-full h-screen bg-cover"
     >

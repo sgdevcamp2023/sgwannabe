@@ -3,6 +3,8 @@ import download_icon from "../../assets/download.png";
 import plus_icon from "../../assets/plus.png";
 import bin_icon from "../../assets/delete.png";
 import { PlaylistMusicType } from "../../types/playlist";
+import { useRecoilState } from "recoil";
+import { playingMusic } from "../../state";
 
 interface MusicProps {
   item: PlaylistMusicType;
@@ -10,6 +12,7 @@ interface MusicProps {
 
 function PlaylistTrack({ item }: MusicProps) {
   const { img_url, title, artist, albumName, time } = item;
+  const [nowMusic, setNowMusic] = useRecoilState(playingMusic);
 
   return (
     <tr className="grid items-center w-full grid-flow-col py-2 border-b group border-whiteDark grid-cols-16">
@@ -20,6 +23,7 @@ function PlaylistTrack({ item }: MusicProps) {
       <img
         src={play_icon}
         className="w-5 col-span-1 transition-opacity opacity-0 cursor-pointer group-hover:opacity-100"
+        onClick={() => setNowMusic(item)}
       />
       <img
         src={plus_icon}
