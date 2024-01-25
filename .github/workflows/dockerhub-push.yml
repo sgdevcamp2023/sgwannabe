@@ -1,9 +1,9 @@
-name: Docker Hub Push for Go
+name: Docker Hub Push
 
 on:
   push:
     branches:
-      - 'storage/develop'
+      - '**/develop'
 
 jobs:
   build-and-push:
@@ -18,14 +18,9 @@ jobs:
           BRANCH_NAME=$(echo $GITHUB_REF | awk -F'/' '{print $3}')
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
 
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.21'
-
-      - name: Build
+      - name: Change directory
         run: |
-          go build -v ./...
+          cd src/${{ env.BRANCH_NAME }}-server
 
       - name: Build and Push Docker Image
         env:
