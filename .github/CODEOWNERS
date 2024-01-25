@@ -1,0 +1,17 @@
+# 담당자를 지정할 때는 github ID 혹은 github email을 넣습니다.
+
+# frontend codeowners (web)
+# web 과 관련된 코드는 프론트엔드가 관리합니다.
+/src/frontend @mingzooo
+
+# service 관련된 코드는 백엔드가 관리합니다.
+/src/*-server @kor-Chipmunk @suakang17 @happysoy
+
+# docs는 모두가 관리합니다.
+/docs @kor-Chipmunk @suakang17 @happysoy @mingzooo
+
+# script는 모두가 관리합니다.
+/scripts @kor-Chipmunk @suakang17 @happysoy @mingzooo
+
+# resources는 프론트엔드와 밀접하므로, 프론트엔드가 관리합니다.
+/resources @mingzooo
