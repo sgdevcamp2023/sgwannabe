@@ -5,6 +5,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+### CUSTOM ###
+database/
 ### STS ###
 .apt_generated
 .classpath

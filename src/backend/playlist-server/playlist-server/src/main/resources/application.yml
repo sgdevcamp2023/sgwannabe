@@ -2,12 +2,15 @@ spring:
   data:
     mongodb:
       host: mongodb
-      port: 16000
-      database: mydatabase
+      port: 27017
+      database: playlistdb
+      username: root
+      password: 1234
+      authentication-database: admin
 
     redis:
+      port: 6379
       host: redis
-      port: 16001
 
 server:
   port: 16002
