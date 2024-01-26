@@ -1,5 +1,6 @@
 package com.sgwannabe.playlistserver.playlist.dto;
 
+import com.sgwannabe.playlistserver.music.domain.Music;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,7 +13,7 @@ public class PlaylistResponseDto {
     private String userName;
     private String id;
     private String name;
-    private String thumnail;
-    private String songs;
+    private String thumbnail;
+    private List<Music> musics;
 
 }

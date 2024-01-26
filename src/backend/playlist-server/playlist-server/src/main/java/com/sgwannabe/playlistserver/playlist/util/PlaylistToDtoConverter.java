@@ -1,6 +1,7 @@
-package com.sgwannabe.playlistserver.playlist.dto;
+package com.sgwannabe.playlistserver.playlist.util;
 
 import com.sgwannabe.playlistserver.playlist.domain.Playlist;
+import com.sgwannabe.playlistserver.playlist.dto.PlaylistResponseDto;
 
 public class PlaylistToDtoConverter {
     public PlaylistResponseDto convert(Playlist playlist) {
@@ -10,8 +11,8 @@ public class PlaylistToDtoConverter {
                 .userName(playlist.getUserName())
                 .id(playlist.getId())
                 .name(playlist.getName())
-                .thumnail(playlist.getThumbnail())
-                .songs(playlist.getSongs())
+                .thumbnail(playlist.getThumbnail())
+                .musics(playlist.getMusics())
                 .build();
     }
 }

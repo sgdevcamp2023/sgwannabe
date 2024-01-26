@@ -1,5 +1,6 @@
 package com.sgwannabe.playlistserver.playlist.dto;
 
+import com.sgwannabe.playlistserver.music.domain.Music;
 import lombok.Getter;
 
 import java.util.List;
@@ -9,6 +10,6 @@ public class PlaylistRequestDto {
     private Long uid;
     private String userName;
     private String name;
-    private String thumnail;
-    private String songs; // TODO List<Songs>로 수정
+    private String thumbnail;
+    private List<Music> musics; // TODO List<Music>로 수정
 }
