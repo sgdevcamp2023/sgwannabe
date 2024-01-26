@@ -14,7 +14,8 @@ public enum CustomUserCode {
     SUCCESS_SIGNUP(HttpStatus.OK.value(), "100", "회원가입에 성공했습니다"),
     SUCCESS_CODE_CHECK(HttpStatus.OK.value(), "101", "인증코드가 일치합니다"),
     SUCCESS_MAIL_SEND(HttpStatus.OK.value(), "102", "메일 전송에 성공했습니다"),
-
+    SUCCESS_PASSWORD_CHANGE(HttpStatus.OK.value(), "103", "비밀번호 변경에 성공했습니다"),
+    SUCCESS_PROFILE_CHANGE(HttpStatus.OK.value(), "104", "프로필 이미지 변경에 성공했습니다"),
     /**
      * 실패
      */
@@ -37,6 +38,8 @@ public enum CustomUserCode {
     INVALID_SIGNATURE_TOKEN(HttpStatus.UNAUTHORIZED.value(), "214", "토큰의 시그니쳐가 유효하지 않습니다"),
     NOT_EXIST_TOKEN(HttpStatus.UNAUTHORIZED.value(), "215", "헤더에 토큰이 존재하지 않습니다"),
     NOT_AUTHORIZED_TOKEN(HttpStatus.UNAUTHORIZED.value(), "216", "접근권한이 없습니다"),
+
+    CLIENT_UNAUTHORIZED(HttpStatus.UNAUTHORIZED.value(), "217", "인증되지 않은 클라이언트입니다"),
 
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(),  "210", "서버에 에러가 발생했습니다");
