@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.sgwannabe.playlistserver.music.domain.Music;
+import com.sgwannabe.playlistserver.playlist.exception.DuplicateMusicException;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.CreatedDate;
@@ -52,12 +53,30 @@ public class Playlist implements Serializable {
         this.name = name;
     }
 
+    // Playlist 클래스의 addMusic 메서드 수정
     public void addMusic(Music music) {
-        this.musics.add(music);
+        if (musics.stream().noneMatch(existingMusic -> existingMusic.getId().equals(music.getId()))) {
+            musics.add(music);
+            if (musics.size() == 1) {
+                this.thumbnail = music.getThumbnail();
+            }
+        } else {
+            throw new DuplicateMusicException("이미 추가된 음원입니다. musicId: " + music.getId());
+        }
     }
+
+
     public void removeMusic(Long musicId) {
-        this.musics.removeIf(music -> music.getId().equals(musicId));
+        musics.removeIf(music -> music.getId().equals(musicId));
+        if (musics.size() > 0) {
+            this.thumbnail = musics.get(0).getThumbnail();
+        } else {
+            // TODO 플레이리스트에 곡이 없는 경우 썸네일을 디폴트 이미지로 변경 or 논의 필요
+            this.thumbnail = null;
+            // this.thumbnail = "기본 썸네일 경로";
+        }
     }
+
     public void changeMusicOrder(int fromIndex, int toIndex) {
         if (fromIndex >= 0 && fromIndex < musics.size() && toIndex >= 0 && toIndex < musics.size()) {
             Music musicToMove = musics.remove(fromIndex);
