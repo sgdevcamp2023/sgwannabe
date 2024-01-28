@@ -4,6 +4,7 @@ import com.sgwannabe.playlistserver.music.dto.MusicOrderChangeRequestDto;
 import com.sgwannabe.playlistserver.music.dto.MusicRequestDto;
 import com.sgwannabe.playlistserver.playlist.dto.PlaylistRequestDto;
 import com.sgwannabe.playlistserver.playlist.dto.PlaylistResponseDto;
+import com.sgwannabe.playlistserver.playlist.exception.DuplicateMusicException;
 import com.sgwannabe.playlistserver.playlist.exception.NotFoundException;
 import com.sgwannabe.playlistserver.playlist.service.PlaylistService;
 import jakarta.validation.Valid;
@@ -14,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -35,6 +38,12 @@ public class PlaylistController {
     public ResponseEntity<PlaylistResponseDto> getPlaylist(@PathVariable String id) {
         PlaylistResponseDto playlistResponseDto = playlistService.getPlaylistById(id);
         return new ResponseEntity<>(playlistResponseDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<PlaylistResponseDto>> getPlaylistsByUserId(@PathVariable Long userId) {
+        List<PlaylistResponseDto> playlistResponseDtos = playlistService.getPlaylistsByUserId(userId);
+        return new ResponseEntity<>(playlistResponseDtos, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
@@ -84,5 +93,11 @@ public class PlaylistController {
     public ResponseEntity<String> handleValidationException(MethodArgumentNotValidException ex) {
         String errorMessage = ex.getBindingResult().getFieldError().getDefaultMessage();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    @ExceptionHandler(DuplicateMusicException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> handleDuplicateMusicException(DuplicateMusicException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

@@ -18,8 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -64,6 +66,13 @@ public class PlaylistService {
 
             throw new NotFoundException("해당하는 플레이리스트가 없습니다 id: " + id);
         }
+    }
+
+    public List<PlaylistResponseDto> getPlaylistsByUserId(Long userId) {
+        List<Playlist> playlists = playlistRepository.findByUid(userId);
+        return playlists.stream()
+                .map(converter::convert)
+                .collect(Collectors.toList());
     }
 
     @Transactional
