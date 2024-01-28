@@ -11,6 +11,7 @@ import com.sgwannabe.playlistserver.playlist.exception.NotFoundException;
 import com.sgwannabe.playlistserver.playlist.repository.PlaylistRepository;
 import com.sgwannabe.playlistserver.playlist.util.KeyGenerator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PlaylistService {
     private final PlaylistRepository playlistRepository;
     private final RedisTemplate<String, Playlist> redisTemplate;
@@ -37,8 +39,10 @@ public class PlaylistService {
                 .thumbnail(playlistRequestDto.getThumbnail())
                 .build();
 
+        log.info("playlist={}", playlist);
         Playlist saved = playlistRepository.save(playlist);
 
+        log.info("savedPlaylist={}", saved);
         updateCacheAsync(saved);
         return converter.convert(saved);
     }
@@ -56,6 +60,8 @@ public class PlaylistService {
             updateCacheAsync(playlist);
             return converter.convert(playlist);
         } else {
+            log.info("플레이리스트를 찾을 수 없습니다. id: {}", id);
+
             throw new NotFoundException("해당하는 플레이리스트가 없습니다 id: " + id);
         }
     }
@@ -91,16 +97,24 @@ public class PlaylistService {
         }
     }
 
-    @Async
-    public CompletableFuture<Void> updateCacheAsync(Playlist playlist) {
+    @Transactional
+    public void updateCacheAsync(Playlist playlist) {
         String key = KeyGenerator.cartKeyGenerate(playlist.getId());
         redisTemplate.opsForValue().set(key, playlist, Duration.ofMinutes(10));
+        log.info("redis 저장 완료");
+        asyncUpdateDatabase(playlist);
+    }
 
-        CompletableFuture.runAsync(() -> {
-            playlistRepository.save(playlist);
-        });
+    @Async
+    public void asyncUpdateDatabase(Playlist playlist) {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
 
-        return CompletableFuture.completedFuture(null);
+        playlistRepository.save(playlist);
+        log.info("MongoDB 업데이트 완료");
     }
 
     private void updateCache(Playlist playlist) {
@@ -121,7 +135,12 @@ public class PlaylistService {
 
             Music music = Music.builder()
                     .title(musicRequestDto.getTitle())
+                    .artistId(musicRequestDto.getArtistId())
                     .artist(musicRequestDto.getArtist())
+                    .albumId(musicRequestDto.getAlbumId())
+                    .album(musicRequestDto.getAlbum())
+                    .thumbnail(musicRequestDto.getThumbnail())
+                    .playtime(musicRequestDto.getPlaytime())
                     .build();
 
             existingPlaylist.addMusic(music);

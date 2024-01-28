@@ -23,6 +23,9 @@ public class PlaylistRedisSerializer implements RedisSerializer<Playlist> {
 
     @Override
     public Playlist deserialize(byte[] bytes) throws SerializationException {
+        if (bytes == null) {
+            return null;
+        }
         try (ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
              ObjectInput in = new ObjectInputStream(bis)) {
             return (Playlist) in.readObject();
