@@ -41,6 +41,8 @@ public class PlaylistService {
                 .thumbnail(playlistRequestDto.getThumbnail())
                 .build();
 
+        playlist.updateTotalMusicCount();
+
         log.info("playlist={}", playlist);
         Playlist saved = playlistRepository.save(playlist);
 
@@ -153,6 +155,7 @@ public class PlaylistService {
                     .build();
 
             existingPlaylist.addMusic(music);
+            existingPlaylist.updateTotalMusicCount();
 
             playlistRepository.save(existingPlaylist);
             updateCache(existingPlaylist);
@@ -171,6 +174,7 @@ public class PlaylistService {
 
             // TODO: musicId를 기반으로 음악을 제거합니다.
             existingPlaylist.removeMusic(musicId);
+            existingPlaylist.updateTotalMusicCount();
 
             playlistRepository.save(existingPlaylist);
             updateCache(existingPlaylist);

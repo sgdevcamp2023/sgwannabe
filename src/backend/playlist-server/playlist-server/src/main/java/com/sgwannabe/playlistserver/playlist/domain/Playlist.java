@@ -38,6 +38,7 @@ public class Playlist implements Serializable {
     private String thumbnail;
     private String userName;
     private Long uid;
+    private int totalMusicCount;
 
     @CreatedDate
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -53,7 +54,13 @@ public class Playlist implements Serializable {
         this.name = name;
     }
 
-    // Playlist 클래스의 addMusic 메서드 수정
+    public void updateTotalMusicCount() {
+        this.totalMusicCount = musics.size();
+    }
+
+    public int getTotalMusicCount() {
+        return musics.size();
+    }
     public void addMusic(Music music) {
         if (musics.stream().noneMatch(existingMusic -> existingMusic.getId().equals(music.getId()))) {
             musics.add(music);
@@ -64,7 +71,6 @@ public class Playlist implements Serializable {
             throw new DuplicateMusicException("이미 추가된 음원입니다. musicId: " + music.getId());
         }
     }
-
 
     public void removeMusic(Long musicId) {
         musics.removeIf(music -> music.getId().equals(musicId));
@@ -81,6 +87,8 @@ public class Playlist implements Serializable {
         if (fromIndex >= 0 && fromIndex < musics.size() && toIndex >= 0 && toIndex < musics.size()) {
             Music musicToMove = musics.remove(fromIndex);
             musics.add(toIndex, musicToMove);
+        } else {
+            throw new IllegalArgumentException("잘못된 인덱스 범위 요청입니다.");
         }
     }
 

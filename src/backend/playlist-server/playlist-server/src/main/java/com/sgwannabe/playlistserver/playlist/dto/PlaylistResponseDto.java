@@ -15,5 +15,6 @@ public class PlaylistResponseDto {
     private String name;
     private String thumbnail;
     private List<Music> musics;
+    private int totalMusicCount;
 
 }

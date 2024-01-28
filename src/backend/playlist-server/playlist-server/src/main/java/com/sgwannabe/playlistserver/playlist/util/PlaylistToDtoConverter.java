@@ -13,6 +13,7 @@ public class PlaylistToDtoConverter {
                 .name(playlist.getName())
                 .thumbnail(playlist.getThumbnail())
                 .musics(playlist.getMusics())
+                .totalMusicCount(playlist.getTotalMusicCount())
                 .build();
     }
 }
