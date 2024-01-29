@@ -1,10 +1,10 @@
 import play_icon from "../../assets/play_white.png";
-import download_icon from "../../assets/download.png";
 import plus_icon from "../../assets/plus.png";
 import bin_icon from "../../assets/delete.png";
 import { PlaylistMusicType } from "../../types/playlist";
 import { useRecoilState } from "recoil";
 import { playingMusic } from "../../state";
+import { useRef } from "react";
 
 interface MusicProps {
   item: PlaylistMusicType;

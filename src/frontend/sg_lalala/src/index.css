@@ -10,3 +10,31 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+@layer base {
+  .input-range {
+    -webkit-appearance: none;
+  }
+
+  .input-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    background-color: #ffffff;
+    border: 3px solid #01b925;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #00cd3c;
+    border-radius: 8px;
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+}

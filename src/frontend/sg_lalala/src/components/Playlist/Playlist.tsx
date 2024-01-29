@@ -1,6 +1,5 @@
 import PlaylistTrack from "./PlaylistTrack";
 import { useRef, useState } from "react";
-import { PlaylistArrayType } from "../../types/playlist";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { nowPlayingList, playingMusic } from "../../state";
 
@@ -50,7 +49,7 @@ function Playlist() {
           <th className="col-span-3">앨범명</th>
           <th className="col-span-2">재생시간</th>
         </tr>
-        <div>
+        <div className="overflow-y-scroll max-h-[75vh]">
           {list.map((item, idx) => (
             <div
               key={item.id}
@@ -61,7 +60,7 @@ function Playlist() {
               onDragOver={(e) => e.preventDefault()}
               className={`transition duration-200 ${
                 dragItem.current === idx && isDragging
-                  ? "bg-primary/20 opacity-0 scale-50"
+                  ? "bg-primary/20 opacity-0"
                   : ""
               }`}
             >
