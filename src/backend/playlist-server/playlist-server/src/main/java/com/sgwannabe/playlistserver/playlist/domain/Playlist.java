@@ -1,6 +1,5 @@
 package com.sgwannabe.playlistserver.playlist.domain;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -8,15 +7,13 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.sgwannabe.playlistserver.music.domain.Music;
 import com.sgwannabe.playlistserver.playlist.exception.DuplicateMusicException;
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.io.IOException;
 import java.io.Serial;
-import java.io.Serializable;  // 추가
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -58,11 +55,15 @@ public class Playlist implements Serializable {
         this.totalMusicCount = musics.size();
     }
 
+    public boolean isExistingMusic(Music music) {
+        return musics.stream().anyMatch(existingMusic -> existingMusic.getId().equals(music.getId()));
+    }
+
     public int getTotalMusicCount() {
         return musics.size();
     }
     public void addMusic(Music music) {
-        if (musics.stream().noneMatch(existingMusic -> existingMusic.getId().equals(music.getId()))) {
+        if (isExistingMusic(music)) {
             musics.add(music);
             if (musics.size() == 1) {
                 this.thumbnail = music.getThumbnail();
@@ -74,7 +75,7 @@ public class Playlist implements Serializable {
 
     public void removeMusic(Long musicId) {
         musics.removeIf(music -> music.getId().equals(musicId));
-        if (musics.size() > 0) {
+        if (!musics.isEmpty()) {
             this.thumbnail = musics.get(0).getThumbnail();
         } else {
             // TODO 플레이리스트에 곡이 없는 경우 썸네일을 디폴트 이미지로 변경 or 논의 필요

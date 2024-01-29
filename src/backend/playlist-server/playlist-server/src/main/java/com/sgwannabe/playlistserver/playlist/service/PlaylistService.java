@@ -13,14 +13,12 @@ import com.sgwannabe.playlistserver.playlist.util.KeyGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +28,8 @@ public class PlaylistService {
     private final PlaylistRepository playlistRepository;
     private final RedisTemplate<String, Playlist> redisTemplate;
     private final PlaylistToDtoConverter converter;
+    private final TransactionalService transactionalService;
+
 
     public PlaylistResponseDto createPlaylist(PlaylistRequestDto playlistRequestDto) {
 
@@ -47,12 +47,12 @@ public class PlaylistService {
         Playlist saved = playlistRepository.save(playlist);
 
         log.info("savedPlaylist={}", saved);
-        updateCacheAsync(saved);
+        transactionalService.updateCacheAsync(saved);
         return converter.convert(saved);
     }
 
     public PlaylistResponseDto getPlaylistById(String id) {
-        String key = KeyGenerator.cartKeyGenerate(id);
+        String key = KeyGenerator.playlistKeyGenerate(id);
         Playlist cachedPlaylist = redisTemplate.opsForValue().get(key);
         if (cachedPlaylist != null) {
             return converter.convert(cachedPlaylist);
@@ -61,7 +61,7 @@ public class PlaylistService {
         Optional<Playlist> playlistOptional = playlistRepository.findById(id);
         if (playlistOptional.isPresent()) {
             Playlist playlist = playlistOptional.get();
-            updateCacheAsync(playlist);
+            transactionalService.updateCacheAsync(playlist);
             return converter.convert(playlist);
         } else {
             log.info("플레이리스트를 찾을 수 없습니다. id: {}", id);
@@ -85,8 +85,8 @@ public class PlaylistService {
 
             existingPlaylist.updateName(playlistRequestDto.getName());
 
-            playlistRepository.save(existingPlaylist);
-            updateCache(existingPlaylist);
+            Playlist saved = playlistRepository.save(existingPlaylist);
+            transactionalService.updateCacheAsync(saved);
 
             return converter.convert(existingPlaylist);
         } else {
@@ -108,33 +108,15 @@ public class PlaylistService {
         }
     }
 
-    @Transactional
-    public void updateCacheAsync(Playlist playlist) {
-        String key = KeyGenerator.cartKeyGenerate(playlist.getId());
-        redisTemplate.opsForValue().set(key, playlist, Duration.ofMinutes(10));
-        log.info("redis 저장 완료");
-        asyncUpdateDatabase(playlist);
-    }
 
-    @Async
-    public void asyncUpdateDatabase(Playlist playlist) {
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-
-        playlistRepository.save(playlist);
-        log.info("MongoDB 업데이트 완료");
-    }
 
     private void updateCache(Playlist playlist) {
-        String key = KeyGenerator.cartKeyGenerate(playlist.getId());
+        String key = KeyGenerator.playlistKeyGenerate(playlist.getId());
         redisTemplate.opsForValue().set(key, playlist, Duration.ofMinutes(10));
     }
 
     private void deleteCache(Playlist playlist) {
-        String key = KeyGenerator.cartKeyGenerate(playlist.getId());
+        String key = KeyGenerator.playlistKeyGenerate(playlist.getId());
         redisTemplate.delete(key);
     }
 
@@ -172,7 +154,6 @@ public class PlaylistService {
         if (existingPlaylistOptional.isPresent()) {
             Playlist existingPlaylist = existingPlaylistOptional.get();
 
-            // TODO: musicId를 기반으로 음악을 제거합니다.
             existingPlaylist.removeMusic(musicId);
             existingPlaylist.updateTotalMusicCount();
 
