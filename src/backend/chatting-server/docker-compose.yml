@@ -1,21 +1,29 @@
-version: '3'
+version: '3.8'
+
 services:
-  app:
-    image: chatting-server:latest
+  mongodb:
+    image: mongo:7.0.5
     ports:
-      - "8080:8080"
-    environment:
-      - SPRING_PROFILES_ACTIVE=dev
+      - "18001:18001"
+    env_file: .env
+    container_name: chattingdb
+    hostname: mongodb
     volumes:
-      - ./logs:/app/logs
-    depends_on:
-      - db
-  db:
-    image: mysql:latest
-    environment:
-      - MYSQL_ROOT_PASSWORD=
-      - MYSQL_DATABASE=
-      - MYSQL_USER=
-      - MYSQL_PASSWORD=
+      - ./database/mongoDB/data:/data/db
+      - ./database/mongoDB/initdb.d:/docker-entrypoint-initdb.d:ro
+    networks:
+      - chatting-network
+
+  chatting:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "3306:3306"
+      - "18000:18000"
+    depends_on:
+      - mongodb
+    networks:
+      - chatting-network
+
+networks:
+  chatting-network:

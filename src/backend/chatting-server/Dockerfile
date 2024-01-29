@@ -1,7 +1,5 @@
-FROM openjdk:11-jre-slim
+FROM openjdk:17-jdk-slim
 
-WORKDIR /app
+COPY build/libs/*.jar app.jar
 
-COPY target/chatting-server.jar /app/chatting-server.jar
-
-CMD ["java", "-jar", "chatting-server.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
