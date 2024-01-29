@@ -1,0 +1,39 @@
+name: Docker Hub Push
+
+on:
+  push:
+    branches:
+      - '**/develop'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Environment Variables
+        run: |
+          BRANCH_NAME=$(echo $GITHUB_REF | awk -F'/' '{print $3}')
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+
+      - name: Build and Push Docker Image
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          BRANCH_NAME: ${{ env.BRANCH_NAME }}
+
+        run: |
+          if [ -n "$BRANCH_NAME" ]; then
+            DOCKERFILE_DIR="src/$BRANCH_NAME-server"
+          else
+            echo "Failed to extract branch name from GITHUB_REF."
+            exit 1
+          fi
+          
+          cd $DOCKERFILE_DIR
+          docker run --privileged --rm tonistiigi/binfmt --install all
+          docker buildx create --use
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+          docker buildx build --platform=linux/amd64,linux/arm64 -t $DOCKER_USERNAME/$BRANCH_NAME:latest . --push
