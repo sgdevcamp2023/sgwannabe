@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      - STORAGE_UPLOAD_URL=http://host.docker.internal:20000/upload
+    ports:
+      - "25000:3000"
+    volumes:
+      - ./:/app/
