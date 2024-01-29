@@ -14,6 +14,16 @@ services:
     networks:
       - chatting-network
 
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    # Mac M1 chip 사용 시 아래 platform 추가
+    platform: linux/amd64
+    networks:
+      - chatting-network
+
   chatting:
     build:
       context: .
@@ -22,6 +32,15 @@ services:
       - "18000:18000"
     depends_on:
       - mongodb
+    networks:
+      - chatting-network
+  kafka:
+    image: bitnami/kafka:3.6.1
+    ports:
+      - "18002:18002"
+    env_file: .env
+    depends_on:
+      - zookeeper
     networks:
       - chatting-network
 
