@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0.5
+    ports:
+      - "18001:18001"
+    env_file: .env
+    container_name: chattingdb
+    hostname: mongodb
+    volumes:
+      - ./database/mongoDB/data:/data/db
+      - ./database/mongoDB/initdb.d:/docker-entrypoint-initdb.d:ro
+    networks:
+      - chatting-network
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    # Mac M1 chip 사용 시 아래 platform 추가
+    platform: linux/amd64
+    networks:
+      - chatting-network
+
+  chatting:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "18000:18000"
+    depends_on:
+      - mongodb
+    networks:
+      - chatting-network
+  kafka:
+    image: bitnami/kafka:3.6.1
+    ports:
+      - "18002:18002"
+    env_file: .env
+    depends_on:
+      - zookeeper
+    networks:
+      - chatting-network
+
+networks:
+  chatting-network:
