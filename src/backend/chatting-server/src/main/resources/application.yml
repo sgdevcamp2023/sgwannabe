@@ -2,13 +2,30 @@ server:
   port: 18000
 
   kafka:
+    bootstrap-servers: localhost:18002
+
     consumer:
-      bootstrap-servers: localhost:18002
-      group-id: foo
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      room-consumer:
+        group-id: foo
+        auto-offset-reset: latest
+        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value-deserializer: org.apache.kafka.common.serialization.JsonDeserializer
+
+      chat-consumer:
+        group-id: foo
+        auto-offset-reset: latest;
+        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value-deserializer: org.apache.kafka.common.serialization.JsonDeserializer
+
     producer:
-      bootstrap-servers: localhost:18002
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      room-producer:
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.apache.kafka.common.serialization.JsonSerializer
+
+      chat-producer:
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.apache.kafka.common.serialization.JsonSerializer
+
+    topic:
+      chat-name: chatname
+      room-name: roomname
