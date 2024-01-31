@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0.5
+    ports:
+      - "19001:19001"
+    env_file: .env
+    container_name: presencedb
+    hostname: mongodb
+    volumes:
+      - ./database/mongoDB/data:/data/db
+      - ./database/mongoDB/initdb.d:/docker-entrypoint-initdb.d:ro
+    networks:
+      - presence-network
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    # Mac M1 chip 사용 시 아래 platform 추가
+    platform: linux/amd64
+    networks:
+      - presence-network
+
+  presence:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "19000:19000"
+    depends_on:
+      - mongodb
+    networks:
+      - presence-network
+  kafka:
+    image: bitnami/kafka:3.6.1
+    ports:
+      - "19002:19002"
+    env_file: .env
+    depends_on:
+      - zookeeper
+    networks:
+      - presence-network
+
+networks:
+  presence-network:
