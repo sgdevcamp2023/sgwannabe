@@ -1,19 +1,34 @@
 server:
   port: 18000
 
+kafka:
+    topic:
+      chat-name: message
+      room-name: room
+
+spring:
+  data:
+    mongodb:
+      host: mongodb
+      port: 27017
+      database: chattingdb
+      username: root
+      password: 1234
+      authentication-database: admin
+
   kafka:
-    bootstrap-servers: localhost:18002
+    bootstrap-servers: kafka:9092
 
     consumer:
       room-consumer:
-        group-id: foo
+        group-id: room-group
         auto-offset-reset: latest
         key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
         value-deserializer: org.apache.kafka.common.serialization.JsonDeserializer
 
       chat-consumer:
-        group-id: foo
-        auto-offset-reset: latest;
+        group-id: chat-group
+        auto-offset-reset: latest
         key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
         value-deserializer: org.apache.kafka.common.serialization.JsonDeserializer
 
@@ -25,7 +40,3 @@ server:
       chat-producer:
         key-serializer: org.apache.kafka.common.serialization.StringSerializer
         value-serializer: org.apache.kafka.common.serialization.JsonSerializer
-
-    topic:
-      chat-name: chatname
-      room-name: roomname

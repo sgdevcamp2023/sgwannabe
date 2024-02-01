@@ -19,25 +19,25 @@ import java.util.Map;
 @EnableKafka
 @Configuration
 public class KafkaConsumerConfig {
-    @Value("${server.kafka.bootstrap-servers}")
+    @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
 
-    @Value("${server.kafka.consumer.chat-consumer.group-id}")
+    @Value("${spring.kafka.consumer.chat-consumer.group-id}")
     private String chatGroupId;
-    @Value("${server.kafka.consumer.chat-consumer.key-deserializer}")
+    @Value("${spring.kafka.consumer.chat-consumer.key-deserializer}")
     private String chatKeyDeserializer;
-    @Value("${server.kafka.consumer.chat-consumer.value-deserializer}")
+    @Value("${spring.kafka.consumer.chat-consumer.value-deserializer}")
     private String chatValueDeserializer;
-    @Value("${server.kafka.consumer.chat-consumer.auto-offset-reset}")
+    @Value("${spring.kafka.consumer.chat-consumer.auto-offset-reset}")
     private String chatAutoOffsetResetConfig;
 
-    @Value("${server.kafka.consumer.room-consumer.group-id}")
+    @Value("${spring.kafka.consumer.room-consumer.group-id}")
     private String roomGroupId;
-    @Value("${server.kafka.consumer.room-consumer.key-deserializer}")
+    @Value("${spring.kafka.consumer.room-consumer.key-deserializer}")
     private String roomKeyDeserializer;
-    @Value("${server.kafka.consumer.room-consumer.value-deserializer}")
+    @Value("${spring.kafka.consumer.room-consumer.value-deserializer}")
     private String roomValueDeserializer;
-    @Value("${server.kafka.consumer.room-consumer.auto-offset-reset}")
+    @Value("${spring.kafka.consumer.room-consumer.auto-offset-reset}")
     private String roomAutoOffsetResetConfig;
 
     @Bean

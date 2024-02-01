@@ -17,15 +17,15 @@ import java.util.Map;
 @EnableKafka
 @Configuration
 public class KafkaProducerConfig {
-    @Value("${server.kafka.bootstrap-servers}")
+    @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
-    @Value("${server.kafka.producer.room-producer.key-serializer}")
+    @Value("${spring.kafka.producer.room-producer.key-serializer}")
     private String roomKeySerializer;
-    @Value("${server.kafka.producer.room-producer.value-serializer}")
+    @Value("${spring.kafka.producer.room-producer.value-serializer}")
     private String roomValueSerializer;
-    @Value("${server.kafka.producer.chat-producer.key-serializer}")
+    @Value("${spring.kafka.producer.chat-producer.key-serializer}")
     private String chatKeySerializer;
-    @Value("${server.kafka.producer.chat-producer.value-serializer}")
+    @Value("${spring.kafka.producer.chat-producer.value-serializer}")
     private String chatValueSerializer;
 
     @Bean

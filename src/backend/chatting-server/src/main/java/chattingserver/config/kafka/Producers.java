@@ -22,12 +22,12 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class Producers {
-    @Value("${server.kafka.topic.chat-name}")
+    @Value("${kafka.topic.chat-name}")
     private String topicChatName;
 
     private final KafkaTemplate<String, ChatMessageDto> chatKafkaTemplate;
 
-    @Value("${server.kafka.topic.room-name}")
+    @Value("${kafka.topic.room-name}")
     private String topicRoomName;
 
     private final KafkaTemplate<String, RoomMessageDto> roomKafkaTemplate;
@@ -35,28 +35,28 @@ public class Producers {
     private final ChatMessageService chatMessageService;
     private final ChatRoomService chatRoomService;
 
-    public void sendMessage(ChatMessageDto chatMessageDto) {
-        if (chatMessageDto.getMessageType() == MessageType.ENTRANCE) {
-            RoomResponseDto roomResponseDto = chatRoomService.getChatRoomInfo(chatMessageDto.getRoomId());
-            List<Long> receivers = roomResponseDto.getUsers().stream().map(User::getUserId).collect(Collectors.toList());
-            receivers.remove(chatMessageDto.getSenderId());
-            sendRoomMessage(RoomMessageDto.builder()
-                    .receivers(receivers)
-                    .roomResponseDto(roomResponseDto)
-                    .build());
-        } else {
-            CompletableFuture<SendResult<String, ChatMessageDto>> completableFuture = chatKafkaTemplate.send(topicChatName, chatMessageDto);
-            completableFuture.whenComplete((result, ex) -> {
-                if (ex == null) {
-                    log.info("채팅방 id: {}, 발신자 id: {}, 메시지: {}", chatMessageDto.getRoomId(), chatMessageDto.getSenderId(), chatMessageDto.getContent());
-                } else {
-                    log.error("메시지 전송 불가=[" + chatMessageDto.getContent() + "] 원인 : " + ex.getMessage());
-                    chatMessageService.deleteChat(chatMessageDto.getId());
-                    log.info("삭제된 메시지={}", chatMessageDto.getId());
-                }
-            });
-        }
-    }
+//    public void sendMessage(ChatMessageDto chatMessageDto) {
+//        if (chatMessageDto.getMessageType() == MessageType.ENTRANCE) {
+//            RoomResponseDto roomResponseDto = chatRoomService.getChatRoomInfo(chatMessageDto.getRoomId());
+//            List<Long> receivers = roomResponseDto.getUsers().stream().map(User::getUid).collect(Collectors.toList());
+//            receivers.remove(chatMessageDto.getSenderId());
+//            sendRoomMessage(RoomMessageDto.builder()
+//                    .receivers(receivers)
+//                    .roomResponseDto(roomResponseDto)
+//                    .build());
+//        } else {
+//            CompletableFuture<SendResult<String, ChatMessageDto>> completableFuture = chatKafkaTemplate.send(topicChatName, chatMessageDto);
+//            completableFuture.whenComplete((result, ex) -> {
+//                if (ex == null) {
+//                    log.info("채팅방 id: {}, 발신자 id: {}, 메시지: {}", chatMessageDto.getRoomId(), chatMessageDto.getSenderId(), chatMessageDto.getContent());
+//                } else {
+//                    log.error("메시지 전송 불가=[" + chatMessageDto.getContent() + "] 원인 : " + ex.getMessage());
+//                    chatMessageService.deleteChat(chatMessageDto.getId());
+//                    log.info("삭제된 메시지={}", chatMessageDto.getId());
+//                }
+//            });
+//        }
+//    }
 
     public void sendRoomMessage(RoomMessageDto roomMessageDto) {
         CompletableFuture<SendResult<String, RoomMessageDto>> completableFuture = roomKafkaTemplate.send(topicRoomName, roomMessageDto);

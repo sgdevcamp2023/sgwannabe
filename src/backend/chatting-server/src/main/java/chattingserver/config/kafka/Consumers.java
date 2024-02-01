@@ -15,12 +15,12 @@ import org.springframework.stereotype.Component;
 public class Consumers {
     private final SimpMessagingTemplate template;
 
-    @KafkaListener(groupId = "${server.kafka.consumer.chat-consumer.group-id}", topics = "${server.kafka.topic.chat-name}")
+    @KafkaListener(groupId = "${spring.kafka.consumer.chat-consumer.group-id}", topics = "${kafka.topic.chat-name}")
     public void listenChat(ChatMessageDto chatMessageDto) {
         template.convertAndSend("/chatting/topic/room/" + chatMessageDto.getRoomId(), chatMessageDto);
     }
 
-    @KafkaListener(groupId = "${server.kafka.consumer.room-consumer.group-id}", topics = "${server.kafka.topic.room-name}", containerFactory = "kafkaListenerContainerFactory")
+    @KafkaListener(groupId = "${spring.kafka.consumer.room-consumer.group-id}", topics = "${kafka.topic.room-name}", containerFactory = "kafkaListenerContainerFactory")
     public void listenGroupCreation(RoomMessageDto roomMessageDto) {
         RoomResponseDto roomResponseDto = roomMessageDto.getRoomResponseDto();
         for (Long userId : roomMessageDto.getReceivers()) {

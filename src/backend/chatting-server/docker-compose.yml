@@ -4,7 +4,7 @@ services:
   mongodb:
     image: mongo:7.0.5
     ports:
-      - "18001:18001"
+      - "18001:27017"
     env_file: .env
     container_name: chattingdb
     hostname: mongodb
@@ -24,6 +24,17 @@ services:
     networks:
       - chatting-network
 
+  kafka:
+    container_name: kafka
+    image: bitnami/kafka:3.6.1
+    ports:
+      - "18002:18002"
+    env_file: .env
+    depends_on:
+      - zookeeper
+    networks:
+      - chatting-network
+
   chatting:
     build:
       context: .
@@ -32,15 +43,7 @@ services:
       - "18000:18000"
     depends_on:
       - mongodb
-    networks:
-      - chatting-network
-  kafka:
-    image: bitnami/kafka:3.6.1
-    ports:
-      - "18002:18002"
-    env_file: .env
-    depends_on:
-      - zookeeper
+      - kafka
     networks:
       - chatting-network
 
