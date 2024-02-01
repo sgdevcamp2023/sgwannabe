@@ -4,6 +4,7 @@ import chattingserver.dto.ChatMessageDto;
 import chattingserver.dto.RoomMessageDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -74,8 +76,8 @@ public class KafkaConsumerConfig {
         Map<String, Object> configurations = new HashMap<>();
         configurations.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         configurations.put(ConsumerConfig.GROUP_ID_CONFIG, roomGroupId);
-        configurations.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, roomKeyDeserializer);
-        configurations.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,roomValueDeserializer);
+        configurations.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configurations.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         configurations.put(JsonDeserializer.TRUSTED_PACKAGES,"*");
         configurations.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, roomAutoOffsetResetConfig); // earliest: 전체 , latest: 최신 메시지
         return configurations;

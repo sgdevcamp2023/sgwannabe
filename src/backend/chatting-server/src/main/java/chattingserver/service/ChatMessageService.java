@@ -12,7 +12,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public class ChatService {
+public class ChatMessageService {
 
     private final ObjectMapper objectMapper;
     public <T> void sendMessage(WebSocketSession session, T message) {
@@ -21,5 +21,9 @@ public class ChatService {
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }
+    }
+
+    public void deleteChat(String id) {
+
     }
 }

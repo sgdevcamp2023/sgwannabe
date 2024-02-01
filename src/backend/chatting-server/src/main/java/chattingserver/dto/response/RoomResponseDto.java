@@ -1,0 +1,23 @@
+package chattingserver.dto.response;
+
+import chattingserver.domain.room.Music;
+import chattingserver.domain.room.Playlist;
+import chattingserver.domain.room.User;
+import lombok.*;
+
+import java.util.List;
+
+@Builder
+@Getter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+public class RoomResponseDto {
+    private String id;
+    private String roomName;
+    private long userCount;
+    private List<User> users;
+    private Playlist playlist;
+//    private Music thumbnail;
+
+}
