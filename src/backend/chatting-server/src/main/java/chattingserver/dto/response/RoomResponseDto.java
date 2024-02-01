@@ -1,6 +1,5 @@
 package chattingserver.dto.response;
 
-import chattingserver.domain.room.Music;
 import chattingserver.domain.room.Playlist;
 import chattingserver.domain.room.User;
 import lombok.*;
