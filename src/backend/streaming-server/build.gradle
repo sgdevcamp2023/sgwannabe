@@ -25,15 +25,31 @@ repositories {
 }
 
 dependencies {
+	// Spring
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// Websocket
+	implementation("org.springframework.boot:spring-boot-starter-websocket")
+
+	// Spring Session Redis
+	implementation("org.springframework.session:spring-session-data-redis")
+
+	// Kotlin
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
 	implementation 'io.projectreactor.kotlin:reactor-kotlin-extensions'
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'
+
+	// Reactor
 	implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-reactor'
+	testImplementation 'io.projectreactor:reactor-test'
+
+	// Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'io.projectreactor:reactor-test'
+
+	// ffmpeg ( audio processing )
+	implementation 'net.bramp.ffmpeg:ffmpeg:0.8.0'
 }
 
 tasks.withType(KotlinCompile) {
