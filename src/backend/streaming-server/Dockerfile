@@ -1,6 +1,6 @@
 FROM openjdk:17-oracle
 ARG JAR_FILE=build/libs/streaming-0.0.1-SNAPSHOT.jar
-ARG DOCKER_YML_FILE=build/resources/main/application.yml
+ARG DOCKER_YML_FILE=src/main/resources/application.yml
 ARG FFMPEG_PATH=libs/ffmpeg-6.1-linux/
 
 ADD ${JAR_FILE} streaming.jar
