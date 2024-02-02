@@ -2,8 +2,12 @@
 
 음원 서버로부터 파일을 불러와 프론트에게 음원 파일을 스트리밍합니다.
 
-## Getting Started
+## 시작하기
+
+사전에 스토리지 서버와 음원 서버가 켜져있어야 합니다.  
+음원 서버의 음원 정보에 스토리지 서버 File URL 이 들어가있어야 합니다.
 
 ```bash
-$ docker-compose down && docker-compose up -d
+$ docker-compose down
+$ docker-compose up -d
 ```
