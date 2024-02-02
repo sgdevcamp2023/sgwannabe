@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/streaming")
-class StreamingController(
-    @Value("\${file-server.url}")
-    val audioLocation: String
+class StreamingRestController(
+    val audioLocation: String = "./static"
 ) {
     @GetMapping
     fun getAudio(@RequestParam("name") name: String): ResponseEntity<ByteArrayResource> {
