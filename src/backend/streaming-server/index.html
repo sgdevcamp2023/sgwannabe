@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket MP3 Streaming</title>
+</head>
+<body>
+
+<div id="audios">
+    <button id="btnStart">시작</button>
+</div>
+
+<script>
+    var audioPlayer = document.getElementById('audioPlayer');
+    var socket = new WebSocket('ws://localhost:22000/streaming');
+
+    socket.binaryType = 'arraybuffer';
+    var stream = false;
+
+    var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    var sourceNode;
+
+    socket.onopen = function (event) {
+        socket.send("1/1");
+    }
+
+    var time = 0;
+
+    socket.onmessage = function (event) {
+
+        if (!stream) {
+            console.log(event.data);
+            socket.send("2/1/0");
+            stream = true;
+        } else {
+            if (!sourceNode) {
+                audioContext.decodeAudioData(event.data, function(buffer) {
+                    sourceNode = audioContext.createBufferSource();
+                    sourceNode.buffer = buffer;
+                    sourceNode.connect(audioContext.destination);
+                    sourceNode.start(time);
+
+                    time += sourceNode.buffer.duration;
+                    console.log(time);
+                });
+            } else {
+                audioContext.decodeAudioData(event.data, function(buffer) {
+                    sourceNode = audioContext.createBufferSource();
+                    sourceNode.buffer = buffer;
+                    sourceNode.connect(audioContext.destination);
+                    sourceNode.start(time);
+
+                    time += sourceNode.buffer.duration;
+                    console.log(time);
+                });
+            }
+        }
+    };
+
+    socket.onclose = function (event) {
+        console.error('WebSocket closed:', event);
+    };
+
+    document.querySelector('button').addEventListener('click', function() {
+          audioContext.resume().then(() => {
+            console.log('AudioContext resumed');
+        });
+    });
+</script>
+
+</body>
+</html>

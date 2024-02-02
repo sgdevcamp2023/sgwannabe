@@ -8,3 +8,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      - client.endpoint.music=http://host.docker.internal:24000
+      - client.endpoint.storage=http://host.docker.internal:30000
+    restart: always
+    networks:
+      - streaming-network
+
+networks:
+  streaming-network:
