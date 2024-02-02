@@ -50,6 +50,9 @@ dependencies {
 
 	// ffmpeg ( audio processing )
 	implementation 'net.bramp.ffmpeg:ffmpeg:0.8.0'
+
+	// kotlin-logging
+	implementation 'io.github.oshai:kotlin-logging-jvm:5.1.0'
 }
 
 tasks.withType(KotlinCompile) {
