@@ -3,6 +3,8 @@ package com.lalala.streaming.handler
 import com.lalala.streaming.dto.MusicDetailDTO
 import com.lalala.streaming.exception.MusicNotFoundException
 import com.lalala.streaming.exception.StorageFileNotFoundException
+import io.github.oshai.kotlinlogging.KotlinLogging
+import net.bramp.ffmpeg.FFmpeg
 import net.bramp.ffmpeg.FFprobe
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpStatusCode
@@ -21,16 +23,24 @@ import kotlin.math.floor
 val TRIM_DURATION = 3
 
 class StreamingHandler(
+    private val ffMpeg: FFmpeg,
     private val ffProbe: FFprobe,
     @Qualifier("musicClient")
     private val musicClient: RestClient,
     @Qualifier("storageClient")
     private val storageClient: RestClient,
 ) : TextWebSocketHandler() {
+    // TODO: 레디스 연결하여 노래 끝났는지 확인
+    // TODO: 다음 트랙 변화 이벤트 추가
+    // TODO: 연결 끊어졌을 때 해당 세션 파일 찾아서 삭제
+
+    private val logger = KotlinLogging.logger {}
+
     override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
+
         val payload = message.payload
 
-        println(payload)
+        logger.info { "${session.id} - ${payload}" }
 
         val command = payload.split("/")[0]
         val commandType = Command.entries.find { it.value == command } ?: throw RuntimeException()
@@ -82,14 +92,14 @@ class StreamingHandler(
         val format = result.getFormat()
         val duration = format.duration
 
-        println("filename: " + format.filename)
-        println("duration : " + format.duration)
-        println("bit_rate : " + format.bit_rate)
+        logger.info { "filename: " + format.filename }
+        logger.info { "duration : " + format.duration }
+        logger.info { "bit_rate : " + format.bit_rate }
 
         val processBuilder = ProcessBuilder()
         processBuilder.directory(File(System.getProperty("user.dir")));
         processBuilder.command(
-            "./libs/ffmpeg-6.1/ffmpeg", "-y", "-i", "${session.id}.mp3",
+            ffMpeg.path, "-y", "-i", "${session.id}.mp3",
             "-ss", startTime, "-f", "segment", "-segment_time", "${TRIM_DURATION}",
             "${session.id}-%d.flac"
         )
@@ -109,9 +119,6 @@ class StreamingHandler(
 
         val remainingDuration = duration - startTime.toDouble()
         val remainingCount = floor(remainingDuration / TRIM_DURATION).toInt()
-
-        println(remainingDuration)
-        println(remainingCount)
 
         for (i in 0..remainingCount) {
             val nextFile = File("${session.id}-${i+1}.flac")
@@ -137,7 +144,6 @@ class StreamingHandler(
         }
 
         File("${session.id}.mp3").delete()
-        // TODO: 연결 끊어졌을 때 해당 세션 파일 찾아서 삭제
     }
 
     fun downloadMusic(session: WebSocketSession, fileName: String) {
