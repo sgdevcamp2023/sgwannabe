@@ -4,6 +4,7 @@ import chattingserver.domain.room.Playlist;
 import chattingserver.domain.room.User;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -17,6 +18,7 @@ public class RoomResponseDto {
     private long userCount;
     private List<User> users;
     private Playlist playlist;
+    private LocalDateTime createdAt;
 //    private Music thumbnail;
 
 }

@@ -9,7 +9,7 @@ kafka:
 spring:
   data:
     mongodb:
-      host: mongodb
+      host: chattingdb
       port: 27017
       database: chattingdb
       username: root

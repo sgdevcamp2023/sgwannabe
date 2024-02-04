@@ -1,12 +1,11 @@
 package chattingserver.domain.room;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Document(collection = "rooms")
@@ -14,6 +13,8 @@ import java.util.List;
 @Getter
 @ToString
 @Slf4j
+@AllArgsConstructor
+@NoArgsConstructor
 public class Room {
 
     @Id
@@ -21,8 +22,8 @@ public class Room {
     private String roomName;
     private Playlist playlist;
 
-//    @Indexed
     private List<User> users;
+    private LocalDateTime createdAt;
     public void setMembers(List<User> users) {
         this.users = users;
     }
