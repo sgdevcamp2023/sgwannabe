@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @Tag(name = "room", description = "채팅방 API")
 @Slf4j
 @RestController
-@RequestMapping("/v1/api/chatrooms")
+@RequestMapping("/api/v1/chatrooms")
 @RequiredArgsConstructor
 public class RoomController {
 
@@ -75,7 +75,7 @@ public class RoomController {
 
     @Operation(summary = "채팅방 리스트 조회", description = "특정 유저가 참여중인 채팅방 리스트 조회", responses = {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = CommonAPIMessage.class)))})
-    @GetMapping("/my-chatrooms")
+    @GetMapping("/joined")
     public ResponseEntity<CommonAPIMessage> myChatRooms(@RequestParam(required = true) Long uid){
         List<JoinedRoomResponseDto> joinedRoomResponseDtos = roomService.findJoinedRoomsByUid(uid);
         CommonAPIMessage apiMessage = new CommonAPIMessage();
@@ -86,7 +86,7 @@ public class RoomController {
 
     @Operation(summary = "채팅방 리스트 조회", description = "특정 유저가 참여할 수 있는 채팅방 리스트 조회", responses = {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = CommonAPIMessage.class)))})
-    @GetMapping("/unjoined-chatrooms")
+    @GetMapping("/unjoined")
     public ResponseEntity<CommonAPIMessage> unjoinedChatRooms(@RequestParam(required = true) Long uid) {
         List<RoomResponseDto> unjoinedRooms = roomService.findUnjoinedRooms(uid);
         CommonAPIMessage apiMessage = new CommonAPIMessage();
