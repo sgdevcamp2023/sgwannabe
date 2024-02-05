@@ -1,12 +1,12 @@
 version: "3.9"
 
 services:
-  app:
+  music-uploader-app:
     build:
       context: .
       dockerfile: ./Dockerfile
     environment:
-      - STORAGE_UPLOAD_URL=http://host.docker.internal:20000/upload
+      - STORAGE_URL=http://fileserver-app:30000
     ports:
       - "25000:3000"
     volumes:
