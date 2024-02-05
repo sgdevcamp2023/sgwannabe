@@ -13,9 +13,12 @@ class TempFileDeleteListener {
 
     @EventListener(ApplicationReadyEvent::class)
     fun DeleteTempFilesAfterStartUp() {
+        File(StreamingConstant.TEMP_FOLDER).mkdir()
+
         File(StreamingConstant.TEMP_FOLDER)
             .walkTopDown()
             .maxDepth(1)
+            .filter(File::isFile)
             .forEach(File::delete)
 
         logger.info { "임시 폴더의 모든 음원 파일을 청소했습니다." }
