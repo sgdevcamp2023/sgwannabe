@@ -1,5 +1,6 @@
 package com.lalala.streaming.handler
 
+import com.lalala.streaming.constant.StreamingConstant
 import com.lalala.streaming.dto.MusicDetailDTO
 import com.lalala.streaming.exception.MusicNotFoundException
 import com.lalala.streaming.exception.StorageFileNotFoundException
@@ -12,6 +13,7 @@ import org.springframework.http.MediaType
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.body
 import org.springframework.web.socket.BinaryMessage
+import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
@@ -19,8 +21,6 @@ import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 import kotlin.math.floor
-
-val TRIM_DURATION = 3
 
 class StreamingHandler(
     private val ffMpeg: FFmpeg,
@@ -30,11 +30,27 @@ class StreamingHandler(
     @Qualifier("storageClient")
     private val storageClient: RestClient,
 ) : TextWebSocketHandler() {
-    // TODO: 레디스 연결하여 노래 끝났는지 확인
     // TODO: 다음 트랙 변화 이벤트 추가
-    // TODO: 연결 끊어졌을 때 해당 세션 파일 찾아서 삭제
 
     private val logger = KotlinLogging.logger {}
+
+    override fun afterConnectionEstablished(session: WebSocketSession) {
+        logger.info { "${session.id} - Connected!" }
+        super.afterConnectionEstablished(session)
+    }
+
+    override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
+        logger.info { "${session.id} - Disconnected! ( ${status.code} - ${status.reason} )" }
+
+        File(StreamingConstant.TEMP_FOLDER)
+            .walkTopDown()
+            .maxDepth(1)
+            .filter(File::isFile)
+            .filter { it.name.startsWith(session.id) }
+            .forEach(File::delete)
+
+        super.afterConnectionClosed(session, status)
+    }
 
     override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
 
@@ -45,16 +61,21 @@ class StreamingHandler(
         val command = payload.split("/")[0]
         val commandType = Command.entries.find { it.value == command } ?: throw RuntimeException()
 
-        when (commandType) {
-            Command.GET -> {
-                val musicId = payload.split("/")[1]
-                sendPlayTime(session, musicId)
+        try {
+            when (commandType) {
+                Command.GET -> {
+                    val musicId = payload.split("/")[1]
+                    sendPlayTime(session, musicId)
+                }
+
+                Command.STREAM -> {
+                    val musicId = payload.split("/")[1]
+                    val startTime = payload.split("/")[2]
+                    startStream(session, musicId, startTime)
+                }
             }
-            Command.STREAM -> {
-                val musicId = payload.split("/")[1]
-                val startTime = payload.split("/")[2]
-                startStream(session, musicId, startTime)
-            }
+        } catch (err: Exception) {
+            afterConnectionClosed(session, CloseStatus.GOING_AWAY)
         }
     }
 
@@ -77,7 +98,7 @@ class StreamingHandler(
     fun sendPlayTime(session: WebSocketSession, musicId: String) {
         // 음원 서버에서 파일 주소 조회
         val music = getMusic(session, musicId)
-        music?.playTime.let { session.sendMessage(TextMessage("$it")) }
+        music.playTime.let { session.sendMessage(TextMessage("$it")) }
     }
 
     fun startStream(session: WebSocketSession, musicId: String, startTime: String) {
@@ -88,7 +109,9 @@ class StreamingHandler(
         // 파일 서버에서 파일 다운로드
         downloadMusic(session, fileName)
 
-        val result = ffProbe.probe("${session.id}.mp3")
+        val mediaFile = File("${StreamingConstant.TEMP_FOLDER}/${session.id}.mp3")
+
+        val result = ffProbe.probe(mediaFile.path)
         val format = result.getFormat()
         val duration = format.duration
 
@@ -99,9 +122,9 @@ class StreamingHandler(
         val processBuilder = ProcessBuilder()
         processBuilder.directory(File(System.getProperty("user.dir")));
         processBuilder.command(
-            ffMpeg.path, "-y", "-i", "${session.id}.mp3",
-            "-ss", startTime, "-f", "segment", "-segment_time", "${TRIM_DURATION}",
-            "${session.id}-%d.flac"
+            ffMpeg.path, "-y", "-i", mediaFile.path,
+            "-ss", startTime, "-f", "segment", "-segment_time", "${StreamingConstant.TRIM_DURATION_SEC}",
+            "${StreamingConstant.TEMP_FOLDER}/${session.id}-%d.flac"
         )
 
         val commandLineThread = Thread() {
@@ -118,10 +141,10 @@ class StreamingHandler(
         commandLineThread.start()
 
         val remainingDuration = duration - startTime.toDouble()
-        val remainingCount = floor(remainingDuration / TRIM_DURATION).toInt()
+        val remainingCount = floor(remainingDuration / StreamingConstant.TRIM_DURATION_SEC).toInt()
 
         for (i in 0..remainingCount) {
-            val nextFile = File("${session.id}-${i+1}.flac")
+            val nextFile = File(StreamingConstant.TEMP_FOLDER, "${session.id}-${i+1}.flac")
             while (!nextFile.exists()) {
                 if (!commandLineThread.isAlive && i == remainingCount) {
                     // 마지막은 다음 파일이 나오는 기준이 아닌, 스레드 종료 기준
@@ -130,20 +153,19 @@ class StreamingHandler(
                 Thread.sleep(10)
             }
 
-            val splitFile = File("${session.id}-${i}.flac")
+            val splitFile = File(StreamingConstant.TEMP_FOLDER, "${session.id}-${i}.flac")
             splitFile.inputStream().buffered().use { stream ->
                 session.sendMessage(BinaryMessage(stream.readBytes(), false))
             }
             session.sendMessage(BinaryMessage(ByteArray(0), true))
 
             splitFile.delete()
-            File("${session.id}-${i}.flac").delete()
 
             // 다음 전달까지 대기
             Thread.sleep(100);
         }
 
-        File("${session.id}.mp3").delete()
+        mediaFile.delete()
     }
 
     fun downloadMusic(session: WebSocketSession, fileName: String) {
@@ -162,7 +184,7 @@ class StreamingHandler(
             }
             .body<ByteArray>()
 
-        val downloadFile = File("${session.id}.mp3")
+        val downloadFile = File(StreamingConstant.TEMP_FOLDER, "${session.id}.mp3")
         downloadFile.writeBytes(storageData!!)
     }
 }
