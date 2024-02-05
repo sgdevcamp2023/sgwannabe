@@ -1,5 +1,6 @@
 package com.lalala.streaming.handler
 
+import com.lalala.streaming.constant.StreamingConstant
 import com.lalala.streaming.dto.MusicDetailDTO
 import com.lalala.streaming.exception.MusicNotFoundException
 import com.lalala.streaming.exception.StorageFileNotFoundException
@@ -19,8 +20,6 @@ import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 import kotlin.math.floor
-
-val TRIM_DURATION = 3
 
 class StreamingHandler(
     private val ffMpeg: FFmpeg,
@@ -99,9 +98,9 @@ class StreamingHandler(
         val processBuilder = ProcessBuilder()
         processBuilder.directory(File(System.getProperty("user.dir")));
         processBuilder.command(
-            ffMpeg.path, "-y", "-i", "${session.id}.mp3",
-            "-ss", startTime, "-f", "segment", "-segment_time", "${TRIM_DURATION}",
-            "${session.id}-%d.flac"
+            ffMpeg.path, "-y", "-i", "${StreamingConstant.TEMP_FOLDER}/${session.id}.mp3",
+            "-ss", startTime, "-f", "segment", "-segment_time", "${StreamingConstant.TRIM_DURATION_SEC}",
+            "${StreamingConstant.TEMP_FOLDER}/${session.id}-%d.flac"
         )
 
         val commandLineThread = Thread() {
@@ -118,10 +117,10 @@ class StreamingHandler(
         commandLineThread.start()
 
         val remainingDuration = duration - startTime.toDouble()
-        val remainingCount = floor(remainingDuration / TRIM_DURATION).toInt()
+        val remainingCount = floor(remainingDuration / StreamingConstant.TRIM_DURATION_SEC).toInt()
 
         for (i in 0..remainingCount) {
-            val nextFile = File("${session.id}-${i+1}.flac")
+            val nextFile = File(StreamingConstant.TEMP_FOLDER, "${session.id}-${i+1}.flac")
             while (!nextFile.exists()) {
                 if (!commandLineThread.isAlive && i == remainingCount) {
                     // 마지막은 다음 파일이 나오는 기준이 아닌, 스레드 종료 기준
@@ -130,20 +129,20 @@ class StreamingHandler(
                 Thread.sleep(10)
             }
 
-            val splitFile = File("${session.id}-${i}.flac")
+            val splitFile = File(StreamingConstant.TEMP_FOLDER, "${session.id}-${i}.flac")
             splitFile.inputStream().buffered().use { stream ->
                 session.sendMessage(BinaryMessage(stream.readBytes(), false))
             }
             session.sendMessage(BinaryMessage(ByteArray(0), true))
 
             splitFile.delete()
-            File("${session.id}-${i}.flac").delete()
+            File(StreamingConstant.TEMP_FOLDER, "${session.id}-${i}.flac").delete()
 
             // 다음 전달까지 대기
             Thread.sleep(100);
         }
 
-        File("${session.id}.mp3").delete()
+        File(StreamingConstant.TEMP_FOLDER, "${session.id}.mp3").delete()
     }
 
     fun downloadMusic(session: WebSocketSession, fileName: String) {
@@ -162,7 +161,7 @@ class StreamingHandler(
             }
             .body<ByteArray>()
 
-        val downloadFile = File("${session.id}.mp3")
+        val downloadFile = File(StreamingConstant.TEMP_FOLDER, "${session.id}.mp3")
         downloadFile.writeBytes(storageData!!)
     }
 }
