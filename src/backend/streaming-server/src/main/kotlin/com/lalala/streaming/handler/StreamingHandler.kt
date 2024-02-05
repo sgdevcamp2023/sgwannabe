@@ -100,7 +100,7 @@ class StreamingHandler(
     fun sendPlayTime(session: WebSocketSession, musicId: String) {
         // 음원 서버에서 파일 주소 조회
         val music = getMusic(session, musicId)
-        music?.playTime.let { session.sendMessage(TextMessage("$it")) }
+        music.playTime.let { session.sendMessage(TextMessage("$it")) }
     }
 
     fun startStream(session: WebSocketSession, musicId: String, startTime: String) {
