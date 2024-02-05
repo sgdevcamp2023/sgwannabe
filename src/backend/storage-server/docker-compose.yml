@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "20000:20000"
+      - "30000:30000"
     restart: unless-stopped
     env_file:
       - .env

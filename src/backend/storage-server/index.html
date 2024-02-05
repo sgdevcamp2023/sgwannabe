@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Han Media Play - Partial Content</title>
+  </head>
+  <style>
+    .video-div {
+      width: 640px;
+      height: 364px;
+      max-width: 640px;
+      max-height: 364px;
+      min-width: 640px;
+      min-height: 364px;
+    }
+  </style>
+  <body>
+    <h3>This is V01 of the media streaming</h3>
+    <div class="video-div">
+      <video
+        muted
+        playsinline
+        loop
+        style="width: 100%; height: auto"
+        controls
+        src="http://localhost:8080/play/media/v01/888"
+      ></video>
+    </div>
+    <h3>This is V02 of the media streaming</h3>
+    <div class="video-div">
+      <video
+        muted
+        playsinline
+        loop
+        style="width: 100%; height: auto"
+        controls
+        src="http://localhost:8080/play/media/v02/888"
+      ></video>
+    </div>
+  </body>
+</html>

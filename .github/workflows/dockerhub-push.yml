@@ -3,7 +3,7 @@ name: Docker Hub Push
 on:
   push:
     branches:
-      - '**/develop'
+      - "**/develop"
 
 jobs:
   build-and-push:
@@ -26,12 +26,12 @@ jobs:
 
         run: |
           if [ -n "$BRANCH_NAME" ]; then
-            DOCKERFILE_DIR="src/$BRANCH_NAME-server"
+            DOCKERFILE_DIR="src/backend/$BRANCH_NAME-server"
           else
             echo "Failed to extract branch name from GITHUB_REF."
             exit 1
           fi
-          
+
           cd $DOCKERFILE_DIR
           docker run --privileged --rm tonistiigi/binfmt --install all
           docker buildx create --use
