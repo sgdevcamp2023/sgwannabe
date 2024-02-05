@@ -30,9 +30,7 @@ class StreamingHandler(
     @Qualifier("storageClient")
     private val storageClient: RestClient,
 ) : TextWebSocketHandler() {
-    // TODO: 레디스 연결하여 노래 끝났는지 확인
     // TODO: 다음 트랙 변화 이벤트 추가
-    // TODO: 연결 끊어졌을 때 해당 세션 파일 찾아서 삭제
 
     private val logger = KotlinLogging.logger {}
 
