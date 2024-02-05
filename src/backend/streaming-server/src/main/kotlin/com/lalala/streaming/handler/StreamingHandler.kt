@@ -111,7 +111,9 @@ class StreamingHandler(
         // 파일 서버에서 파일 다운로드
         downloadMusic(session, fileName)
 
-        val result = ffProbe.probe("${session.id}.mp3")
+        val mediaFile = File("${StreamingConstant.TEMP_FOLDER}/${session.id}.mp3")
+
+        val result = ffProbe.probe(mediaFile.path)
         val format = result.getFormat()
         val duration = format.duration
 
@@ -122,7 +124,7 @@ class StreamingHandler(
         val processBuilder = ProcessBuilder()
         processBuilder.directory(File(System.getProperty("user.dir")));
         processBuilder.command(
-            ffMpeg.path, "-y", "-i", "${StreamingConstant.TEMP_FOLDER}/${session.id}.mp3",
+            ffMpeg.path, "-y", "-i", mediaFile.path,
             "-ss", startTime, "-f", "segment", "-segment_time", "${StreamingConstant.TRIM_DURATION_SEC}",
             "${StreamingConstant.TEMP_FOLDER}/${session.id}-%d.flac"
         )
@@ -160,13 +162,12 @@ class StreamingHandler(
             session.sendMessage(BinaryMessage(ByteArray(0), true))
 
             splitFile.delete()
-            File(StreamingConstant.TEMP_FOLDER, "${session.id}-${i}.flac").delete()
 
             // 다음 전달까지 대기
             Thread.sleep(100);
         }
 
-        File(StreamingConstant.TEMP_FOLDER, "${session.id}.mp3").delete()
+        mediaFile.delete()
     }
 
     fun downloadMusic(session: WebSocketSession, fileName: String) {
