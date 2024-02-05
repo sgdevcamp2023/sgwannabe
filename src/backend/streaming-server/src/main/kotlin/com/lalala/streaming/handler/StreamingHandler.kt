@@ -63,16 +63,21 @@ class StreamingHandler(
         val command = payload.split("/")[0]
         val commandType = Command.entries.find { it.value == command } ?: throw RuntimeException()
 
-        when (commandType) {
-            Command.GET -> {
-                val musicId = payload.split("/")[1]
-                sendPlayTime(session, musicId)
+        try {
+            when (commandType) {
+                Command.GET -> {
+                    val musicId = payload.split("/")[1]
+                    sendPlayTime(session, musicId)
+                }
+
+                Command.STREAM -> {
+                    val musicId = payload.split("/")[1]
+                    val startTime = payload.split("/")[2]
+                    startStream(session, musicId, startTime)
+                }
             }
-            Command.STREAM -> {
-                val musicId = payload.split("/")[1]
-                val startTime = payload.split("/")[2]
-                startStream(session, musicId, startTime)
-            }
+        } catch (err: Exception) {
+            afterConnectionClosed(session, CloseStatus.GOING_AWAY)
         }
     }
 
