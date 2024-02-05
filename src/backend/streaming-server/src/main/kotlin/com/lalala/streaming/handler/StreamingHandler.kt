@@ -75,6 +75,7 @@ class StreamingHandler(
                 }
             }
         } catch (err: Exception) {
+            err.printStackTrace()
             afterConnectionClosed(session, CloseStatus.GOING_AWAY)
         }
     }
