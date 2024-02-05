@@ -13,6 +13,7 @@ import org.springframework.http.MediaType
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.body
 import org.springframework.web.socket.BinaryMessage
+import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
@@ -34,6 +35,24 @@ class StreamingHandler(
     // TODO: 연결 끊어졌을 때 해당 세션 파일 찾아서 삭제
 
     private val logger = KotlinLogging.logger {}
+
+    override fun afterConnectionEstablished(session: WebSocketSession) {
+        logger.info { "${session.id} - Connected!" }
+        super.afterConnectionEstablished(session)
+    }
+
+    override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
+        logger.info { "${session.id} - Disconnected! ( ${status.code} - ${status.reason} )" }
+
+        File(StreamingConstant.TEMP_FOLDER)
+            .walkTopDown()
+            .maxDepth(1)
+            .filter(File::isFile)
+            .filter { it.name.startsWith(session.id) }
+            .forEach(File::delete)
+
+        super.afterConnectionClosed(session, status)
+    }
 
     override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
 
