@@ -11,7 +11,7 @@ import java.time.Duration;
 public class RedisService {
     private final RedisTemplate<String, String> redisTemplate;
 
-    // key: email, vale: authcode
+    // key: email, vale: auth code
     public String getRedisTemplateValue(String key) {
         return redisTemplate.opsForValue().get(key);
     }

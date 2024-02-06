@@ -2,7 +2,6 @@ package userserver.exception;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,16 +25,22 @@ public class CustomExceptionAdvice extends ResponseEntityExceptionHandler {
     protected ResponseEntity<ErrorResponse> globalException(CustomException e, HttpServletRequest request) {
         CustomUserCode code = e.getErrorCode();
 
-        ErrorResponse errorResponse = new ErrorResponse(code.getStatus(), code.getCode(), code.getMessage(), request.getRequestURI().toString());
-
-        return ResponseEntity.status(HttpStatus.valueOf(code.getStatus())).body(errorResponse);
+        if (code != null) {
+            ErrorResponse errorResponse = new ErrorResponse(code.getStatus(), code.getCode(), code.getMessage(), request.getRequestURI());
+            return ResponseEntity.status(HttpStatus.valueOf(code.getStatus())).body(errorResponse);
+        } else {
+            // Handle the case where the error code is null
+            log.error("CustomException error code is null.");
+            // You can provide a default error response or take appropriate action
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "500", "Internal Server Error", request.getRequestURI()));
+        }
     }
 
 
     @ExceptionHandler({MalformedJwtException.class, ExpiredJwtException.class, AuthenticationCredentialsNotFoundException.class, AccessDeniedException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<ErrorResponse> handleJwtExceptions(Exception exception, HttpServletRequest request) {
-        CustomUserCode customUserCode = null;
+        CustomUserCode customUserCode = CustomUserCode.INTERNAL_SERVER_ERROR;
 
         if (exception instanceof MalformedJwtException) {
             customUserCode = CustomUserCode.MALFORMED_TOKEN;

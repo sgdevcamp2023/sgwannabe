@@ -1,4 +1,5 @@
 package userserver.exception;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public enum CustomUserCode {
      */
     EMPTY_EMAIL(HttpStatus.BAD_REQUEST.value(), "200", "이메일을 입력해주세요"),
     EMPTY_PASSWORD(HttpStatus.BAD_REQUEST.value(),  "201", "비밀번호를 입력해주세요"),
-    EMPTY_NICKNAME(HttpStatus.BAD_REQUEST.value(), "202", "별명을 입력해주세요"),
+    EMPTY_NICKNAME(HttpStatus.BAD_REQUEST.value(), "202", "닉네임을 입력해주세요"),
     EMPTY_CODE(HttpStatus.BAD_REQUEST.value(),  "203", "인증코드를 입력해주세요"),
 
     INVALID_EMAIL(HttpStatus.BAD_REQUEST.value(),  "204", "이메일 형식이 올바르지 않습니다"),
@@ -48,5 +49,7 @@ public enum CustomUserCode {
     private final Integer status;
     private final String code;
     private final String message;
+
+
 
 }

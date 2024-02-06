@@ -11,7 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 /**
- * 모든 entity의 상위 클래스에서 created_at, updated_at 을 자동으로 관리
+ * 모든 entity 의 상위 클래스에서 created_at, updated_at 을 자동으로 관리
  */
 @Getter
 @MappedSuperclass

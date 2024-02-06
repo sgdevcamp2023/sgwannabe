@@ -3,14 +3,15 @@ package userserver.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import userserver.config.security.UserDetailsImpl;
 import userserver.exception.CustomException;
 import userserver.exception.CustomUserCode;
+import userserver.exception.CustomUserProvider;
 import userserver.payload.request.*;
 import userserver.service.UserService;
 
@@ -36,7 +37,11 @@ public class UserController {
      * 인증 코드 입력 검증
      */
     @PostMapping("/verification")
-    public ResponseEntity<?> verifyAuthCode(@Validated @RequestBody EmailVerifyRequest request) {
+    public ResponseEntity<?> verifyAuthCode(@Validated @RequestBody EmailVerifyRequest request, Errors errors) {
+        if (errors.hasErrors()){
+            CustomUserProvider.throwError(errors);
+        }
+
         return userService.verifyAuthCode(request);
     }
 
@@ -44,8 +49,10 @@ public class UserController {
      * 회원가입
      */
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@Validated @RequestBody SignUpRequest request) {
-
+    public ResponseEntity<?> signup(@Validated @RequestBody SignUpRequest request, Errors errors) {
+        if (errors.hasErrors()){
+            CustomUserProvider.throwError(errors);
+        }
         return userService.signUp(request);
     }
 
@@ -53,7 +60,11 @@ public class UserController {
      * 비밀번호 변경
      */
     @PostMapping("/password-change")
-    public ResponseEntity<?> passwordChange(@AuthenticationPrincipal UserDetailsImpl userDetails, @Validated @RequestBody PasswordChangeRequest request) {
+    public ResponseEntity<?> passwordChange(@AuthenticationPrincipal UserDetailsImpl userDetails, @Validated @RequestBody PasswordChangeRequest request, Errors errors) {
+        if (errors.hasErrors()){
+            CustomUserProvider.throwError(errors);
+        }
+
         if (userDetails == null) {
             throw new CustomException(CustomUserCode.CLIENT_UNAUTHORIZED);
         }
