@@ -21,16 +21,17 @@ public class KafkaTopicConfig {
     private String topicRoomName;
 
     @Bean
-    public KafkaAdmin kafkaAdmin(){
-        Map<String,Object> configurations = new HashMap<>();
-        configurations.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG,bootstrapAddress);
+    public KafkaAdmin kafkaAdmin() {
+        Map<String, Object> configurations = new HashMap<>();
+        configurations.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         return new KafkaAdmin(configurations);
     }
 
     @Bean
-    public NewTopic chatTopic(){
-        return new NewTopic(topicChatName,1,(short)1);
+    public NewTopic chatTopic() {
+        return new NewTopic(topicChatName, 1, (short) 1);
     }
+
     @Bean
     public NewTopic roomTopic() {
         return TopicBuilder.name(topicRoomName)

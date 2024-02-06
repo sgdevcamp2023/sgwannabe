@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @Tag(name = "room", description = "채팅방 API")
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/chatrooms")
+@RequestMapping("/api/v1/rooms")
 @RequiredArgsConstructor
 public class RoomController {
 

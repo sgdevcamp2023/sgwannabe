@@ -22,4 +22,6 @@ public interface RoomRepository extends MongoRepository<Room, String>, RoomRepos
     @Override
     <S extends Room> S save(S entity);
 
+    @Override
+    boolean existsById(String s);
 }

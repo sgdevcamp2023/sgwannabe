@@ -31,31 +31,12 @@ public class KafkaProducerConfig {
     private String chatValueSerializer;
 
     @Bean
-    public ProducerFactory<String, ChatMessageDto> producerFactory(){
+    public ProducerFactory<String, ChatMessageDto> producerFactory() {
         return new DefaultKafkaProducerFactory<>(chatProducerConfigurations());
     }
 
     @Bean
-    public Map<String, Object> chatProducerConfigurations(){
-        Map<String, Object> configurations = new HashMap<>();
-        configurations.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-        configurations.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, chatKeySerializer);
-        configurations.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, chatValueSerializer);
-        return configurations;
-    }
-
-    @Bean
-    public KafkaTemplate<String, ChatMessageDto> chatKafkaTemplate(){
-        return new KafkaTemplate<>(producerFactory());
-    }
-
-    @Bean
-    public ProducerFactory<String, RoomMessageDto> roomProducerFactory(){
-        return new DefaultKafkaProducerFactory<>(roomProducerConfigurations());
-    }
-
-    @Bean
-    public Map<String, Object> roomProducerConfigurations(){
+    public Map<String, Object> chatProducerConfigurations() {
         Map<String, Object> configurations = new HashMap<>();
         configurations.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         configurations.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -64,7 +45,26 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, RoomMessageDto> roomKafkaTemplate(){
+    public KafkaTemplate<String, ChatMessageDto> chatKafkaTemplate() {
+        return new KafkaTemplate<>(producerFactory());
+    }
+
+    @Bean
+    public ProducerFactory<String, RoomMessageDto> roomProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(roomProducerConfigurations());
+    }
+
+    @Bean
+    public Map<String, Object> roomProducerConfigurations() {
+        Map<String, Object> configurations = new HashMap<>();
+        configurations.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+        configurations.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configurations.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return configurations;
+    }
+
+    @Bean
+    public KafkaTemplate<String, RoomMessageDto> roomKafkaTemplate() {
         return new KafkaTemplate<>(roomProducerFactory());
     }
 }

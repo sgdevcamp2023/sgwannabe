@@ -12,7 +12,6 @@ import java.util.List;
 @Builder
 @Getter
 @ToString
-@Slf4j
 @AllArgsConstructor
 @NoArgsConstructor
 public class Room {

@@ -43,7 +43,7 @@ public class KafkaConsumerConfig {
     private String roomAutoOffsetResetConfig;
 
     @Bean
-    public ConsumerFactory<String, ChatMessageDto> chatConsumerFactory(){
+    public ConsumerFactory<String, ChatMessageDto> chatConsumerFactory() {
         return new DefaultKafkaConsumerFactory<>(chatConsumerConfigurations(), new StringDeserializer(),
                 new JsonDeserializer<>(ChatMessageDto.class));
     }
@@ -52,22 +52,22 @@ public class KafkaConsumerConfig {
         Map<String, Object> configurations = new HashMap<>();
         configurations.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         configurations.put(ConsumerConfig.GROUP_ID_CONFIG, chatGroupId);
-        configurations.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, chatKeyDeserializer);
-        configurations.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, chatValueDeserializer);
-        configurations.put(JsonDeserializer.TRUSTED_PACKAGES,"*");
+        configurations.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configurations.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        configurations.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         configurations.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, chatAutoOffsetResetConfig); // earliest: 전체 , latest: 최신 메시지
         return configurations;
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, ChatMessageDto> kafkaListenerContainerFactory(){
+    public ConcurrentKafkaListenerContainerFactory<String, ChatMessageDto> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, ChatMessageDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(chatConsumerFactory());
         return factory;
     }
 
     @Bean
-    public ConsumerFactory<String, RoomMessageDto> roomConsumerFactory(){
+    public ConsumerFactory<String, RoomMessageDto> roomConsumerFactory() {
         return new DefaultKafkaConsumerFactory<>(roomConsumerConfigurations(), new StringDeserializer(),
                 new JsonDeserializer<>(RoomMessageDto.class));
     }
@@ -78,7 +78,7 @@ public class KafkaConsumerConfig {
         configurations.put(ConsumerConfig.GROUP_ID_CONFIG, roomGroupId);
         configurations.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configurations.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        configurations.put(JsonDeserializer.TRUSTED_PACKAGES,"*");
+        configurations.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         configurations.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, roomAutoOffsetResetConfig); // earliest: 전체 , latest: 최신 메시지
         return configurations;
     }

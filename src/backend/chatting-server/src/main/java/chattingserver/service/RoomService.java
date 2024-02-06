@@ -120,4 +120,8 @@ public class RoomService {
             return false;
         }
     }
+
+    public boolean isExistingRoom(String roomId) {
+        return roomRepository.existsById(roomId);
+    }
 }
