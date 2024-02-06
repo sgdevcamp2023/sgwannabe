@@ -94,13 +94,13 @@ public class ChatController {
         return new ResponseEntity<>(apiMessage, HttpStatus.OK);
     }
 
-    @MessageMapping("/join")
+    @MessageMapping("/api/v1/join")
     public void join(ChatMessageDto message) {
 
         producers.sendMessage(chatMessageService.join(message));
     }
 
-    @MessageMapping("/leave")
+    @MessageMapping("/api/v1/leave")
     public void leave(ChatMessageDto message) {
 
         producers.sendMessage(chatMessageService.leave(message));

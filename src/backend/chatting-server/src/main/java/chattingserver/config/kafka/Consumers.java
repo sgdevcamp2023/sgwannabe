@@ -17,14 +17,14 @@ public class Consumers {
 
     @KafkaListener(groupId = "${spring.kafka.consumer.chat-consumer.group-id}", topics = "${kafka.topic.chat-name}")
     public void listenChat(ChatMessageDto chatMessageDto) {
-        template.convertAndSend("/chatting/topic/room/" + chatMessageDto.getRoomId(), chatMessageDto);
+        template.convertAndSend("/chat/topic/room/" + chatMessageDto.getRoomId(), chatMessageDto);
     }
 
     @KafkaListener(groupId = "${spring.kafka.consumer.room-consumer.group-id}", topics = "${kafka.topic.room-name}", containerFactory = "kafkaListenerContainerFactory")
     public void listenGroupCreation(RoomMessageDto roomMessageDto) {
         RoomResponseDto roomResponseDto = roomMessageDto.getRoomResponseDto();
         for (Long userId : roomMessageDto.getReceivers()) {
-            template.convertAndSend("/chatting/topic/new-room/" + userId, roomResponseDto);
+            template.convertAndSend("/chat/topic/new-room/" + userId, roomResponseDto);
         }
     }
 }
