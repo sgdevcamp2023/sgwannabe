@@ -18,10 +18,28 @@ cd "../backend/"
 BACKEND_PWD=`pwd`
 
 SERVER_ORDER=(
+    "user-server"
+
+    "auth-server"
+
     "storage-server"
+    
     "music-server"
-    "streaming-server"
     "music-uploader-server"
+    
+    "streaming-server"
+    
+    "alarm-server"
+
+    "chart-server"
+    
+    "chatting-server"
+    
+    "feed-server"
+
+    "playlist-server"
+
+    "gateway-server"
 )
 
 echo "$BACKEND_PWD"
