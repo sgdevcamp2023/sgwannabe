@@ -1,11 +1,13 @@
 package com.lalala.music.dto;
 
-import com.lalala.music.entity.AlbumType;
 import java.time.LocalDateTime;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import com.lalala.music.entity.AlbumType;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

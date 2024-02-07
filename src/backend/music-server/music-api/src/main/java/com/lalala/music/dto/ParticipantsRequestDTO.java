@@ -1,6 +1,5 @@
 package com.lalala.music.dto;
 
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

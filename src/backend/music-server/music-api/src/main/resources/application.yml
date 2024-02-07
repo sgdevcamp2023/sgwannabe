@@ -1,20 +1,20 @@
 server:
-  port: 9000
+  port: 24000
 
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: "jdbc:mysql://localhost:9306/music?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul"
+    url: "jdbc:mysql://localhost:24100/music?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul"
     username: root
     password: admin
 
 
   jpa:
-    database-platform: org.hibernate.dialect.MySQLDialect
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: validate
     properties:
-      dialect: org.hibernate.dialect.MySQLDialect
+      dialect: org.hibernate.dialect.MySQL8Dialect
       hibernate:
         format_sql: true
         show_sql: true
@@ -27,3 +27,8 @@ logging:
         type:
           descriptor:
             sql: trace
+
+file:
+  multipart:
+    maxUploadSizeMB: 30
+    maxUploadSizePerFileMB: 30

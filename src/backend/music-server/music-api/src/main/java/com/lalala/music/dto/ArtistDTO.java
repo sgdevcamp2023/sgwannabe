@@ -1,12 +1,14 @@
 package com.lalala.music.dto;
 
-import com.lalala.music.entity.ArtistEntity;
-import com.lalala.music.entity.ArtistType;
-import com.lalala.music.entity.GenderType;
 import java.time.LocalDateTime;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import com.lalala.music.entity.ArtistEntity;
+import com.lalala.music.entity.ArtistType;
+import com.lalala.music.entity.GenderType;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -27,7 +29,6 @@ public final class ArtistDTO {
                 artist.getType(),
                 artist.getAgency(),
                 artist.getCreatedAt(),
-                artist.getUpdatedAt()
-        );
+                artist.getUpdatedAt());
     }
 }

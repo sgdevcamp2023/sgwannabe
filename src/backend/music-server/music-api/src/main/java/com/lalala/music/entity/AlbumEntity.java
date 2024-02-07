@@ -1,5 +1,11 @@
 package com.lalala.music.entity;
 
+import java.time.LocalDateTime;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -8,10 +14,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "albums")
@@ -38,12 +40,7 @@ public class AlbumEntity extends BaseTimeEntity {
     @Column(name = "released_at", nullable = false, columnDefinition = "DATETIME default NOW()")
     LocalDateTime releasedAt;
 
-    public AlbumEntity(
-            String title,
-            String coverUrl,
-            AlbumType type,
-            LocalDateTime releasedAt
-    ) {
+    public AlbumEntity(String title, String coverUrl, AlbumType type, LocalDateTime releasedAt) {
         this.title = title;
         this.coverUrl = coverUrl;
         this.type = type;
@@ -54,12 +51,7 @@ public class AlbumEntity extends BaseTimeEntity {
         this.artistId = artistId;
     }
 
-    public void update(
-            String title,
-            String coverUrl,
-            AlbumType type,
-            LocalDateTime releasedAt
-    ) {
+    public void update(String title, String coverUrl, AlbumType type, LocalDateTime releasedAt) {
         this.title = title;
         this.coverUrl = coverUrl;
         this.type = type;

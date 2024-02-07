@@ -11,12 +11,14 @@ services:
     env_file:
       - .env
     networks:
-      - backend
+      - lalala-network
     volumes:
       - static-data:/resources
 
 networks:
-  backend:
+  lalala-network:
+    driver: bridge
+    external: true
 
 volumes:
   static-data:
