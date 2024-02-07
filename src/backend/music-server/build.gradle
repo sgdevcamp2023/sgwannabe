@@ -2,6 +2,9 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.1'
 	id 'io.spring.dependency-management' version '1.1.4'
+
+	// Lint
+	id("com.diffplug.spotless") version("6.11.0") apply false
 }
 
 repositories {
@@ -19,6 +22,7 @@ subprojects {
 	apply plugin: 'java'
 	apply plugin: 'org.springframework.boot'
 	apply plugin: 'io.spring.dependency-management'
+	apply plugin: 'com.diffplug.spotless'
 
 	group = 'com.lalala'
 	version = '0.0.1-SNAPSHOT'
@@ -51,4 +55,30 @@ subprojects {
 		useJUnitPlatform()
 	}
 
+	spotless {
+		java {
+			// import 순서 정의
+			importOrder(
+					"java",
+					"javax",
+					"lombok",
+					"org.springframework",
+					"",
+					"\\#",
+					"org.junit",
+					"\\#org.junit",
+			)
+			// 사용하지 않는 import 제거
+			removeUnusedImports()
+			// 구글 자바 포맷 적용
+			googleJavaFormat()
+			// Indent
+			indentWithTabs(2)
+			indentWithSpaces(4)
+			// 공백 제거
+			trimTrailingWhitespace()
+			// 끝부분 New Line 처리
+			endWithNewline()
+		}
+	}
 }
