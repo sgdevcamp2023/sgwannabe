@@ -19,6 +19,6 @@ COPY --from=builder /build/build/libs/*.jar app.jar
 ARG DOCKER_YML_FILE=src/main/resources/application.yml
 COPY ${DOCKER_YML_FILE} application.yml
 
-EXPOSE 8001
+EXPOSE 10000
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
