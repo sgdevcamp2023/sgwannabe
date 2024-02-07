@@ -2,49 +2,33 @@ import { motion } from "framer-motion";
 import { cn } from "../../utils";
 import { useRecoilValue } from "recoil";
 import { playingMusic } from "../../state";
-import { useEffect, useState } from "react";
+import { memo } from "react";
 
 interface CircularProgressProps {
-  value: number;
-  minValue?: number;
-  maxValue?: number;
+  duration: number;
+  currentProgress: number;
   size?: number;
   className?: string;
 }
 
 function CircularProgress({
-  value,
+  duration,
+  currentProgress,
   className,
-  minValue = 0,
-  maxValue = 100,
   size = 300,
 }: CircularProgressProps) {
   const nowPlayingMusic = useRecoilValue(playingMusic);
 
-  const draw = {
-    hidden: { pathLength: 0, opacity: 0 },
-    visible: (i: number) => {
-      const delay = 1 + i * 0.5;
-      return {
-        pathLength: 1,
-        opacity: 1,
-        transition: {
-          pathLength: { delay, type: "spring", duration: 1.5, bounce: 0 },
-          opacity: { delay, duration: 0.01 },
-        },
-      };
-    },
-  };
+  const circumference = Math.PI * (size - 12);
+  const strokeDasharray = circumference * (1 - currentProgress / duration);
 
   return (
     <div className={cn("flex", className)}>
       <div className="relative">
-        <motion.svg
+        <svg
           width={size}
           height={size}
           viewBox="0 0 200 200"
-          initial="hidden"
-          animate="visible"
           className="w-full h-full overflow-visible"
         >
           <motion.circle
@@ -52,12 +36,12 @@ function CircularProgress({
             cy="100"
             r="100"
             stroke="#00CD3C"
+            fill="#FFFFFF"
             strokeWidth={12}
-            variants={draw}
-            custom={1}
-            fill={"#FFFFFF"}
+            strokeDasharray={circumference}
+            strokeDashoffset={strokeDasharray}
           />
-        </motion.svg>
+        </svg>
         <motion.img
           src={nowPlayingMusic.img_url}
           animate={{
@@ -75,5 +59,6 @@ function CircularProgress({
     </div>
   );
 }
+const MemoizedCircularProgress = memo(CircularProgress);
 
-export default CircularProgress;
+export default MemoizedCircularProgress;
