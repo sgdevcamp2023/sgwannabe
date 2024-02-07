@@ -4,4 +4,5 @@ public enum GenderType {
     MALE,
     FEMALE,
     MIX,
+    NONE,
 }
