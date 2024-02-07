@@ -1,9 +1,9 @@
-name: Docker Hub Push
+name: Docker Hub Push for nodejs
 
 on:
   push:
     branches:
-      - "**/develop"
+      - "music-uploader/develop"
 
 jobs:
   build-and-push:
