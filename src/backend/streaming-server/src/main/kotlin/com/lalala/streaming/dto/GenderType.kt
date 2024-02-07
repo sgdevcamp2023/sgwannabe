@@ -4,4 +4,5 @@ enum class GenderType {
     MALE,
     FEMALE,
     MIX,
+    NONE,
 }
