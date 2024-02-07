@@ -18,6 +18,9 @@ public enum ErrorCode {
     TEMP_DOWNLOAD_FAILED(HttpStatus.BAD_REQUEST, "1001", "임시 파일 다운로드에 실패했습니다."),
     MUSIC_UPLOAD_FAILED(HttpStatus.BAD_REQUEST, "1002", "음원 업로드가 실패했습니다."),
     INVALID_MP3_TAG(HttpStatus.BAD_REQUEST, "1003", "MP3 태그 버전을 찾을 수 없습니다."),
+    MUSIC_NOT_FOUND(HttpStatus.BAD_REQUEST, "1004", "음원을 조회할 수 없습니다."),
+    ALBUM_NOT_FOUND(HttpStatus.BAD_REQUEST, "1005", "앨범을 조회할 수 없습니다."),
+    ARTIST_NOT_FOUND(HttpStatus.BAD_REQUEST, "1006", "아티스트를 조회할 수 없습니다."),
     ;
 
     private final int status;
