@@ -1,0 +1,53 @@
+version: "3.9"
+services:
+  playlist-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      SPRING_NEO4J_URI: bolt://feed-neo4j:14200
+      SPRING_NEO4J_AUTHENTICATION_USERNAME: neo4j
+      SPRING_NEO4J_AUTHENTICATION_PASSWORD: password
+    ports:
+      - 16000:16000
+    depends_on:
+      - playlist-mongo
+      - playlist-redis
+    networks:
+      - lalala-network
+
+  playlist-mongo:
+    image: mongo:7.0.5
+    restart: always
+    ports:
+      - 16100:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: QOdmQodmsapomd41dM
+      MONGO_INITDB_DATABASE: playlist
+    volumes:
+      - ./database/mongoDB/data:/data/db
+      - ./database/mongoDB/initdb.d:/docker-entrypoint-initdb.d:ro
+
+  playlist-redis:
+    image: redis:7.0
+    ports:
+      - 16200:6379
+
+  playlist-mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 17900:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: QOdmQodmsapomd41dM
+      ME_CONFIG_MONGODB_SERVER: playlist-mongo
+      ME_CONFIG_BASICAUTH_USERNAME: playlist-admin
+      ME_CONFIG_BASICAUTH_PASSWORD: g2+u*8XG%^xKT=-SzDMfbZ
+
+networks:
+  lalala-network:
+    driver: bridge
+    external: true
