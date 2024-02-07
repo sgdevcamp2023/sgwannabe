@@ -1,12 +1,12 @@
 package com.lalala.music.dto;
 
-import com.lalala.music.entity.FormatType;
-import com.lalala.music.entity.MusicFile;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+
+import com.lalala.music.entity.FormatType;
+import com.lalala.music.entity.MusicFile;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -16,9 +16,6 @@ public class FileDTO {
     private FormatType formatType;
 
     public static FileDTO from(MusicFile musicFile) {
-        return new FileDTO(
-                musicFile.getFileUrl(),
-                musicFile.getFormatType()
-        );
+        return new FileDTO(musicFile.getFileUrl(), musicFile.getFormatType());
     }
 }

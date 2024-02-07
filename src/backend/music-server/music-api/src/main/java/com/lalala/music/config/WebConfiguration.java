@@ -10,8 +10,6 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("*")
-                .maxAge(MAX_AGE);
+        registry.addMapping("/**").allowedOrigins("*").maxAge(MAX_AGE);
     }
 }

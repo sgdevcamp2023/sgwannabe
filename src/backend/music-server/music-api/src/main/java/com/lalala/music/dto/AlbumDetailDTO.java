@@ -1,14 +1,16 @@
 package com.lalala.music.dto;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 import com.lalala.music.entity.AlbumEntity;
 import com.lalala.music.entity.AlbumType;
 import com.lalala.music.entity.ArtistEntity;
 import com.lalala.music.entity.MusicEntity;
-import java.time.LocalDateTime;
-import java.util.List;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -23,10 +25,7 @@ public class AlbumDetailDTO {
     private final List<MusicDTO> musics;
 
     public static AlbumDetailDTO from(
-            AlbumEntity album,
-            ArtistEntity artist,
-            List<MusicEntity> musics
-    ) {
+            AlbumEntity album, ArtistEntity artist, List<MusicEntity> musics) {
         return new AlbumDetailDTO(
                 album.getId(),
                 album.getType(),
@@ -34,24 +33,10 @@ public class AlbumDetailDTO {
                 album.getCoverUrl(),
                 album.getReleasedAt(),
                 ArtistDTO.from(artist),
-                musics.stream().map(
-                        music -> MusicDTO.from(
-                            music,
-                            album,
-                            artist
-                        )
-                ).toList()
-        );
+                musics.stream().map(music -> MusicDTO.from(music, album, artist)).toList());
     }
 
-    public static AlbumDetailDTO from(
-            AlbumEntity album,
-            ArtistEntity artist
-    ) {
-        return from(
-                album,
-                artist,
-                List.of()
-        );
+    public static AlbumDetailDTO from(AlbumEntity album, ArtistEntity artist) {
+        return from(album, artist, List.of());
     }
 }

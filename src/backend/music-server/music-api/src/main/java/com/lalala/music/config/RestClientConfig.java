@@ -12,8 +12,6 @@ public class RestClientConfig {
 
     @Bean(name = {"uploaderClient"})
     public RestClient restClient() {
-        return RestClient.builder()
-                .baseUrl(uploaderURL)
-                .build();
+        return RestClient.builder().baseUrl(uploaderURL).build();
     }
 }
