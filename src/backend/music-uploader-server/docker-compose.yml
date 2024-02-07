@@ -6,8 +6,15 @@ services:
       context: .
       dockerfile: ./Dockerfile
     environment:
-      - STORAGE_URL=http://fileserver-app:30000
+      - STORAGE_URL=http://fileserver-app
     ports:
       - "25000:3000"
     volumes:
       - ./:/app/
+    networks:
+      - lalala-network
+
+networks:
+  lalala-network:
+    driver: bridge
+    external: true
