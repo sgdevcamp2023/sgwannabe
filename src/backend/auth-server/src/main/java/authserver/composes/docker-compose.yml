@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  db:
+    container_name: test-mysql
+    image: mysql:8.0
+    env_file:
+      - test.env
+    environment:
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_DATABASE: "test"
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  redis:
+    container_name: test-redis
+    image: redis:7.0-alpine
+    hostname: test-redis
+    ports:
+      - "16379:6379"
+    command: redis-server --port 6379
+    labels:
+      - "name=redis"
+      - "mode=standalone"
+
+volumes:
+  db-data:

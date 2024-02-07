@@ -1,0 +1,12 @@
+server:
+  port: 22000
+
+client:
+  endpoint:
+    music: http://host.docker.internal:24000
+    storage: http://host.docker.internal:30000
+
+ffmpeg:
+  location:
+    mpeg: ./libs/ffmpeg-6.1/ffmpeg
+    probe: ./libs/ffmpeg-6.1/ffprobe

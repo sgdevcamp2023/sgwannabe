@@ -1,0 +1,67 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+plugins {
+	id 'org.springframework.boot' version '3.2.1'
+	id 'io.spring.dependency-management' version '1.1.4'
+	id 'org.jetbrains.kotlin.jvm' version '1.9.21'
+	id 'org.jetbrains.kotlin.plugin.spring' version '1.9.21'
+}
+
+group = 'com.lalala'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// Spring
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// Websocket
+	implementation("org.springframework.boot:spring-boot-starter-websocket")
+
+	// Spring Session Redis
+	implementation("org.springframework.session:spring-session-data-redis")
+
+	// Kotlin
+	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+	implementation 'io.projectreactor.kotlin:reactor-kotlin-extensions'
+	implementation 'org.jetbrains.kotlin:kotlin-reflect'
+
+	// Reactor
+	implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-reactor'
+	testImplementation 'io.projectreactor:reactor-test'
+
+	// Lombok
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// ffmpeg ( audio processing )
+	implementation 'net.bramp.ffmpeg:ffmpeg:0.8.0'
+
+	// kotlin-logging
+	implementation 'io.github.oshai:kotlin-logging-jvm:5.1.0'
+}
+
+tasks.withType(KotlinCompile) {
+	kotlinOptions {
+		freeCompilerArgs += '-Xjsr305=strict'
+		jvmTarget = '17'
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
