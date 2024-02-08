@@ -17,6 +17,8 @@ services:
 
       SPRING_DATA_REDIS_HOST: auth-redis
       SPRING_DATA_REDIS_PORT: 6379
+    depends_on:
+      - auth-redis
     networks:
       - lalala-network
 
