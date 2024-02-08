@@ -5,3 +5,9 @@ class Artist(BaseModel):
     gender: str
     type: str
     agency: str
+
+class ArtistIndexRequest(BaseModel):
+    name: str
+    gender: str
+    type: str
+    agency: str
