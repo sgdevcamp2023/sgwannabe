@@ -11,7 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class AuthConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
-        DelegatingPasswordEncoder passwordEncoder = (DelegatingPasswordEncoder) PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        DelegatingPasswordEncoder passwordEncoder =
+                (DelegatingPasswordEncoder) PasswordEncoderFactories.createDelegatingPasswordEncoder();
         passwordEncoder.setDefaultPasswordEncoderForMatches(new BCryptPasswordEncoder());
         return passwordEncoder;
     }

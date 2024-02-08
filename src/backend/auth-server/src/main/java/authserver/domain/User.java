@@ -1,12 +1,12 @@
 package authserver.domain;
 
-import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "\"user\"")
@@ -17,6 +17,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // h2로 테스트할 때만 사용
     private Long id;
+
     private String nickname;
     private String email;
     private String password;

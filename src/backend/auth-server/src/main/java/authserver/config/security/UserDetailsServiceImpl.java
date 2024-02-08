@@ -1,13 +1,15 @@
 package authserver.config.security;
 
-import authserver.domain.User;
-import authserver.repository.AuthRepository;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import authserver.domain.User;
+import authserver.repository.AuthRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +19,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-        User user = authRepository.findById(Long.valueOf(id))
-                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다"));
+        User user =
+                authRepository
+                        .findById(Long.valueOf(id))
+                        .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다"));
 
         return new UserDetailsImpl(user);
     }

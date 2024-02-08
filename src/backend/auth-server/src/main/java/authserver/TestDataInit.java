@@ -1,14 +1,16 @@
 package authserver;
 
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import authserver.domain.Role;
 import authserver.domain.Status;
 import authserver.domain.User;
 import authserver.repository.AuthRepository;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -24,7 +26,7 @@ public class TestDataInit {
     @Component
     @Transactional
     @RequiredArgsConstructor
-    static class InitService{
+    static class InitService {
 
         private final AuthRepository authRepository;
         private final PasswordEncoder passwordEncoder;
@@ -42,7 +44,6 @@ public class TestDataInit {
             User user = new User(nickname, email, hashPassword, status);
             user.changeUserRole(Role.USER);
             authRepository.save(user);
-
         }
     }
 }

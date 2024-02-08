@@ -1,18 +1,20 @@
 package authserver.service;
 
-import authserver.repository.AuthRepository;
+import java.time.Duration;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
+import authserver.repository.AuthRepository;
 
 @Service
 @RequiredArgsConstructor
 public class RedisService {
 
-    @Value("${jwt.refresh-expiration}") //30초
+    @Value("${jwt.refresh-expiration}") // 30초
     private long jwtRefreshExpiration;
 
     private final RedisTemplate<String, String> redisTemplate;
@@ -23,7 +25,6 @@ public class RedisService {
     public String getRedisTemplateValue(String key) {
         return redisTemplate.opsForValue().get(key);
     }
-
 
     public void deleteRedisTemplateValue(String key) {
         redisTemplate.delete(key);
@@ -39,5 +40,4 @@ public class RedisService {
     public Boolean isExistKey(String key) {
         return redisTemplate.hasKey(key);
     }
-
 }
