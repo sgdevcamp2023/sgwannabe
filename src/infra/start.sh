@@ -39,6 +39,8 @@ SERVER_ORDER=(
 
     "playlist-server"
 
+    "search-server"
+
     "gateway-server"
 )
 
