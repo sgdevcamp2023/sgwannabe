@@ -10,7 +10,6 @@ public class CustomUserProvider {
         throw new CustomException(CustomUserProvider.getExceptionCode(code, field));
     }
 
-
     public static CustomUserCode getExceptionCode(String code, String target) {
         switch (code) {
             case "NotBlank" -> {
@@ -39,7 +38,5 @@ public class CustomUserProvider {
         }
 
         return CustomUserCode.INTERNAL_SERVER_ERROR;
-
     }
-
 }

@@ -1,10 +1,12 @@
 package userserver;
 
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.annotation.PostConstruct;
 import userserver.domain.Role;
 import userserver.domain.Status;
 import userserver.domain.User;
@@ -24,7 +26,7 @@ public class TestDataInit {
     @Component
     @Transactional
     @RequiredArgsConstructor
-    static class InitService{
+    static class InitService {
 
         private final UserRepository userRepository;
         private final PasswordEncoder passwordEncoder;
@@ -42,10 +44,6 @@ public class TestDataInit {
             User user = new User(nickname, email, hashPassword, status);
             user.changeUserRole(Role.USER);
             userRepository.save(user);
-
         }
-
-
-
     }
 }

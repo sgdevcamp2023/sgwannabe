@@ -1,12 +1,12 @@
 package userserver.domain;
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
-
 import java.time.LocalDateTime;
 
+import lombok.*;
+
+import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 @Builder
 @Entity
@@ -14,7 +14,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.MODULE)
 @DynamicInsert
-@Table(name="\"user\"", uniqueConstraints={@UniqueConstraint(name="EMAIL_UNIQUE", columnNames = "email")})
+@Table(
+        name = "\"user\"",
+        uniqueConstraints = {@UniqueConstraint(name = "EMAIL_UNIQUE", columnNames = "email")})
 public class User extends BaseTimeEntity {
 
     @Id
@@ -22,7 +24,7 @@ public class User extends BaseTimeEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(nullable = false, name="email", columnDefinition = "varchar(60)")
+    @Column(nullable = false, name = "email", columnDefinition = "varchar(60)")
     private String email;
 
     @Column(nullable = false, columnDefinition = "char(68)")
@@ -66,6 +68,4 @@ public class User extends BaseTimeEntity {
         this.password = password;
         this.status = status;
     }
-
-
 }

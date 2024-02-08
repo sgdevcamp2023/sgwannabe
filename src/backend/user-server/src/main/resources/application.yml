@@ -21,7 +21,7 @@ spring:
         format_sql: true
 
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
   h2:
     console:
       enabled: true

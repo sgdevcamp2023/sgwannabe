@@ -1,26 +1,28 @@
 package userserver.controller;
 
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import org.assertj.core.api.Assertions;
 import userserver.domain.Role;
 import userserver.domain.Status;
 import userserver.domain.User;
 import userserver.repository.UserRepository;
 
+import org.junit.jupiter.api.Test;
+
 @SpringBootTest
 class UserControllerTest {
 
-    @Autowired
-    UserRepository userRepository;
+    @Autowired UserRepository userRepository;
 
     @Test
-    void 프로필_데이터_저장() throws Exception{
-        //given
+    void 프로필_데이터_저장() throws Exception {
+        // given
         String profileURL = "https://www.lalala.com/image.png";
 
-        User user = User.builder()
+        User user =
+                User.builder()
                         .email("email")
                         .password("asd")
                         .nickname("신짱구")
@@ -31,9 +33,8 @@ class UserControllerTest {
 
         userRepository.save(user);
 
-        //then
+        // then
         User findUser = userRepository.findByEmail(user.getEmail()).orElse(null);
         Assertions.assertThat(findUser.getProfile()).isEqualTo(profileURL);
-
     }
 }

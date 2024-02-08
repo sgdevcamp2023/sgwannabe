@@ -1,10 +1,11 @@
 package userserver.service;
 
+import java.time.Duration;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-
-import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
@@ -15,7 +16,6 @@ public class RedisService {
     public String getRedisTemplateValue(String key) {
         return redisTemplate.opsForValue().get(key);
     }
-
 
     public void deleteRedisTemplateValue(String key) {
         redisTemplate.delete(key);
