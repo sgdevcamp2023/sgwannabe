@@ -2,7 +2,7 @@ package authserver.config.jwt;
 
 import authserver.domain.User;
 import authserver.service.RedisService;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
@@ -12,11 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.WebUtils;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.time.Duration;
 import java.util.Date;
 import java.util.UUID;
@@ -110,12 +108,10 @@ public class JwtUtils {
     }
 
     public ResponseCookie getCleanAccessJwtCookie() {
-        ResponseCookie cookie = ResponseCookie.from(jwtAccessCookie, null).path("/v1").build();
-        return cookie;
+        return ResponseCookie.from(jwtAccessCookie, null).path("/v1").build();
     }
     public ResponseCookie getCleanRefreshJwtCookie() {
-        ResponseCookie cookie = ResponseCookie.from(jwtRefreshCookie, null).path("/v1/api").build();
-        return cookie;
+        return ResponseCookie.from(jwtRefreshCookie, null).path("/v1/api").build();
     }
 
 
@@ -126,11 +122,6 @@ public class JwtUtils {
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
-//                .setSigningKey(key())
-//                .build()
-//                .parseClaimsJws(token)
-//                .getBody()
-//                .getSubject();
     }
 
 
