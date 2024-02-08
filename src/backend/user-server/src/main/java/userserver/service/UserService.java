@@ -6,7 +6,9 @@ import userserver.payload.request.*;
 
 public interface UserService {
     ResponseEntity<?> sendAuthCodeByEmail(EmailAuthCodeRequest request);
+
     ResponseEntity<?> verifyAuthCode(EmailVerifyRequest request);
+
     ResponseEntity<?> signUp(SignUpRequest request);
 
     ResponseEntity<?> passwordChange(User user, PasswordChangeRequest request);

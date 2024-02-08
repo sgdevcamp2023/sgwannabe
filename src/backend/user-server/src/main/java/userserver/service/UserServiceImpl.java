@@ -1,4 +1,5 @@
 package userserver.service;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RedisService redisService;
@@ -32,15 +33,15 @@ public class UserServiceImpl implements UserService{
 
     public ResponseEntity<?> sendAuthCodeByEmail(EmailAuthCodeRequest request) {
         String email = request.email();
-        // 이메일 중복 검사
+
         validateEmailDuplicate(email);
 
         String authCode = createAuthCode();
 
-        // redis에 인증코드 ttl 3분 설정 -> key: email, value: authCode
+        // redis 에 인증코드 ttl 3분 설정 -> key: email, value: authCode
         redisService.setRedisTemplate(email, authCode, Duration.ofMinutes(3));
 
-        // 이메일 전송
+        // 동기 방식
         sendMail(email, authCode);
 
         return ResponseEntity.ok().body(new SuccessMessageResponse(CustomUserCode.SUCCESS_MAIL_SEND.getMessage()));
@@ -49,8 +50,6 @@ public class UserServiceImpl implements UserService{
 
     @Transactional
     public ResponseEntity<?> signUp(SignUpRequest request) {
-        // TODO 프론트에서 이메일 인증을 한 경우에만 회원가입 버튼이 활성화가 되는 건 지 논의 필요
-        // 이메일 중복 검사
         validateEmailDuplicate(request.email());
 
         String encodePassword = passwordEncoder.encode(request.password());
@@ -85,17 +84,16 @@ public class UserServiceImpl implements UserService{
 
     /**
      * 이메일로 인증번호 전송
-     * TODO 비동기 처리
      */
     private void sendMail(String email, String code) {
-        try{
-            emailService.createMessageForm(email, "[라라라] 회원가입 인증 이메일", "인증 코드: "+ code);
+        try {
+            emailService.createMessageForm(email, "[라라라] 회원가입 인증 이메일", "인증 코드: " + code);
         } catch (Exception e) {
             throw new CustomException(CustomUserCode.SEND_EMAIL_ERROR);
         }
     }
 
-    public  ResponseEntity<?> verifyAuthCode(EmailVerifyRequest request) {
+    public ResponseEntity<?> verifyAuthCode(EmailVerifyRequest request) {
         String email = request.email();
         String code = request.code();
         String validateCode = redisService.getRedisTemplateValue(email);

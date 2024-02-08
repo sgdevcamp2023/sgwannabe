@@ -1,10 +1,8 @@
 package userserver.config.security;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -14,10 +12,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import userserver.config.jwt.AuthEntryPoint;
 import userserver.config.jwt.AuthTokenFilter;
-//import userserver.config.jwt.JwtAccessDeniedHandler;
 import userserver.config.jwt.JwtAccessDeniedHandler;
 import userserver.config.jwt.JwtUtils;
-import userserver.service.UserService;
 
 
 @Configuration
@@ -35,7 +31,7 @@ public class WebSecurityConfig {
     };
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter(jwtUtils, userDetailsService); // TODO 여기서 주입하는게 필요할까?
+        return new AuthTokenFilter(jwtUtils, userDetailsService);
     }
 
     @Bean
@@ -50,7 +46,6 @@ public class WebSecurityConfig {
 
         http.headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)); // h2-console 사용
 
-        // TODO Before? After?
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
 

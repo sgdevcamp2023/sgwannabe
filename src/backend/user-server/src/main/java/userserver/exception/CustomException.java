@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class CustomException extends RuntimeException {
-    private CustomUserCode errorCode;
+    private final CustomUserCode errorCode;
 }

@@ -18,7 +18,6 @@ public class TestDataInit {
 
     @PostConstruct
     public void init() {
-//        initService.dbInitAdmin();
         initService.dbInitUsers();
     }
 
@@ -29,10 +28,6 @@ public class TestDataInit {
 
         private final UserRepository userRepository;
         private final PasswordEncoder passwordEncoder;
-
-//        public void dbInitAdmin() {
-//            extracted("a", "a", "관리자", Role.ADMIN);
-//        }
 
         public void dbInitUsers() {
             extracted("신짱구", "jjangu@gmail.com", "aaaaaaaaaa", Status.ACTIVE);
