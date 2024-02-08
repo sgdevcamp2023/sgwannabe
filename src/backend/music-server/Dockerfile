@@ -17,7 +17,7 @@ WORKDIR /app
 
 COPY --from=builder /build/music-api/build/libs/*.jar app.jar
 
-ARG DOCKER_YML_FILE=src/main/resources/application.yml
+ARG DOCKER_YML_FILE=music-api/src/main/resources/application.yml
 COPY ${DOCKER_YML_FILE} application.yml
 
 EXPOSE 24000
