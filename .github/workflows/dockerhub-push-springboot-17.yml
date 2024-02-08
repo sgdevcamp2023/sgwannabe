@@ -3,16 +3,15 @@ name: Docker Hub Push for SpringBoot 17
 on:
   push:
     branches:
-      - "music/develop"
-      - "streaming/develop"
-      - "storage/develop"
       - "alarm/develop"
-      - "user/develop"
       - "auth/develop"
       - "chatting/develop"
       - "feed/develop"
-      - "playlist/develop"
       - "gateway/develop"
+      - "music/develop"
+      - "playlist/develop"
+      - "streaming/develop"
+      - "user/develop"
 
 jobs:
   build-and-push:

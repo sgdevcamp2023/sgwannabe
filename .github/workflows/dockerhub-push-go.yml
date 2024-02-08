@@ -3,7 +3,7 @@ name: Docker Hub Push for go
 on:
   push:
     branches:
-      - "stroage/develop"
+      - "storage/develop"
 
 jobs:
   build-and-push:

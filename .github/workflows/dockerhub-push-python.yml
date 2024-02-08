@@ -3,7 +3,7 @@ name: Docker Hub Push for python
 on:
   push:
     branches:
-      - "stroage/develop"
+      - "search/develop"
 
 jobs:
   build-and-push:
