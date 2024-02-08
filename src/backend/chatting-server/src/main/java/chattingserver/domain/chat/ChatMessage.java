@@ -1,27 +1,26 @@
-package chattingserver.dto;
+package chattingserver.domain.chat;
 
 import chattingserver.util.constant.MessageType;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
+@Document(collection = "messages")
 @Getter
-@Setter
-@ToString
 @Builder
-@NoArgsConstructor
+@ToString
 @AllArgsConstructor
-public class ChatMessageDto {
+@NoArgsConstructor
+public class ChatMessage {
 
+    @Id
     private String id;
-    @NotBlank
     private MessageType messageType;
-    @NotBlank
     private String roomId;
-    @NotBlank
     private Long senderId;
-    @NotBlank
     private String content;
     private LocalDateTime createdAt;
+
 }

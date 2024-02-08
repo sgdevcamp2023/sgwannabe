@@ -1,27 +1,21 @@
-package chattingserver.dto;
+package chattingserver.dto.response;
 
 import chattingserver.util.constant.MessageType;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatMessageDto {
+public class ChatMessageResponseDto {
 
     private String id;
-    @NotBlank
     private MessageType messageType;
-    @NotBlank
     private String roomId;
-    @NotBlank
     private Long senderId;
-    @NotBlank
     private String content;
     private LocalDateTime createdAt;
 }

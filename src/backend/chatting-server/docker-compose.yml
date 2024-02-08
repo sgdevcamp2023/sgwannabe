@@ -1,21 +1,65 @@
-version: '3'
+version: '3.8'
+
 services:
-  app:
-    image: chatting-server:latest
+  mongodb:
+    image: mongo:7.0.5
+    ports:
+      - "18001:27017"
+    env_file: .env
+    container_name: chattingdb
+    hostname: mongodb
+    volumes:
+      - ./database/mongoDB/data:/data/db
+      - ./database/mongoDB/initdb.d:/docker-entrypoint-initdb.d:ro
+    networks:
+      - chatting-network
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    # Mac M1 chip 사용 시 아래 platform 추가
+    platform: linux/amd64
+    networks:
+      - chatting-network
+
+  kafka:
+    container_name: kafka
+    image: bitnami/kafka:3.6.1
+    ports:
+      - "18002:18002"
+    env_file: .env
+    depends_on:
+      - zookeeper
+    networks:
+      - chatting-network
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
     ports:
       - "8080:8080"
-    environment:
-      - SPRING_PROFILES_ACTIVE=dev
-    volumes:
-      - ./logs:/app/logs
     depends_on:
-      - db
-  db:
-    image: mysql:latest
+      - kafka
     environment:
-      - MYSQL_ROOT_PASSWORD=
-      - MYSQL_DATABASE=
-      - MYSQL_USER=
-      - MYSQL_PASSWORD=
+      - KAFKA_CLUSTERS_0_NAME=kafka
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
+    networks:
+      - chatting-network
+
+  chatting:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "3306:3306"
+      - "18000:18000"
+    depends_on:
+      - mongodb
+      - kafka
+    networks:
+      - chatting-network
+
+networks:
+  chatting-network:
