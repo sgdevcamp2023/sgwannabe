@@ -48,6 +48,7 @@ services:
     image: redis:7.0
     ports:
       - 12200:6379
+
   user-adminer:
     image: adminer
     restart: always
