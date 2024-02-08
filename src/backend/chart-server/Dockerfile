@@ -1,5 +1,5 @@
 # Build - https://findstar.pe.kr/2022/05/13/gradle-docker-cache/
-FROM gradle:8.6.0-jdk17 as builder
+FROM gradle:8.6.0-jdk21 as builder
 WORKDIR /build
 
 # 그레이들 파일이 변경되었을 때만 새로운 의존성 다운로드
