@@ -13,7 +13,7 @@ async def search_musics(
 ):
     query = generate_generic_query("field", music, size, sort, start)
 
-    results = es_connector.search(index="music_index", query=query)
+    results = es_connector.search(index="music", query=query)
     return {"results": results}
 
 @router.get("/artists")
@@ -25,7 +25,7 @@ async def search_artists(
 ):
     query = generate_generic_query("field", artist, size, sort, start)
 
-    results = es_connector.search(index="artist_index", query=query)
+    results = es_connector.search(index="artist", query=query)
     return {"results": results}
 
 @router.get("/users")
@@ -37,7 +37,7 @@ async def search_users(
 ):
     query = generate_generic_query("field", user, size, sort, start)
 
-    results = es_connector.search(index="user_index", query=query)
+    results = es_connector.search(index="user", query=query)
     return {"results": results}
 
 @router.get("/playlists")
@@ -49,7 +49,7 @@ async def search_playlists(
 ):
     query = generate_generic_query("field", playlist, size, sort, start)
 
-    results = es_connector.search(index="playlist_index", query=query)
+    results = es_connector.search(index="playlist", query=query)
     return {"results": results}
 
 @router.get("/chatrooms")
@@ -61,7 +61,7 @@ async def search_chatrooms(
 ):
     query = generate_generic_query("field", chatroom, size, sort, start)
 
-    results = es_connector.search(index="chatroom_index", query=query)
+    results = es_connector.search(index="chatroom", query=query)
     return {"results": results}
 
 def generate_generic_query(field: str, query_value: str, size: int, sort: str, start: int):

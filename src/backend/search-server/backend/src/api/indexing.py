@@ -48,7 +48,7 @@ async def index_data(body: MusicIndexRequest = Body(embed=True)):
     print(body)
 
     try:
-        es_connector.index(index=f"music_index", data=body.model_dump())
+        es_connector.index(index=f"music", data=body.model_dump())
         
         return {"message": f"music 색인 성공"}
     except Exception as e:
@@ -62,7 +62,7 @@ async def index_data(body: ArtistIndexRequest = Body(embed=True)):
     print(body)
 
     try:
-        es_connector.index(index=f"artist_index", data=body.model_dump())
+        es_connector.index(index=f"artist", data=body.model_dump())
         
         return {"message": f"artist 색인 성공"}
     except Exception as e:
@@ -76,7 +76,7 @@ async def index_data(body: AlbumIndexRequest = Body(embed=True)):
     print(body)
 
     try:
-        es_connector.index(index=f"album_index", data=body.model_dump())
+        es_connector.index(index=f"album", data=body.model_dump())
         
         return {"message": f"album 색인 성공"}
     except Exception as e:
