@@ -40,7 +40,7 @@ services:
     container_name: music-adminer
     restart: always
     ports:
-      - 24200:8080
+      - 24900:8080
     networks:
       - lalala-network
 

@@ -1,12 +1,12 @@
 package userserver.domain;
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
-
 import java.time.LocalDateTime;
 
+import lombok.*;
+
+import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 @Builder
 @Entity
@@ -14,7 +14,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.MODULE)
 @DynamicInsert
-@Table(name="\"user\"", uniqueConstraints={@UniqueConstraint(name="EMAIL_UNIQUE", columnNames = "email")})
+@Table(
+        name = "\"user\"",
+        uniqueConstraints = {@UniqueConstraint(name = "EMAIL_UNIQUE", columnNames = "email")})
 public class User extends BaseTimeEntity {
 
     @Id
@@ -22,7 +24,7 @@ public class User extends BaseTimeEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(nullable = false, name="email", columnDefinition = "varchar(60)")
+    @Column(nullable = false, name = "email", columnDefinition = "varchar(60)")
     private String email;
 
     @Column(nullable = false, columnDefinition = "char(68)")
@@ -31,11 +33,11 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "varchar(15)")
     private String nickname; // 사용자 이름, 닉네임 사용 가능
 
-    @Column(nullable = false, columnDefinition = "char(15) default 'USER'")
+    @Column(nullable = false, columnDefinition = "varchar(15) default 'USER'")
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(nullable = false, columnDefinition = "char(10) default 'ACTIVE'")
+    @Column(nullable = false, columnDefinition = "varchar(10) default 'ACTIVE'")
     @Enumerated(EnumType.STRING)
     private Status status;
 
@@ -66,6 +68,4 @@ public class User extends BaseTimeEntity {
         this.password = password;
         this.status = status;
     }
-
-
 }

@@ -10,12 +10,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class UserConfig {
 
-    /**
-     * 서버가 해싱 알고리즘을 변경하는 경우를 고려해 DelegatingPasswordEncoder 구현체 사용
-     */
+    /** 서버가 해싱 알고리즘을 변경하는 경우를 고려해 DelegatingPasswordEncoder 구현체 사용 */
     @Bean
     public PasswordEncoder passwordEncoder() {
-        DelegatingPasswordEncoder passwordEncoder = (DelegatingPasswordEncoder) PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        DelegatingPasswordEncoder passwordEncoder =
+                (DelegatingPasswordEncoder) PasswordEncoderFactories.createDelegatingPasswordEncoder();
         passwordEncoder.setDefaultPasswordEncoderForMatches(new BCryptPasswordEncoder());
         return passwordEncoder;
     }

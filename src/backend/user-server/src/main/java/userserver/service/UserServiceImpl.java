@@ -1,11 +1,17 @@
 package userserver.service;
 
+import java.time.Duration;
+import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import userserver.domain.Role;
 import userserver.domain.Status;
 import userserver.domain.User;
@@ -14,10 +20,6 @@ import userserver.exception.CustomUserCode;
 import userserver.payload.request.*;
 import userserver.payload.response.SuccessMessageResponse;
 import userserver.repository.UserRepository;
-
-import java.time.Duration;
-import java.util.Objects;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 @Service
@@ -29,7 +31,6 @@ public class UserServiceImpl implements UserService {
     private final RedisService redisService;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
-
 
     public ResponseEntity<?> sendAuthCodeByEmail(EmailAuthCodeRequest request) {
         String email = request.email();
@@ -44,8 +45,8 @@ public class UserServiceImpl implements UserService {
         // 동기 방식
         sendMail(email, authCode);
 
-        return ResponseEntity.ok().body(new SuccessMessageResponse(CustomUserCode.SUCCESS_MAIL_SEND.getMessage()));
-
+        return ResponseEntity.ok()
+                .body(new SuccessMessageResponse(CustomUserCode.SUCCESS_MAIL_SEND.getMessage()));
     }
 
     @Transactional
@@ -54,37 +55,36 @@ public class UserServiceImpl implements UserService {
 
         String encodePassword = passwordEncoder.encode(request.password());
 
-        User user = User.builder()
-                .nickname(request.nickname())
-                .email(request.email())
-                .password(encodePassword) // bcrypt 암호화 적용
-                .role(Role.USER)
-                .status(Status.ACTIVE)
-                .build();
+        User user =
+                User.builder()
+                        .nickname(request.nickname())
+                        .email(request.email())
+                        .password(encodePassword) // bcrypt 암호화 적용
+                        .role(Role.USER)
+                        .status(Status.ACTIVE)
+                        .build();
 
         userRepository.save(user);
 
-        return ResponseEntity.ok().body(new SuccessMessageResponse(CustomUserCode.SUCCESS_SIGNUP.getMessage()));
-
+        return ResponseEntity.ok()
+                .body(new SuccessMessageResponse(CustomUserCode.SUCCESS_SIGNUP.getMessage()));
     }
 
     public void validateEmailDuplicate(String email) {
-        userRepository.findByEmail(email)
-                .ifPresent((user -> {
-                    throw new CustomException(CustomUserCode.DUPLICATE_EMAIL);
-                }));
+        userRepository
+                .findByEmail(email)
+                .ifPresent(
+                        (user -> {
+                            throw new CustomException(CustomUserCode.DUPLICATE_EMAIL);
+                        }));
     }
 
-    /**
-     * 6자리 난수 생성
-     */
+    /** 6자리 난수 생성 */
     public String createAuthCode() {
         return Integer.toString(ThreadLocalRandom.current().nextInt(100000, 1000000));
     }
 
-    /**
-     * 이메일로 인증번호 전송
-     */
+    /** 이메일로 인증번호 전송 TODO 비동기 처리 */
     private void sendMail(String email, String code) {
         try {
             emailService.createMessageForm(email, "[라라라] 회원가입 인증 이메일", "인증 코드: " + code);
@@ -101,7 +101,8 @@ public class UserServiceImpl implements UserService {
         if (!Objects.equals(code, validateCode)) {
             throw new CustomException(CustomUserCode.NOT_VALID_CODE);
         }
-        return ResponseEntity.ok().body(new SuccessMessageResponse(CustomUserCode.SUCCESS_CODE_CHECK.getMessage()));
+        return ResponseEntity.ok()
+                .body(new SuccessMessageResponse(CustomUserCode.SUCCESS_CODE_CHECK.getMessage()));
     }
 
     @Transactional
@@ -111,7 +112,8 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        return ResponseEntity.ok().body(new SuccessMessageResponse(CustomUserCode.SUCCESS_PASSWORD_CHANGE.getMessage()));
+        return ResponseEntity.ok()
+                .body(new SuccessMessageResponse(CustomUserCode.SUCCESS_PASSWORD_CHANGE.getMessage()));
     }
 
     @Transactional
@@ -120,7 +122,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        return ResponseEntity.ok().body(new SuccessMessageResponse(CustomUserCode.SUCCESS_PROFILE_CHANGE.getMessage()));
+        return ResponseEntity.ok()
+                .body(new SuccessMessageResponse(CustomUserCode.SUCCESS_PROFILE_CHANGE.getMessage()));
     }
-
 }

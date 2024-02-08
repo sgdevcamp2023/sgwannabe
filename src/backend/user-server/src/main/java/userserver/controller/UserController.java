@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import userserver.config.security.UserDetailsImpl;
 import userserver.exception.CustomException;
 import userserver.exception.CustomUserCode;
@@ -15,67 +16,61 @@ import userserver.exception.CustomUserProvider;
 import userserver.payload.request.*;
 import userserver.service.UserService;
 
-
 @Slf4j
 @RestController
-@RequestMapping("/v1/api")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
-
     private final UserService userService;
 
-    /**
-     * 이메일 인증 코드 전송
-     */
+    /** 이메일 인증 코드 전송 */
     @PostMapping("/email")
-    public ResponseEntity<?> sendAuthCodeByEmail(@Validated @RequestBody EmailAuthCodeRequest request) {
+    public ResponseEntity<?> sendAuthCodeByEmail(
+            @Validated @RequestBody EmailAuthCodeRequest request) {
         return userService.sendAuthCodeByEmail(request);
     }
 
-    /**
-     * 인증 코드 입력 검증
-     */
+    /** 인증 코드 입력 검증 */
     @PostMapping("/verification")
-    public ResponseEntity<?> verifyAuthCode(@Validated @RequestBody EmailVerifyRequest request, Errors errors) {
-        if (errors.hasErrors()){
+    public ResponseEntity<?> verifyAuthCode(
+            @Validated @RequestBody EmailVerifyRequest request, Errors errors) {
+        if (errors.hasErrors()) {
             CustomUserProvider.throwError(errors);
         }
 
         return userService.verifyAuthCode(request);
     }
 
-    /**
-     * 회원가입
-     */
+    /** 회원가입 */
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Validated @RequestBody SignUpRequest request, Errors errors) {
-        if (errors.hasErrors()){
+        if (errors.hasErrors()) {
             CustomUserProvider.throwError(errors);
         }
         return userService.signUp(request);
     }
 
-    /**
-     * 비밀번호 변경
-     */
+    /** 비밀번호 변경 */
     @PostMapping("/password-change")
-    public ResponseEntity<?> passwordChange(@AuthenticationPrincipal UserDetailsImpl userDetails, @Validated @RequestBody PasswordChangeRequest request, Errors errors) {
-        if (errors.hasErrors()){
+    public ResponseEntity<?> passwordChange(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @Validated @RequestBody PasswordChangeRequest request,
+            Errors errors) {
+        if (errors.hasErrors()) {
             CustomUserProvider.throwError(errors);
         }
-
         if (userDetails == null) {
             throw new CustomException(CustomUserCode.CLIENT_UNAUTHORIZED);
         }
         return userService.passwordChange(userDetails.getUser(), request);
     }
 
-    /**
-     * 프로필 이미지 변경
-     */
+    /** 프로필 이미지 변경 */
     @PostMapping("/profile-change")
-    public ResponseEntity<?> profileChange(@AuthenticationPrincipal UserDetailsImpl userDetails, @Validated @RequestBody ProfileChangeRequest request) {
+    public ResponseEntity<?> profileChange(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @Validated @RequestBody ProfileChangeRequest request) {
         if (userDetails == null) {
             throw new CustomException(CustomUserCode.CLIENT_UNAUTHORIZED);
         }

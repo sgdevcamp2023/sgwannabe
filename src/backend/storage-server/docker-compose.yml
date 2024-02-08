@@ -15,11 +15,11 @@ services:
     volumes:
       - static-data:/resources
 
+volumes:
+  static-data:
+    driver: local
+
 networks:
   lalala-network:
     driver: bridge
     external: true
-
-volumes:
-  static-data:
-    driver: local

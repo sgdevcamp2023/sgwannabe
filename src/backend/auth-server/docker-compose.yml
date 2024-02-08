@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+  auth-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 10000:10000
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://user-mysql:3306/user?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_DATASOURCE_DRIVER-CLASS-NAME: com.mysql.cj.jdbc.Driver
+
+      SPRING_JPA_PROPERTIES_DIALECT: org.hibernate.dialect.MySQLDialect
+
+      SPRING_DATA_REDIS_HOST: auth-redis
+      SPRING_DATA_REDIS_PORT: 6379
+    depends_on:
+      - auth-redis
+    networks:
+      - lalala-network
+
+  auth-redis:
+    image: redis:7.0
+    ports:
+      - 10100:6379
+
+networks:
+  lalala-network:
+    driver: bridge
+    external: true
