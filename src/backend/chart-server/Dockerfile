@@ -3,8 +3,8 @@ FROM gradle:8.6.0-jdk17 as builder
 WORKDIR /build
 
 # 그레이들 파일이 변경되었을 때만 새로운 의존성 다운로드
-COPY build.gradle settings.gradle /build/
-COPY chart-api/build.gradle /build/chart-api/
+COPY build.gradle.kts settings.gradle.kts /build/
+COPY chart-api/build.gradle.kts /build/chart-api/
 RUN gradle build -x test --parallel --continue > /dev/null 2>&1 || true
 
 # 빌더 이미지에서 애플리케이션 빌드
