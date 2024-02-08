@@ -1,11 +1,11 @@
-version: '3.9'
+version: "3.9"
 services:
   Kafka00Service:
     image: bitnami/kafka:3.6.1-debian-11-r0
     restart: unless-stopped
     container_name: Kafka00Container
     ports:
-      - '40000:9094'
+      - "40000:9094"
     environment:
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
       # KRaft settings
@@ -35,7 +35,7 @@ services:
     restart: unless-stopped
     container_name: Kafka01Container
     ports:
-      - '40001:9094'
+      - "40001:9094"
     environment:
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
       # KRaft settings
@@ -65,7 +65,7 @@ services:
     restart: unless-stopped
     container_name: Kafka02Container
     ports:
-      - '40002:9094'
+      - "40002:9094"
     environment:
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
       # KRaft settings
@@ -95,7 +95,7 @@ services:
     restart: unless-stopped
     container_name: KafkaWebUiContainer
     ports:
-      - '41000:8080'
+      - "41000:8080"
     environment:
       - KAFKA_CLUSTERS_0_NAME=Local-Kraft-Cluster
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
