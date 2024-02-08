@@ -7,7 +7,7 @@ es_connector = ElasticsearchConnector(host='elasticsearch', port=9200)
 @router.get("/search")
 def search(query: str, index: str):
     es_query = {"query": {"match": {"field_name": query}}}
-    result = es_connector.search_data(index, es_query)
+    result = es_connector.search(index, es_query)
     
     if result.get("hits") and result["hits"].get("hits"):
         return {"data": result["hits"]["hits"]}
