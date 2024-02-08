@@ -58,7 +58,7 @@ index_type_models = {
 }
 
 @router.post("/index/music")
-async def index_data(body: MusicIndexRequest = Body(embed=True)):
+async def index_music(body: MusicIndexRequest = Body(embed=True)):
     """
     Music 데이터를 Elasticsearch에 색인합니다.
     """
@@ -72,7 +72,7 @@ async def index_data(body: MusicIndexRequest = Body(embed=True)):
         raise HTTPException(status_code=500, detail=f"music 색인 실패: {str(e)}")
     
 @router.post("/index/artist")
-async def index_data(body: ArtistIndexRequest = Body(embed=True)):
+async def index_artist(body: ArtistIndexRequest = Body(embed=True)):
     """
     Artist 데이터를 Elasticsearch에 색인합니다.
     """
@@ -86,7 +86,7 @@ async def index_data(body: ArtistIndexRequest = Body(embed=True)):
         raise HTTPException(status_code=500, detail=f"artist 색인 실패: {str(e)}")
     
 @router.post("/index/album")
-async def index_data(body: AlbumIndexRequest = Body(embed=True)):
+async def index_album(body: AlbumIndexRequest = Body(embed=True)):
     """
     Album 데이터를 Elasticsearch에 색인합니다.
     """
@@ -100,7 +100,7 @@ async def index_data(body: AlbumIndexRequest = Body(embed=True)):
         raise HTTPException(status_code=500, detail=f"album 색인 실패: {str(e)}")
 
 @router.post("/index/playlist")
-async def index_data(body: PlaylistIndexRequest = Body(embed=True)):
+async def index_playlist(body: PlaylistIndexRequest = Body(embed=True)):
     """
     Playlist 데이터를 Elasticsearch에 색인합니다.
     """
@@ -112,7 +112,7 @@ async def index_data(body: PlaylistIndexRequest = Body(embed=True)):
         raise HTTPException(status_code=500, detail=f"playlist 색인 실패: {str(e)}")
     
 @router.post("/index/chatroom")
-async def index_data(body: ChatroomIndexRequest = Body(embed=True)):
+async def index_chatroom(body: ChatroomIndexRequest = Body(embed=True)):
     """
     Chatroom 데이터를 Elasticsearch에 색인합니다.
     """
