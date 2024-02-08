@@ -22,7 +22,8 @@ services:
       SPRING_DATA_REDIS_HOST: alarm-redis
       SPRING_DATA_REDIS_PORT: 6379
     depends_on:
-      - user-mysql
+      - alarm-mysql
+      - alarm-redis
     networks:
       - lalala-network
 
