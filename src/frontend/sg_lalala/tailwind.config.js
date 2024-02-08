@@ -34,6 +34,11 @@ module.exports = {
       400: "400",
       300: "300",
     },
+    extend: {
+      gridTemplateColumns: {
+        16: "repeat(16, minmax(0, 1fr))",
+      },
+    },
   },
   plugins: [],
 };
