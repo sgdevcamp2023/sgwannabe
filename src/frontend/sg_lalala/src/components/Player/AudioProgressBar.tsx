@@ -13,10 +13,12 @@ interface AudioProgressBarProps
 export default function AudioProgressBar(props: AudioProgressBarProps) {
   const { duration, currentProgress, buffered, ...rest } = props;
 
-  const progressBarWidth = isNaN(currentProgress / duration)
+  const progressBarWidth = Number.isNaN(currentProgress / duration)
     ? 0
     : currentProgress / duration;
-  const bufferedWidth = isNaN(buffered / duration) ? 0 : buffered / duration;
+  const bufferedWidth = Number.isNaN(buffered / duration)
+    ? 0
+    : buffered / duration;
 
   const progressStyles: ProgressCSSProps = {
     "--progress-width": progressBarWidth,

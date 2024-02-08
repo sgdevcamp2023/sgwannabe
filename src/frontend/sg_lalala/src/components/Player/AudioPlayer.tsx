@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import {
   MdPlayArrow,
   MdPause,
@@ -9,9 +10,9 @@ import {
 import { CgSpinner } from "react-icons/cg";
 import IconButton from "./IconButton";
 import AudioProgressBar from "./AudioProgressBar";
-import { useEffect, useRef, useState } from "react";
+import { setState } from "../../@types/react";
 
-function formatDurationDisplay(duration: number) {
+function timeFormat(duration: number) {
   const min = Math.floor(duration / 60);
   const sec = Math.floor(duration - min * 60);
 
@@ -25,9 +26,9 @@ interface AudioPlayerProps {
   songIndex: number;
   songCount: number;
   duration: number;
-  setDuration: React.Dispatch<React.SetStateAction<number>>;
+  setDuration: setState<number>;
   currentProgress: number;
-  setCurrentProgress: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentProgress: setState<number>;
   onNext: () => void;
   onPrev: () => void;
 }
@@ -43,52 +44,60 @@ export default function AudioPlayer({
   onNext,
   onPrev,
 }: AudioPlayerProps) {
+  const MAX_VOLUME = 1;
+  const INITIAL_AUDIO_BUFFER = 0;
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const [isReady, setIsReady] = useState<boolean>(false);
-  const [buffered, setBuffered] = useState<number>(0);
-  const [volume, setVolume] = useState<number>(1);
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [playingState, setPlayingState] = useState<"ready" | "pause" | "play">(
+    "ready"
+  );
+  const [buffered, setBuffered] = useState<number>(INITIAL_AUDIO_BUFFER);
+  const [volume, setVolume] = useState<number>(MAX_VOLUME);
 
-  const durationDisplay = formatDurationDisplay(duration);
-  const elapsedDisplay = formatDurationDisplay(currentProgress);
+  const durationDisplay = timeFormat(duration);
+  const elapsedDisplay = timeFormat(currentProgress);
 
   useEffect(() => {
     audioRef.current?.pause();
 
-    const timeout = setTimeout(() => {
-      audioRef.current?.play();
-    }, 500);
+    if (audioRef.current?.paused) {
+      const timeout = setTimeout(() => {
+        audioRef.current?.play();
+      }, 1000);
 
-    return () => {
-      clearTimeout(timeout);
-    };
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
   }, [songIndex]);
 
-  const handleNext = () => {
-    onNext();
-  };
+  useEffect(() => {
+    if (playingState === "play") {
+      if (audioRef.current?.paused) {
+        const timeout = setTimeout(() => {
+          audioRef.current?.play();
+        }, 1000);
 
-  const handlePrev = () => {
-    onPrev();
-  };
+        return () => {
+          clearTimeout(timeout);
+        };
+      }
+    } else {
+      audioRef.current?.pause();
+    }
+  }, [playingState]);
 
   const togglePlayPause = () => {
-    if (isPlaying) {
-      audioRef.current?.pause();
-      setIsPlaying(false);
-    } else {
-      audioRef.current?.play();
-      setIsPlaying(true);
-    }
+    if (playingState === "play") setPlayingState("pause");
+    if (playingState === "pause") setPlayingState("play");
   };
 
   const handleBufferProgress: React.ReactEventHandler<HTMLAudioElement> = (
     e
   ) => {
     const audio = e.currentTarget;
-    const dur = audio.duration;
-    if (dur > 0) {
+    if (audio.duration > 0) {
       for (let i = 0; i < audio.buffered.length; i++) {
         if (
           audio.buffered.start(audio.buffered.length - 1 - i) <
@@ -121,12 +130,12 @@ export default function AudioPlayer({
           ref={audioRef}
           preload="metadata"
           onDurationChange={(e) => setDuration(e.currentTarget.duration)}
-          onPlaying={() => setIsPlaying(true)}
-          onPause={() => setIsPlaying(false)}
-          onEnded={handleNext}
+          onPlaying={() => setPlayingState("play")}
+          onPause={() => setPlayingState("pause")}
+          onEnded={() => onNext()}
           onCanPlay={(e) => {
             e.currentTarget.volume = volume;
-            setIsReady(true);
+            setPlayingState("ready");
           }}
           onTimeUpdate={(e) => {
             setCurrentProgress(e.currentTarget.currentTime);
@@ -165,7 +174,7 @@ export default function AudioPlayer({
         </span>
         <div className="flex items-center gap-4 justify-self-center">
           <IconButton
-            onClick={handlePrev}
+            onClick={() => onPrev()}
             disabled={songIndex === 0}
             aria-label="go to previous"
             intent="secondary"
@@ -173,21 +182,19 @@ export default function AudioPlayer({
             <MdSkipPrevious size={24} />
           </IconButton>
           <IconButton
-            disabled={!isReady}
+            disabled={playingState !== "ready"}
             onClick={togglePlayPause}
-            aria-label={isPlaying ? "Pause" : "Play"}
+            aria-label={playingState}
             size="lg"
           >
-            {!isReady && currentSong ? (
+            {playingState === "ready" && (
               <CgSpinner size={24} className="animate-spin" />
-            ) : isPlaying ? (
-              <MdPause size={30} />
-            ) : (
-              <MdPlayArrow size={30} />
             )}
+            {playingState === "play" && <MdPause size={30} />}
+            {playingState === "pause" && <MdPlayArrow size={30} />}
           </IconButton>
           <IconButton
-            onClick={handleNext}
+            onClick={() => onNext()}
             disabled={songIndex === songCount - 1}
             aria-label="go to next"
             intent="secondary"

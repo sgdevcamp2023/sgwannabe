@@ -33,8 +33,10 @@ function Player() {
           setDuration={setDuration}
           currentProgress={currrentProgress}
           setCurrentProgress={setCurrrentProgress}
-          onNext={() => setCurrentSongIndex((i) => i + 1)}
-          onPrev={() => setCurrentSongIndex((i) => i - 1)}
+          onNext={() =>
+            setCurrentSongIndex((i) => Math.min(i + 1, songs.length))
+          }
+          onPrev={() => setCurrentSongIndex((i) => Math.max(i - 1, 0))}
         />
       </div>
     </div>

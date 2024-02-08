@@ -15,11 +15,11 @@ function CircularProgress({
   duration,
   currentProgress,
   className,
-  size = 300,
+  size = 400,
 }: CircularProgressProps) {
   const nowPlayingMusic = useRecoilValue(playingMusic);
 
-  const circumference = Math.PI * (size - 12);
+  const circumference = Math.PI * size;
   const strokeDasharray = circumference * (1 - currentProgress / duration);
 
   return (
@@ -28,13 +28,13 @@ function CircularProgress({
         <svg
           width={size}
           height={size}
-          viewBox="0 0 200 200"
+          viewBox={`0 0 ${size} ${size}`}
           className="w-full h-full overflow-visible"
         >
           <motion.circle
-            cx="100"
-            cy="100"
-            r="100"
+            cx={size / 2}
+            cy={size / 2}
+            r={size / 2}
             stroke="#00CD3C"
             fill="#FFFFFF"
             strokeWidth={12}
