@@ -31,11 +31,11 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "varchar(15)")
     private String nickname; // 사용자 이름, 닉네임 사용 가능
 
-    @Column(nullable = false, columnDefinition = "char(15) default 'USER'")
+    @Column(nullable = false, columnDefinition = "varchar(15) default 'USER'")
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(nullable = false, columnDefinition = "char(10) default 'ACTIVE'")
+    @Column(nullable = false, columnDefinition = "varchar(10) default 'ACTIVE'")
     @Enumerated(EnumType.STRING)
     private Status status;
 

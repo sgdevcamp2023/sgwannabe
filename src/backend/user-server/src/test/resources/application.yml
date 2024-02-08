@@ -5,14 +5,15 @@ spring:
   application:
     name: user-server
   datasource:
-    # driver-class-name: com.mysql.cj.jdbc.Driver
-    # url: jdbc:mysql://localhost:3306/test_db?useSSL=false&allowPublicKeyRetrieval=true
-    # username: root
-    # password: 12345678
-    driver-class-name: org.h2.Driver
+    #    driver-class-name: com.mysql.cj.jdbc.Driver
+    #    username: root
+    #    password: 12345678
+    #    url: jdbc:mysql://localhost:3306/test_db?useSSL=false&allowPublicKeyRetrieval=true
+
     url: jdbc:h2:mem:local;MODE=MySQL;DATABASE_TO_LOWER=TRUE
     username: sa
     password:
+    driver-class-name: org.h2.Driver
   jpa:
     properties:
       hibernate:
@@ -21,7 +22,7 @@ spring:
         format_sql: true
 
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
   h2:
     console:
       enabled: true
@@ -31,12 +32,12 @@ spring:
   data:
     redis:
       host: localhost
-      port: 12300
+      port: 16379
   mail:
     host: smtp.naver.com
     port: 465
-    username: unknown
-    password: unknown
+    username: a
+    password: a
     properties:
       mail:
         smtp:
