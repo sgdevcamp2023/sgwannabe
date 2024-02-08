@@ -40,6 +40,10 @@ public class TestDataInit {
         }
 
         private void extracted(String nickname, String email, String password, Status status) {
+            if (userRepository.findByEmail(email).isPresent()) {
+                return;
+            }
+
             String hashPassword = passwordEncoder.encode(password);
             User user = new User(nickname, email, hashPassword, status);
             user.changeUserRole(Role.USER);
