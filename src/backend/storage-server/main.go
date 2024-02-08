@@ -13,22 +13,16 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/joho/godotenv"
 	"go.uber.org/zap"
 )
 
 func main() {
-	loadEnvironments()
 	configureLogger()
 
 	logger.Info("starting Web Server")
 
 	registerHandlers()
 	listenServe()
-}
-
-func loadEnvironments() {
-	godotenv.Load(".env")
 }
 
 type ReleaseType int

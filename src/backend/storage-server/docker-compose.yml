@@ -8,8 +8,9 @@ services:
     ports:
       - "30000:30000"
     restart: unless-stopped
-    env_file:
-      - .env
+    environment:
+      - PORT=30000
+      - ENV=develop
     networks:
       - lalala-network
     volumes:
