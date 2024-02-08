@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from ..models.music import Music
 from ..models.album import Album
 from ..models.artist import Artist
+from ..models.playlist import Playlist
 
 import json
 
@@ -34,10 +35,26 @@ class ArtistIndexRequest(BaseModel):
     type: str
     agency: str
 
+class PlaylistIndexRequest(BaseModel):
+    id: str
+    name: str
+    musics: list
+    thumbnail: str
+    uid: str
+    userName: str
+
+class ChatroomIndexRequest(BaseModel):
+    id: str
+    name: str
+    playlist: Playlist
+
+
 index_type_models = {
     'album': AlbumIndexRequest,
     'artist': ArtistIndexRequest,
     'music': MusicIndexRequest,
+    'playlist': PlaylistIndexRequest,
+    'chatroom': ChatroomIndexRequest
 }
 
 @router.post("/index/music")
@@ -81,3 +98,27 @@ async def index_data(body: AlbumIndexRequest = Body(embed=True)):
         return {"message": f"album 색인 성공"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"album 색인 실패: {str(e)}")
+
+@router.post("/index/playlist")
+async def index_data(body: PlaylistIndexRequest = Body(embed=True)):
+    """
+    Playlist 데이터를 Elasticsearch에 색인합니다.
+    """
+    try:
+        es_connector.index(index=f"playlist", data=body.model_dump())
+
+        return {"message": f"playlist 색인 성공"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"playlist 색인 실패: {str(e)}")
+    
+@router.post("/index/chatroom")
+async def index_data(body: ChatroomIndexRequest = Body(embed=True)):
+    """
+    Chatroom 데이터를 Elasticsearch에 색인합니다.
+    """
+    try:
+        es_connector.index(index=f"chatroom", data=body.model_dump())
+
+        return {"message": f"chatroom 색인 성공"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"chatroom 색인 실패: {str(e)}")
