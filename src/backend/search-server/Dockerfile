@@ -7,4 +7,6 @@ COPY . /app
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-CMD ["uvicorn", "backend.src.main:app", "--host", "0.0.0.0", "--port", "20000"]
+EXPOSE 20000
+
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "20000"]

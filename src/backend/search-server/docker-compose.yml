@@ -1,7 +1,24 @@
 version: "3.9"
 
 services:
+  search-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "20000:20000"
+    restart: unless-stopped
+    environment:
+      - PORT=20000
+      - ENV=develop
+      - ELASTICSEARCH_HOST=elasticsearch
+    depends_on:
+      - elasticsearch
+    networks:
+      - lalala-network
+
   elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
     build:
       context: .
       dockerfile: Dockerfile.elasticsearch
@@ -9,9 +26,7 @@ services:
       - discovery.type=single-node
       - xpack.security.enabled=false
     ports:
-      - "20001:9200"
-    networks:
-      - backend
+      - "21000:9200"
     volumes:
       - ./es_data_volume:/usr/share/elasticsearch/data
       - ./elasticsearch.yml:/etc/elasticsearch/elasticsearch.yml
@@ -20,29 +35,14 @@ services:
     image: docker.elastic.co/kibana/kibana:8.6.1
     container_name: kibana
     ports:
-      - 5601:5601
+      - 21900:5601
     environment:
-      - ELASTICSEARCH_URL=http://localhost:20001
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
       - xpack.security.enabled=false
-
-    networks:
-      - backend
     depends_on:
       - elasticsearch
 
-  search-server:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "20000:20000"
-    restart: unless-stopped
-    env_file:
-      - .env
-    networks:
-      - backend
-    depends_on:
-      - elasticsearch
-  
 networks:
-  backend:
+  lalala-network:
+    driver: bridge
+    external: true
