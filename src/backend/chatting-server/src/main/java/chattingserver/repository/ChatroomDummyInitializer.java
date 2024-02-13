@@ -1,9 +1,11 @@
 package chattingserver.repository;
 
+import chattingserver.domain.chat.ChatMessage;
 import chattingserver.domain.room.Music;
 import chattingserver.domain.room.Playlist;
 import chattingserver.domain.room.Room;
 import chattingserver.domain.room.User;
+import chattingserver.util.constant.MessageType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -20,6 +22,7 @@ import java.util.List;
 public class ChatroomDummyInitializer implements ApplicationRunner {
 
     private final RoomRepository roomRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -73,5 +76,25 @@ public class ChatroomDummyInitializer implements ApplicationRunner {
 
         roomRepository.save(dummyRoom);
         log.info("방 생성 성공 room={}", dummyRoom);
+
+        ChatMessage message1 = chatMessageRepository.save(ChatMessage.builder()
+                .messageType(MessageType.MSG)
+                .roomId(dummyRoom.getId())
+                .senderId(1L)
+                .content("메시지메시지1")
+                .createdAt(LocalDateTime.now())
+                .build());
+
+        ChatMessage message2 = chatMessageRepository.save(ChatMessage.builder()
+                .messageType(MessageType.MSG)
+                .roomId(dummyRoom.getId())
+                .senderId(2L)
+                .content("메시지메시지2")
+                .createdAt(LocalDateTime.now())
+                .build());
+
+        log.info("메시지 생성 성공 message1={}", message1);
+        log.info("메시지 생성 성공 message2={}", message2);
+
     }
 }
