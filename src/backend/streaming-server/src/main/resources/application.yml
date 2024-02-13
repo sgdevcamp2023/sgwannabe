@@ -36,8 +36,8 @@ management:
     sampling:
       probability: 1.0
     propagation:
-      consume: b3_single
-      produce: b3_multi
+      consume: [b3, w3c]
+      produce: [b3, w3c]
   zipkin:
     tracing:
       endpoint: "http://localhost:43000/api/v2/spans"
