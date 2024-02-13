@@ -1,4 +1,4 @@
-package spring.feed.domain;
+package com.lalala.feed.domain;
 
 import java.util.UUID;
 

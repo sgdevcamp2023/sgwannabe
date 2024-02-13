@@ -1,4 +1,4 @@
-package spring.feed.dto.response;
+package com.lalala.feed.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

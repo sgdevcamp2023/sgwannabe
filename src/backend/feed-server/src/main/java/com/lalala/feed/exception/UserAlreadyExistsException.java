@@ -1,4 +1,4 @@
-package spring.feed.exception;
+package com.lalala.feed.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

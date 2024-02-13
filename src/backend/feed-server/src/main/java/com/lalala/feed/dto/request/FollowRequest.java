@@ -1,5 +1,5 @@
-package spring.feed.dto.request;
+package com.lalala.feed.dto.request;
 
-import spring.feed.dto.FollowPayload;
+import com.lalala.feed.dto.FollowPayload;
 
 public record FollowRequest(FollowPayload fromUser, FollowPayload toUser) {}

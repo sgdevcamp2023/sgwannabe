@@ -1,5 +1,7 @@
-package spring.feed.service;
+package com.lalala.feed.service;
 
+import com.lalala.feed.domain.Friendship;
+import com.lalala.feed.domain.User;
 import java.util.HashSet;
 import java.util.List;
 
@@ -9,10 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import spring.feed.domain.Friendship;
-import spring.feed.domain.User;
-import spring.feed.exception.UserAlreadyExistsException;
-import spring.feed.repository.UserRepository;
+import com.lalala.feed.exception.UserAlreadyExistsException;
+import com.lalala.feed.repository.UserRepository;
 
 @Slf4j
 @RequiredArgsConstructor
