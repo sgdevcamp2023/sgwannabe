@@ -9,15 +9,15 @@ kafka:
 spring:
   data:
     mongodb:
-      host: chattingdb
+      host: chatting-mongo
       port: 27017
-      database: chattingdb
-      username: root
-      password: 1234
+      database: chatting
+      username: chatting-admin
+      password: JMTpdsu8YkLEX4RA
       authentication-database: admin
 
   kafka:
-    bootstrap-servers: kafka:9092
+    bootstrap-servers: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
 
     consumer:
       room-consumer:
