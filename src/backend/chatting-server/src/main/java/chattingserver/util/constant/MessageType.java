@@ -1,5 +1,6 @@
 package chattingserver.util.constant;
 
-public enum MessageType{
-    ENTRANCE, MSG
+public enum MessageType {
+    ENTRANCE,
+    MSG
 }

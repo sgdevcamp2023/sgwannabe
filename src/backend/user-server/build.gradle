@@ -1,13 +1,10 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.2.1'
+	id 'org.springframework.boot' version '3.2.2'
 	id 'io.spring.dependency-management' version '1.1.4'
-
-	// Lint
-	id("com.diffplug.spotless") version("6.11.0")
 }
 
-group = 'com.example'
+group = 'com.lalala'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -25,12 +22,13 @@ repositories {
 }
 
 dependencies {
+	implementation project(":common-module")
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-
 
 	implementation 'org.springframework.boot:spring-boot-starter-mail' // mail
 
@@ -52,34 +50,24 @@ dependencies {
 	testImplementation 'io.projectreactor:reactor-test'
 
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+
+	// Eureka
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.1.0'
+
+	// OpenFeign
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.0'
+
+	// Actuator
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	// Open Tracing
+	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+
+	// Logback for LogStash
+	implementation 'net.logstash.logback:logstash-logback-encoder:6.3'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
-}
-
-spotless {
-	java {
-		googleJavaFormat()			// 구글 자바 포맷 적용
-
-		removeUnusedImports()       // 사용하지 않는 import 제거
-		trimTrailingWhitespace() 	// 공백 제거
-		endWithNewline() 			// 끝부분 New Line 처리
-
-		// Indentation
-		indentWithTabs(2)
-		indentWithSpaces(4)
-
-		// import 순서 정의
-		importOrder(
-				"java",
-				"javax",
-				"lombok",
-				"org.springframework",
-				"",
-				"\\#",
-				"org.junit",
-				"\\#org.junit",
-		)
-	}
 }

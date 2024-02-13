@@ -9,12 +9,12 @@ data class Album(
         fun of(
             albumId: Int,
             albumName: String,
-            albumCoverUrl: String
+            albumCoverUrl: String,
         ): Album {
             return Album(
                 albumId = albumId,
                 albumName = albumName,
-                albumCoverUrl = albumCoverUrl
+                albumCoverUrl = albumCoverUrl,
             )
         }
     }

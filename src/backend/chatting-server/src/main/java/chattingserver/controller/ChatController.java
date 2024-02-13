@@ -1,5 +1,13 @@
 package chattingserver.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.web.bind.annotation.*;
+
 import chattingserver.config.kafka.Producers;
 import chattingserver.dto.ChatMessageDto;
 import chattingserver.dto.response.ChatMessageResponseDto;
@@ -16,12 +24,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "chat", description = "채팅 API")
 @RequiredArgsConstructor
@@ -29,7 +31,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/chat")
 @Slf4j
 public class ChatController {
-
 
     private final Producers producers;
     private final ChatMessageService chatMessageService;
@@ -40,7 +41,8 @@ public class ChatController {
     public void sendSocketMessage(@Valid @RequestBody ChatMessageDto chatMessageDto) {
         if (!roomService.isExistingRoom(chatMessageDto.getRoomId())) {
             log.error("메시지 전송 에러 : 존재하지 않는 방입니다. roomId={}", chatMessageDto.getRoomId());
-            throw new CustomAPIException(ErrorCode.ROOM_NOT_FOUND_ERROR, "채팅방 id=" + chatMessageDto.getRoomId());
+            throw new CustomAPIException(
+                    ErrorCode.ROOM_NOT_FOUND_ERROR, "채팅방 id=" + chatMessageDto.getRoomId());
         }
 
         ChatMessageResponseDto savedMessage = chatMessageService.saveChatMessage(chatMessageDto);
@@ -50,11 +52,15 @@ public class ChatController {
     }
 
     @Operation(summary = "메시지 전송")
-    @PostMapping(value = "/api/v1/message", consumes = "application/json", produces = "application/json")
+    @PostMapping(
+            value = "/api/v1/message",
+            consumes = "application/json",
+            produces = "application/json")
     public void sendMessage(@Valid @RequestBody ChatMessageDto chatMessageDto) {
         if (!roomService.isExistingRoom(chatMessageDto.getRoomId())) {
             log.error("메시지 전송 에러 : 존재하지 않는 방입니다. roomId={}", chatMessageDto.getRoomId());
-            throw new CustomAPIException(ErrorCode.ROOM_NOT_FOUND_ERROR, "채팅방 id=" + chatMessageDto.getRoomId());
+            throw new CustomAPIException(
+                    ErrorCode.ROOM_NOT_FOUND_ERROR, "채팅방 id=" + chatMessageDto.getRoomId());
         }
         ChatMessageResponseDto savedMessage = chatMessageService.saveChatMessage(chatMessageDto);
 
@@ -64,10 +70,16 @@ public class ChatController {
     }
 
     @Operation(summary = "채팅방 새 메시지 조회")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "채팅방 새 메시지 조회 성공", content = @Content(schema = @Schema(implementation = CommonAPIMessage.class)))})
+    @ApiResponses(
+            value = {
+                @ApiResponse(
+                        responseCode = "200",
+                        description = "채팅방 새 메시지 조회 성공",
+                        content = @Content(schema = @Schema(implementation = CommonAPIMessage.class)))
+            })
     @GetMapping("/api/v1/new-message/{roomId}/{readMsgId}")
-    public ResponseEntity<CommonAPIMessage> newMessagesAtRoom(@PathVariable String roomId, @PathVariable String readMsgId) {
+    public ResponseEntity<CommonAPIMessage> newMessagesAtRoom(
+            @PathVariable String roomId, @PathVariable String readMsgId) {
         CommonAPIMessage apiMessage = new CommonAPIMessage();
         apiMessage.setMessage(CommonAPIMessage.ResultEnum.success);
         apiMessage.setData(chatMessageService.getNewMessages(roomId, readMsgId));
@@ -83,7 +95,9 @@ public class ChatController {
         return new ResponseEntity<>(apiMessage, HttpStatus.OK);
     }
 
-    @Operation(summary = "채팅 메시지 Pagination", description = "내림차순으로 해당 채팅방 메시지 Pagination, 사이즈 N = 12 고정")
+    @Operation(
+            summary = "채팅 메시지 Pagination",
+            description = "내림차순으로 해당 채팅방 메시지 Pagination, 사이즈 N = 12 고정")
     @GetMapping("/history")
     public ResponseEntity<CommonAPIMessage> chatMessagePagination(
             @RequestParam String roomId,

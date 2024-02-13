@@ -3,16 +3,14 @@ package userserver.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import userserver.config.security.UserDetailsImpl;
-import userserver.exception.CustomException;
-import userserver.exception.CustomUserCode;
-import userserver.exception.CustomUserProvider;
+import com.lalala.aop.AuthenticationContext;
+import com.lalala.aop.PassportAuthentication;
+import com.lalala.response.BaseResponse;
+import userserver.domain.User;
 import userserver.payload.request.*;
 import userserver.service.UserService;
 
@@ -26,54 +24,34 @@ public class UserController {
 
     /** 이메일 인증 코드 전송 */
     @PostMapping("/email")
-    public ResponseEntity<?> sendAuthCodeByEmail(
-            @Validated @RequestBody EmailAuthCodeRequest request) {
-        return userService.sendAuthCodeByEmail(request);
+    public BaseResponse<Boolean> sendAuthCodeByEmail(@RequestBody EmailAuthCodeRequest request) {
+        return userService.sendAuthCodeByEmail(request.email());
     }
 
     /** 인증 코드 입력 검증 */
     @PostMapping("/verification")
-    public ResponseEntity<?> verifyAuthCode(
+    public BaseResponse<Boolean> verifyAuthCode(
             @Validated @RequestBody EmailVerifyRequest request, Errors errors) {
-        if (errors.hasErrors()) {
-            CustomUserProvider.throwError(errors);
-        }
-
-        return userService.verifyAuthCode(request);
+        return userService.verifyAuthCode(request.email(), request.code());
     }
 
     /** 회원가입 */
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@Validated @RequestBody SignUpRequest request, Errors errors) {
-        if (errors.hasErrors()) {
-            CustomUserProvider.throwError(errors);
-        }
-        return userService.signUp(request);
+    public BaseResponse<User> signup(@RequestBody SignUpRequest request) {
+        return userService.signUp(request.email(), request.password(), request.nickname());
     }
 
     /** 비밀번호 변경 */
     @PostMapping("/password-change")
-    public ResponseEntity<?> passwordChange(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @Validated @RequestBody PasswordChangeRequest request,
-            Errors errors) {
-        if (errors.hasErrors()) {
-            CustomUserProvider.throwError(errors);
-        }
-        if (userDetails == null) {
-            throw new CustomException(CustomUserCode.CLIENT_UNAUTHORIZED);
-        }
-        return userService.passwordChange(userDetails.getUser(), request);
+    @PassportAuthentication
+    public BaseResponse<Boolean> passwordChange(@RequestBody PasswordChangeRequest request) {
+        return userService.passwordChange(AuthenticationContext.getUserInfo(), request.password());
     }
 
     /** 프로필 이미지 변경 */
     @PostMapping("/profile-change")
-    public ResponseEntity<?> profileChange(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @Validated @RequestBody ProfileChangeRequest request) {
-        if (userDetails == null) {
-            throw new CustomException(CustomUserCode.CLIENT_UNAUTHORIZED);
-        }
-        return userService.profileChange(userDetails.getUser(), request);
+    @PassportAuthentication
+    public BaseResponse<Boolean> profileChange(@RequestBody ProfileChangeRequest request) {
+        return userService.profileChange(AuthenticationContext.getUserInfo(), request.profile());
     }
 }

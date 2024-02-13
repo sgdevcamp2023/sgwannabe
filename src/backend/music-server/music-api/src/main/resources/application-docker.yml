@@ -2,6 +2,9 @@ server:
   port: 24000
 
 spring:
+  application:
+    name: music-server
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: "jdbc:mysql://music-mysql:3306/music?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul"

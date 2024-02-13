@@ -1,6 +1,6 @@
 package com.lalala.chart.entity.mongo
 
-enum class DifferenceType (
+enum class DifferenceType(
     private val description: String,
 ) {
     UP("상승"),

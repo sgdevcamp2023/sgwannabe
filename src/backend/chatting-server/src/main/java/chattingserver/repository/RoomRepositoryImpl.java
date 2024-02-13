@@ -1,13 +1,14 @@
 package chattingserver.repository;
 
-import chattingserver.domain.room.Room;
-import chattingserver.dto.request.ReadMessageUpdateRequestDto;
-import com.mongodb.client.result.UpdateResult;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.stereotype.Repository;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.stereotype.Repository;
+
+import chattingserver.domain.room.Room;
+import chattingserver.dto.request.ReadMessageUpdateRequestDto;
+import com.mongodb.client.result.UpdateResult;
 
 @Repository
 public class RoomRepositoryImpl implements RoomRepositoryCustom {
@@ -28,10 +29,13 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
     @Override
     public UpdateResult updateLastReadMsgId(ReadMessageUpdateRequestDto requestDto) {
 
-        Query query = Query.query(
-                Criteria.where("roomId").is(requestDto.getRoomId())
-                        .andOperator(Criteria.where("users").elemMatch(Criteria.where("uid").is(requestDto.getUid())))
-        );
+        Query query =
+                Query.query(
+                        Criteria.where("roomId")
+                                .is(requestDto.getRoomId())
+                                .andOperator(
+                                        Criteria.where("users")
+                                                .elemMatch(Criteria.where("uid").is(requestDto.getUid()))));
 
         Update update = new Update().set("users.$.lastReadMsgId", requestDto.getMessageId());
 

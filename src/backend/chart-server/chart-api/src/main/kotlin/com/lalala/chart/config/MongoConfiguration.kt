@@ -20,9 +20,8 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 @EnableReactiveMongoRepositories(basePackages = ["com.lalala.chart.repository"])
 @EnableReactiveMongoAuditing
 class MongoConfiguration(
-    private val env: Environment
+    private val env: Environment,
 ) : AbstractReactiveMongoConfiguration() {
-
     override fun getDatabaseName() = "chart"
 
     override fun reactiveMongoClient() = mongoClient()
@@ -30,7 +29,7 @@ class MongoConfiguration(
     override fun mappingMongoConverter(
         databaseFactory: ReactiveMongoDatabaseFactory,
         customConversions: MongoCustomConversions,
-        mappingContext: MongoMappingContext
+        mappingContext: MongoMappingContext,
     ): MappingMongoConverter {
         val converter = MappingMongoConverter(NoOpDbRefResolver.INSTANCE, mappingContext)
         converter.customConversions = customConversions
@@ -48,6 +47,6 @@ class MongoConfiguration(
     @Bean
     override fun reactiveMongoTemplate(
         databaseFactory: ReactiveMongoDatabaseFactory,
-        mongoConverter: MappingMongoConverter
+        mongoConverter: MappingMongoConverter,
     ): ReactiveMongoTemplate = ReactiveMongoTemplate(mongoClient(), databaseName)
 }

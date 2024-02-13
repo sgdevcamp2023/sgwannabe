@@ -4,15 +4,12 @@ server:
 spring:
   application:
     name: user-server
+
   datasource:
-    # driver-class-name: com.mysql.cj.jdbc.Driver
-    # url: jdbc:mysql://localhost:3306/test_db?useSSL=false&allowPublicKeyRetrieval=true
-    # username: root
-    # password: 12345678
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:local;MODE=MySQL;DATABASE_TO_LOWER=TRUE
-    username: sa
-    password:
+     driver-class-name: com.mysql.cj.jdbc.Driver
+     url: jdbc:mysql://localhost:12100/user?useSSL=false&allowPublicKeyRetrieval=true
+     username: root
+     password: admin
   jpa:
     properties:
       hibernate:
@@ -21,31 +18,52 @@ spring:
         format_sql: true
 
     hibernate:
-      ddl-auto: create
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-      settings:
-        web-allow-others: true
+      ddl-auto: validate
   data:
     redis:
       host: localhost
-      port: 12300
+      port: 12200
   mail:
-    host: smtp.naver.com
+    host: smtp.gmail.com
     port: 465
-    username: unknown
-    password: unknown
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
+    username: smilegate.wannabe@gmail.com
+    password: hxir xfcg rzec atni
+    auth: true
+    starttls:
+      enable: true
     protocol: smtps
+
+  kafka:
+    bootstrap-servers: localhost:40000,localhost:40001,localhost:40002
 
 jwt:
   cookie-max-age: 86400 #1day
   secret-key: c21pbGVnYXRlLWNvbXBhbnktaXMtdG9vLWZhci1zby1pLXdhbnQtdG8td29yay1mcm9tLWhvbWUtZXZlcnktb3RoZXItZGF5Cg==
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:34100/eureka
+
+passport:
+  algorithm: SHA-256
+  key: SECRET_KEY
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+    propagation:
+      consume: b3_single
+      produce: b3_multi
+  zipkin:
+    tracing:
+      endpoint: "http://localhost:43000/api/v2/spans"
+
+logging:
+  pattern:
+    level: "%5p [%X{traceId:-},%X{spanId:-}]"

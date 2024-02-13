@@ -1,10 +1,11 @@
 package chattingserver.dto;
 
-import chattingserver.util.constant.MessageType;
-import jakarta.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
+
 import lombok.*;
 
-import java.time.LocalDateTime;
+import chattingserver.util.constant.MessageType;
+import jakarta.validation.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -15,13 +16,9 @@ import java.time.LocalDateTime;
 public class ChatMessageDto {
 
     private String id;
-    @NotBlank
-    private MessageType messageType;
-    @NotBlank
-    private String roomId;
-    @NotBlank
-    private Long senderId;
-    @NotBlank
-    private String content;
+    @NotBlank private MessageType messageType;
+    @NotBlank private String roomId;
+    @NotBlank private Long senderId;
+    @NotBlank private String content;
     private LocalDateTime createdAt;
 }

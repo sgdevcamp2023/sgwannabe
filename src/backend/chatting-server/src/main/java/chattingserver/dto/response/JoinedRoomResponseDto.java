@@ -1,8 +1,10 @@
 package chattingserver.dto.response;
 
-import chattingserver.domain.room.User;
-import lombok.*;
 import java.util.List;
+
+import lombok.*;
+
+import chattingserver.domain.room.User;
 
 @Getter
 @Builder
@@ -14,5 +16,5 @@ public class JoinedRoomResponseDto {
     private String roomName;
     private List<User> users;
 
-//    private LastMessage last_message;
+    //    private LastMessage last_message;
 }

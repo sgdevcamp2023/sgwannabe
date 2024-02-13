@@ -1,17 +1,18 @@
 package authserver.controller;
 
+import authserver.service.AuthService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import authserver.payload.request.SignInRequest;
 import authserver.payload.response.UserAndTokenResponse;
-import authserver.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
@@ -29,5 +30,10 @@ public class AuthController {
     @PostMapping("signout")
     public ResponseEntity<?> signOutUser(HttpServletRequest request) {
         return authService.signOut(request);
+    }
+
+    @PostMapping("/passport")
+    public ResponseEntity<String> generatePassport(@RequestHeader("Authorization") String jwtPayload) {
+        return ResponseEntity.ok().body(authService.generatePassport(jwtPayload));
     }
 }

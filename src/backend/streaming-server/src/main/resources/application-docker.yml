@@ -1,6 +1,10 @@
 server:
   port: 22000
 
+spring:
+  application:
+    name: streaming-server
+
 client:
   endpoint:
     music: http://host.docker.internal:24000
@@ -10,3 +14,31 @@ ffmpeg:
   location:
     mpeg: ./libs/ffmpeg-6.1/ffmpeg
     probe: ./libs/ffmpeg-6.1/ffprobe
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://discovery-app:34100/eureka
+
+passport:
+  algorithm: SHA-256
+  key: SECRET_KEY
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+    propagation:
+      consume: b3_single
+      produce: b3_multi
+  zipkin:
+    tracing:
+      endpoint: "http://localhost:43000/api/v2/spans"
+
+logging:
+  pattern:
+    level: "%5p [%X{traceId:-},%X{spanId:-}]"

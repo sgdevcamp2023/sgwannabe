@@ -1,5 +1,17 @@
 package chattingserver.service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
 import chattingserver.domain.room.Room;
 import chattingserver.domain.room.User;
 import chattingserver.dto.request.ReadMessageUpdateRequestDto;
@@ -8,16 +20,6 @@ import chattingserver.dto.response.JoinedRoomResponseDto;
 import chattingserver.dto.response.RoomResponseDto;
 import chattingserver.repository.RoomRepository;
 import chattingserver.util.converter.EntityToResponseDtoConverter;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -32,26 +34,31 @@ public class RoomService {
         return foundRoom.map(entityToResponseDtoConverter::convertRoom).orElse(null);
     }
 
-    public List<JoinedRoomResponseDto> findJoinedRoomsByUid(Long uid){
+    public List<JoinedRoomResponseDto> findJoinedRoomsByUid(Long uid) {
         List<Room> roomList = roomRepository.findJoinedRoomsByUid(uid);
 
         log.info("참여한 방 리스트 조회 성공 uid={}", uid);
         List<JoinedRoomResponseDto> myRoomsDto = new ArrayList<>();
 
-        for(Room room : roomList){
+        for (Room room : roomList) {
             String roomId = room.getId();
-//            MessageCollection messageCollection = chatMessageRepository.getLastMessage(roomId);
+            //            MessageCollection messageCollection =
+            // chatMessageRepository.getLastMessage(roomId);
 
-//            LastMessage lastMessage = LastMessage.builder()
-//                    .message_id(messageCollection.get_id()).sender_id(messageCollection.getSenderId())
-//                    .content(messageCollection.getContent()).created_at(messageCollection.getCreatedAt())
-//                    .build();
+            //            LastMessage lastMessage = LastMessage.builder()
+            //
+            // .message_id(messageCollection.get_id()).sender_id(messageCollection.getSenderId())
+            //
+            // .content(messageCollection.getContent()).created_at(messageCollection.getCreatedAt())
+            //                    .build();
 
-            myRoomsDto.add(JoinedRoomResponseDto.builder()
-                    .roomId(roomId).roomName(room.getRoomName())
-                    .users(room.getUsers())
-//                    .last_message(lastMessage)
-                    .build());
+            myRoomsDto.add(
+                    JoinedRoomResponseDto.builder()
+                            .roomId(roomId)
+                            .roomName(room.getRoomName())
+                            .users(room.getUsers())
+                            //                    .last_message(lastMessage)
+                            .build());
         }
 
         return myRoomsDto;
@@ -59,39 +66,44 @@ public class RoomService {
 
     public List<RoomResponseDto> findUnjoinedRooms(Long uid) {
 
-        List<Room> unjoinedRooms = roomRepository.findUnjoinedRoomsSortedByCreationDate(uid, Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<Room> unjoinedRooms =
+                roomRepository.findUnjoinedRoomsSortedByCreationDate(
+                        uid, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         log.info("참여하지 않은 방 리스트 조회 성공 uid={}", uid);
 
         return unjoinedRooms.stream()
-                .map(room -> RoomResponseDto.builder()
-                        .id(room.getId())
-                        .roomName(room.getRoomName())
-                        .userCount(room.getUsers().size())
-                        .users(room.getUsers())
-                        .playlist(room.getPlaylist())
-                        .build())
+                .map(
+                        room ->
+                                RoomResponseDto.builder()
+                                        .id(room.getId())
+                                        .roomName(room.getRoomName())
+                                        .userCount(room.getUsers().size())
+                                        .users(room.getUsers())
+                                        .playlist(room.getPlaylist())
+                                        .build())
                 .collect(Collectors.toList());
     }
 
-
     public RoomResponseDto create(RoomCreateRequestDto roomCreateRequestDto) {
         // user build
-        User user = User.builder()
-                .uid(roomCreateRequestDto.getUid())
-                .nickName(roomCreateRequestDto.getNickName())
-                .enteredAt(LocalDateTime.now())
-                .build();
+        User user =
+                User.builder()
+                        .uid(roomCreateRequestDto.getUid())
+                        .nickName(roomCreateRequestDto.getNickName())
+                        .enteredAt(LocalDateTime.now())
+                        .build();
 
         List<User> users = new ArrayList<>();
         users.add(user);
 
         // room build
-        Room room = Room.builder()
-                .roomName(roomCreateRequestDto.getPlaylist().getName())
-                .playlist(roomCreateRequestDto.getPlaylist())
-                .users(users)
-                .build();
+        Room room =
+                Room.builder()
+                        .roomName(roomCreateRequestDto.getPlaylist().getName())
+                        .playlist(roomCreateRequestDto.getPlaylist())
+                        .users(users)
+                        .build();
 
         log.info("생성된 방에 생성자 추가 성공 user={}", room.getUsers().toString());
         Room savedRoom = roomRepository.save(room);
@@ -110,10 +122,15 @@ public class RoomService {
         }
     }
 
-    public boolean updateLastReadMsgId(String roomId, Long uid, ReadMessageUpdateRequestDto requestDto) {
+    public boolean updateLastReadMsgId(
+            String roomId, Long uid, ReadMessageUpdateRequestDto requestDto) {
         try {
             roomRepository.updateLastReadMsgId(requestDto);
-            log.info("LastReadMsgId 업데이트 성공 uid={}, roomId={}, 업데이트 완료 message_id={}", uid, roomId, requestDto.getMessageId());
+            log.info(
+                    "LastReadMsgId 업데이트 성공 uid={}, roomId={}, 업데이트 완료 message_id={}",
+                    uid,
+                    roomId,
+                    requestDto.getMessageId());
             return true;
         } catch (Exception e) {
             log.error("LastReadMsgId 업데이트 실패 uid={}, roomId={}: {}", uid, roomId, e.getMessage());

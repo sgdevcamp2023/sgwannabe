@@ -55,11 +55,11 @@ public class JwtUtils {
     /** 클라이언트 http cookie 관리 */
     public ResponseCookie generateAccessJwtCookie(User user) {
         String jwt = generateAccessTokenFromId(String.valueOf(user.getId()));
-        return generateCookie(jwtAccessCookie, jwt, "/v1");
+        return generateCookie(jwtAccessCookie, jwt, "/");
     }
 
     public ResponseCookie generateRefreshJwtCookie(String refreshToken) {
-        return generateCookie(jwtRefreshCookie, refreshToken, "/v1/api");
+        return generateCookie(jwtRefreshCookie, refreshToken, "/");
     }
 
     private ResponseCookie generateCookie(String name, String value, String path) {

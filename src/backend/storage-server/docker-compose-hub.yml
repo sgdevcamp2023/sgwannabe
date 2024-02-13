@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  fileserver-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "30000:30000"
+    restart: unless-stopped
+    environment:
+      - PORT=30000
+      - ENV=develop
+    networks:
+      - lalala-network
+    volumes:
+      - static-data:/resources
+
+volumes:
+  static-data:
+    driver: local
+
+networks:
+  lalala-network:
+    driver: bridge
+    external: true

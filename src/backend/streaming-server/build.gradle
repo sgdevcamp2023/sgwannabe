@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id 'org.springframework.boot' version '3.2.1'
+	id 'org.springframework.boot' version '3.2.2'
 	id 'io.spring.dependency-management' version '1.1.4'
 	id 'org.jetbrains.kotlin.jvm' version '1.9.21'
 	id 'org.jetbrains.kotlin.plugin.spring' version '1.9.21'
@@ -25,6 +25,8 @@ repositories {
 }
 
 dependencies {
+	implementation project(":common-module")
+
 	// Spring
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -53,6 +55,22 @@ dependencies {
 
 	// kotlin-logging
 	implementation 'io.github.oshai:kotlin-logging-jvm:5.1.0'
+
+	// Eureka
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.1.0'
+
+	// OpenFeign
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.0'
+
+	// Actuator
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	// Open Tracing
+	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+
+	// Logback for LogStash
+	implementation 'net.logstash.logback:logstash-logback-encoder:6.3'
 }
 
 tasks.withType(KotlinCompile) {

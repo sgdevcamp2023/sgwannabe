@@ -1,9 +1,10 @@
 package chattingserver.util.constant;
 
-import chattingserver.dto.response.CommonAPIError;
+import java.time.LocalDateTime;
+
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import chattingserver.dto.response.CommonAPIError;
 
 @Getter
 public enum ErrorCode {
@@ -20,8 +21,7 @@ public enum ErrorCode {
     }
 
     public CommonAPIError toErrorResponseDto(String msg) {
-        return CommonAPIError
-                .builder()
+        return CommonAPIError.builder()
                 .status(this.status)
                 .errorCode(this.code)
                 .description(this.description)

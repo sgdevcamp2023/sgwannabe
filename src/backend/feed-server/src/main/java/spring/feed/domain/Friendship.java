@@ -1,10 +1,11 @@
 package spring.feed.domain;
 
+import java.util.UUID;
+
 import lombok.Builder;
+
 import org.neo4j.ogm.annotation.*;
 import org.neo4j.ogm.id.UuidStrategy;
-
-import java.util.UUID;
 
 @RelationshipEntity("IS_FOLLOWING")
 @Builder
@@ -13,9 +14,7 @@ public class Friendship {
     @Id
     private UUID id;
 
-    @StartNode
-    private User startNode;
+    @StartNode private User startNode;
 
-    @EndNode
-    private User endNode;
+    @EndNode private User endNode;
 }

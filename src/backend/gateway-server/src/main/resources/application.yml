@@ -1,2 +1,132 @@
 server:
-  port: 40000
+  port: 34000
+
+spring:
+  application:
+    name: gateway-server
+
+  main:
+    web-application-type: reactive
+
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: [ "http://localhost:3000", "http://127.0.0.1:3000" ]
+            allow-credentials: true
+            allowedHeaders: '*'
+            allowedMethods:
+              - PUT
+              - GET
+              - POST
+              - DELETE
+              - OPTIONS
+      routes:
+        - id: ALARM-SERVICE
+          uri: lb://ALARM-SERVER
+          predicates:
+            - Path=/alarm/**
+          filters:
+            - RewritePath=/alarm/?(?<segment>.*), /$\{segment}
+
+        - id: AUTH-SERVICE
+          uri: lb://AUTH-SERVER
+          predicates:
+            - Path=/auth/**
+          filters:
+            - RewritePath=/v1/api/?(?<segment>.*), /$\{segment}
+
+        - id: CHART-SERVICE
+          uri: lb://CHART-SERVER
+          predicates:
+            - Path=/chart/**
+          filters:
+            - RewritePath=/charts/?(?<segment>.*), /$\{segment}
+
+        - id: CHATTING-CHAT
+          uri: lb://CHATTING-SERVER
+          predicates:
+            - Path=/chatting/chat/**
+          filters:
+            - RewritePath=/chat/(?<segment>/?.*), /$\{segment}
+
+        - id: CHATTING-ROOM
+          uri: lb://CHATTING-SERVER
+          predicates:
+            - Path=/chatting/room/**
+          filters:
+            - RewritePath=/api/v1/rooms/(?<segment>/?.*), /$\{segment}
+
+        - id: FEED
+          uri: lb://FEED-SERVER
+          predicates:
+            - Path=/feed/**
+          filters:
+            - RewritePath=/v1/api/?(?<segment>.*), /$\{segment}
+
+        - id: MUSIC
+          uri: lb://MUSIC-SERVER
+          predicates:
+            - Path=/music/**
+          filters:
+            - RewritePath=/api/v1/?(?<segment>.*), /$\{segment}
+
+        - id: PLAYLIST
+          uri: lb://PLAYLIST-SERVER
+          predicates:
+            - Path=/playlist/**
+          filters:
+            - RewritePath=/v1/api/?(?<segment>.*), /$\{segment}
+
+        - id: SEARCH
+          uri: lb://SEARCH-SERVER
+          predicates:
+            - Path=/search/**
+          filters:
+            - RewritePath=/?(?<segment>.*), /$\{segment}
+
+        - id: STREAMING
+          uri: lb://ws://STREAMING-SERVER
+          predicates:
+            - Path=/streaming/**
+          filters:
+            - RewritePath=/?(?<segment>.*), /$\{segment}
+
+        - id: USER
+          uri: lb://USER-SERVER
+          predicates:
+            - Path=/user/**
+          filters:
+            - RewritePath=/api/v1/?(?<segment>.*), /$\{segment}
+
+      default-filters:
+        - name: AuthorizationFilter
+          args:
+            baseMessage: Gateway Authorization Filter
+            preLogger: true
+            postLogger: true
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:34100/eureka
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+    propagation:
+      consume: b3_single
+      produce: b3_multi
+  zipkin:
+    tracing:
+      endpoint: "http://localhost:43000/api/v2/spans"
+
+logging:
+  pattern:
+    level: "%5p [%X{traceId:-},%X{spanId:-}]"

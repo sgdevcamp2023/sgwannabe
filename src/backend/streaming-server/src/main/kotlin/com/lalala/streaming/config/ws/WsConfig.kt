@@ -22,6 +22,10 @@ class WsConfig(
         registry
             .addHandler(streamingHandler(), "/streaming")
             .setAllowedOrigins("*")
+        registry
+            .addHandler(streamingHandler(), "/streaming")
+            .setAllowedOrigins("*")
+            .withSockJS()
     }
 
     @Bean
