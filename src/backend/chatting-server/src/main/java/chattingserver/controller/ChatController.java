@@ -35,7 +35,7 @@ public class ChatController {
     private final ChatMessageService chatMessageService;
     private final RoomService roomService;
 
-    @MessageMapping("/chat/pub")
+    @MessageMapping("/send")
     @Operation(summary = "웹소켓 메시지 전송")
     public void sendSocketMessage(@Valid @RequestBody ChatMessageDto chatMessageDto) {
         if (!roomService.isExistingRoom(chatMessageDto.getRoomId())) {
@@ -94,12 +94,14 @@ public class ChatController {
         return new ResponseEntity<>(apiMessage, HttpStatus.OK);
     }
 
+    @PostMapping("/api/v1/join")
     @MessageMapping("/api/v1/join")
     public void join(ChatMessageDto message) {
 
         producers.sendMessage(chatMessageService.join(message));
     }
 
+    @PostMapping("/api/v1/leave")
     @MessageMapping("/api/v1/leave")
     public void leave(ChatMessageDto message) {
 
