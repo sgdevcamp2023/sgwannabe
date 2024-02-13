@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  gateway-app:
+    image: smilegatewannabe/gateway
+    environment:
+      eureka.instance.hostname: localhost
+      eureka.client.service-url.defaultZone: http://discovery-app:8761/eureka
+    restart: always
+    ports:
+      - 34000:34000
+    networks:
+      - lalala-network
+
+networks:
+  lalala-network:
+    driver: bridge
+    external: true

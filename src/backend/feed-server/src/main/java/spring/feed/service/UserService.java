@@ -1,16 +1,18 @@
 package spring.feed.service;
 
+import java.util.HashSet;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import spring.feed.domain.Friendship;
 import spring.feed.domain.User;
 import spring.feed.exception.UserAlreadyExistsException;
 import spring.feed.repository.UserRepository;
-
-import java.util.HashSet;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,31 +35,32 @@ public class UserService {
 
     @Transactional
     public void startFollowing(User fromUser, User toUser) {
-        User savedFromUser = userRepository
-                .findByUserId(fromUser.getUserId())
-                .orElseGet(() -> {
-                    return this.addUser(fromUser);
-                });
+        User savedFromUser =
+                userRepository
+                        .findByUserId(fromUser.getUserId())
+                        .orElseGet(
+                                () -> {
+                                    return this.addUser(fromUser);
+                                });
 
-        User savedToUser = userRepository
-                .findByUserId(toUser.getUserId())
-                .orElseGet(() -> {
-                    return this.addUser(toUser);
-                });
+        User savedToUser =
+                userRepository
+                        .findByUserId(toUser.getUserId())
+                        .orElseGet(
+                                () -> {
+                                    return this.addUser(toUser);
+                                });
 
         if (savedFromUser.getFriendships() == null) {
             savedFromUser.setFriendships(new HashSet<>());
         }
 
-        savedFromUser.getFriendships().add(Friendship.
-                builder().
-                startNode(savedFromUser).
-                endNode(savedToUser).
-                build());
+        savedFromUser
+                .getFriendships()
+                .add(Friendship.builder().startNode(savedFromUser).endNode(savedToUser).build());
 
         userRepository.save(savedFromUser);
     }
-
 
     public List<User> findFollowing(String userId) {
 

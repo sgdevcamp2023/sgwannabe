@@ -4,6 +4,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      eureka.instance.hostname: localhost
+      eureka.client.service-url.defaultZone: http://discovery-app:8761/eureka
     restart: always
     ports:
       - 34000:34000

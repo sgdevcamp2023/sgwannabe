@@ -7,6 +7,17 @@ services:
       - 26000:8200
     depends_on:
       - chart-mongo
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://chipmunk:JMTpdsu8YkLEXBW4RA@chart-mongo:27017/chart
+
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
+
+      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:8761/eureka
+
+      PASSPORT_ALGORITHM: SHA-256
+      PASSPORT_KEY: SECRET_KEY
+
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://infra-zipkin:9411/api/v2/spans
     networks:
       - lalala-network
 

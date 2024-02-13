@@ -1,11 +1,8 @@
 package chattingserver.repository;
 
-import chattingserver.domain.chat.ChatMessage;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import java.util.List;
+import chattingserver.domain.chat.ChatMessage;
 
-public interface ChatMessageRepository extends MongoRepository<ChatMessage, String>, ChatMessageRepositoryCustom {
-
-
-}
+public interface ChatMessageRepository
+        extends MongoRepository<ChatMessage, String>, ChatMessageRepositoryCustom {}

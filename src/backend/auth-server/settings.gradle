@@ -1,1 +1,4 @@
-rootProject.name = 'auth-server'
+rootProject.name = 'auth'
+
+include ':common-module'
+project(':common-module').projectDir = new File('../common-module')

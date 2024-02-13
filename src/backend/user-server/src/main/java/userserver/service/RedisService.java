@@ -25,10 +25,10 @@ public class RedisService {
         if (getRedisTemplateValue(key) != null) {
             deleteRedisTemplateValue(key);
         }
-        redisTemplate.opsForValue().set(key, value, duration); // ttl 설정
+        redisTemplate.opsForValue().set(key, value, duration);
     }
 
-    public Boolean isExistKey(String key) {
+    public Boolean hasKey(String key) {
         return redisTemplate.hasKey(key);
     }
 }

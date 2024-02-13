@@ -1,5 +1,7 @@
 version: "3.9"
 services:
+  # Kafka Brokers
+
   Kafka00Service:
     image: bitnami/kafka:3.6.1-debian-11-r0
     restart: unless-stopped
@@ -29,7 +31,7 @@ services:
       - lalala-network
     volumes:
       - "Kafka00:/bitnami/kafka"
-  ##Kafka 01
+
   Kafka01Service:
     image: bitnami/kafka:3.6.1-debian-11-r0
     restart: unless-stopped
@@ -59,7 +61,7 @@ services:
       - lalala-network
     volumes:
       - "Kafka01:/bitnami/kafka"
-  ##Kafka 02
+
   Kafka02Service:
     image: bitnami/kafka:3.6.1-debian-11-r0
     restart: unless-stopped
@@ -103,6 +105,73 @@ services:
       - KAFKA_CLUSTERS_0_AUDIT_TOPICAUDITENABLED=true
       - KAFKA_CLUSTERS_0_AUDIT_CONSOLEAUDITENABLED=true
       #- KAFKA_CLUSTERS_0_METRICS_PORT=9999
+    networks:
+      - lalala-network
+
+  # ELK Stack
+
+  infra-elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.1
+    container_name: infra-elasticsearch
+    environment:
+      - node.name=elasticsearch
+      - discovery.type=single-node
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ELASTIC_PASSWORD=changeme"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - .docker/esdata1:/usr/share/elasticsearch/data
+    ports:
+      - 42000:9300 # Cluster Port
+      - 42001:9200 # REST Port
+    networks:
+      - lalala-network
+
+  infra-kibana:
+    image: docker.elastic.co/kibana/kibana:8.12.1
+    container_name: infra-kibana
+    environment:
+      ELASTICSEARCH_URL: "http://infra-elasticsearch:9300"
+    ports:
+      - 42100:5601
+    depends_on:
+      - infra-elasticsearch
+    networks:
+      - lalala-network
+
+  infra-logstash:
+    image: docker.elastic.co/logstash/logstash:8.12.1
+    container_name: infra-logstash
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: ./logstash/config/logstash.yml
+        target: /usr/share/logstash/config/logstash.yml
+        read_only: true
+      - type: bind
+        source: ./logstash/pipeline
+        target: /usr/share/logstash/pipeline
+        read_only: true
+    ports:
+      - "42200:5000"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    depends_on:
+      - infra-elasticsearch
+    networks:
+      - lalala-network
+
+  infra-zipkin:
+    image: openzipkin/zipkin
+    container_name: infra-zipkin
+    restart: unless-stopped
+    ports:
+      - "43000:9411"
     networks:
       - lalala-network
 

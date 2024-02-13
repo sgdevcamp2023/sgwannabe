@@ -8,8 +8,8 @@ SG(스마일게이트)에서 목표를 이루고(워너비)야 말겠다는 포�
     <tr align="center">
         <td><B>강수아(Server)</B></td>
         <td><B>김선재(Server)</B></td>
-        <td><B>박민주(Web)</B></td>
         <td><B>정소연(Server)</B></td>
+        <td><B>박민주(Web)</B></td>
     </tr>
     <tr align="center">
         <td>

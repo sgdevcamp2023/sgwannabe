@@ -2,6 +2,9 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.2'
 	id 'io.spring.dependency-management' version '1.1.4'
+
+	// Lint
+	id("com.diffplug.spotless") version("6.25.0")
 }
 
 group = 'com.lalala'
@@ -21,9 +24,24 @@ ext {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
+
+	// Gateway
+	implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
+
+	// Eureka
+	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+
+	// OpenFeign
+	implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+
+	// lombok
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// Actuator
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 dependencyManagement {
@@ -34,4 +52,30 @@ dependencyManagement {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+spotless {
+	java {
+		googleJavaFormat()			// 구글 자바 포맷 적용
+
+		removeUnusedImports()       // 사용하지 않는 import 제거
+		trimTrailingWhitespace() 	// 공백 제거
+		endWithNewline() 			// 끝부분 New Line 처리
+
+		// Indentation
+		indentWithTabs(2)
+		indentWithSpaces(4)
+
+		// import 순서 정의
+		importOrder(
+				"java",
+				"javax",
+				"lombok",
+				"org.springframework",
+				"",
+				"\\#",
+				"org.junit",
+				"\\#org.junit",
+		)
+	}
 }

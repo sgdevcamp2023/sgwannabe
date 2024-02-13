@@ -17,6 +17,8 @@ cd "../backend/"
 
 BACKEND_PWD=`pwd`
 
+# 서버 시작 순서 조정, 의존성이 있는 경우 앞에 먼저 시작되어야 함
+
 SERVER_ORDER=(
     "user-server"
 
@@ -41,6 +43,7 @@ SERVER_ORDER=(
 
     "search-server"
 
+    "discovery-server"
     "gateway-server"
 )
 
@@ -49,5 +52,5 @@ echo "$BACKEND_PWD"
 for SERVER in ${SERVER_ORDER[@]}; do
     cd $BACKEND_PWD/$SERVER/
     docker-compose down
-    docker-compose up -d
+    docker-compose -f docker-compose-hub.yml up -d
 done

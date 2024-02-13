@@ -17,10 +17,17 @@ services:
 
       SPRING_MAIL_HOST: smtp.gmail.com
       SPRING_MAIL_USERNAME: smilegate.wannabe@gmail.com
-      SPRING_MAIL_PASSWORD: b3^weK*zh47gZxm5
+      SPRING_MAIL_PASSWORD: hxir xfcg rzec atni
 
       SPRING_DATA_REDIS_HOST: user-redis
       SPRING_DATA_REDIS_PORT: 6379
+
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
+
+      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:8761/eureka
+
+      PASSPORT_ALGORITHM: SHA-256
+      PASSPORT_KEY: SECRET_KEY
     depends_on:
       - user-mysql
     networks:

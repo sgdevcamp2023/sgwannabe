@@ -6,5 +6,6 @@ import com.mongodb.client.result.UpdateResult;
 public interface RoomRepositoryCustom {
 
     void exitRoom(String roomId, Long uid);
+
     UpdateResult updateLastReadMsgId(ReadMessageUpdateRequestDto requestDto);
 }

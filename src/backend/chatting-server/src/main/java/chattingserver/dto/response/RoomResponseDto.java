@@ -1,11 +1,12 @@
 package chattingserver.dto.response;
 
-import chattingserver.domain.room.Playlist;
-import chattingserver.domain.room.User;
-import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
+
+import lombok.*;
+
+import chattingserver.domain.room.Playlist;
+import chattingserver.domain.room.User;
 
 @Builder
 @Getter
@@ -19,6 +20,6 @@ public class RoomResponseDto {
     private List<User> users;
     private Playlist playlist;
     private LocalDateTime createdAt;
-//    private Music thumbnail;
+    //    private Music thumbnail;
 
 }

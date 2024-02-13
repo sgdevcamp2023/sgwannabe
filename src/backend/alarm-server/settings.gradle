@@ -1,2 +1,3 @@
 rootProject.name = 'alarm'
+
 include 'alarm-api'
