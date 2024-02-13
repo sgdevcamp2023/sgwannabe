@@ -1,31 +1,48 @@
 package authserver.domain;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.LocalDateTime;
 
+import lombok.*;
+
+import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+
+@Builder
 @Entity
-@Table(name = "\"user\"")
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
-public class User {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.MODULE)
+@DynamicInsert
+@Table(
+        name = "\"user\"",
+        uniqueConstraints = {@UniqueConstraint(name = "EMAIL_UNIQUE", columnNames = "email")})
+public class User extends BaseTimeEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // h2로 테스트할 때만 사용
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
-    private String nickname;
+
+    @Column(nullable = false, name = "email", columnDefinition = "varchar(60)")
     private String email;
+
+    @Column(nullable = false, columnDefinition = "char(68)")
     private String password;
 
+    @Column(nullable = false, columnDefinition = "varchar(15)")
+    private String nickname; // 사용자 이름, 닉네임 사용 가능
+
+    @Column(nullable = false, columnDefinition = "varchar(15) default 'USER'")
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(nullable = false, columnDefinition = "varchar(10) default 'ACTIVE'")
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @ColumnDefault("''")
+    private String profile;
 
     private LocalDateTime lastAccess;
 

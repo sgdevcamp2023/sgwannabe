@@ -1,0 +1,20 @@
+{
+  "playlist": [
+    {
+      "id": 1,
+      "img_url": "https://cdnimg.melon.co.kr/cm2/album/images/113/52/904/11352904_20231027101104_500.jpg/melon/resize/120/quality/80/optimize",
+      "title": "Perfect Night",
+      "artist": "LE SSERAFIM (르세라핌)",
+      "albumName": "Perfect Night",
+      "time": "04:03"
+    },
+    {
+      "id": 2,
+      "img_url": "https://cdnimg.melon.co.kr/cm2/album/images/113/52/904/11352904_20231027101104_500.jpg/melon/resize/120/quality/80/optimize",
+      "title": "Perfect Night",
+      "artist": "LE SSERAFIM (르세라핌)",
+      "albumName": "Perfect Night",
+      "time": "04:03"
+    }
+  ]
+}

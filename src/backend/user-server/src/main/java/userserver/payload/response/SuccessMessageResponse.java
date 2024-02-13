@@ -1,6 +1,3 @@
 package userserver.payload.response;
 
-public record SuccessMessageResponse(
-        String message
-) {
-}
+public record SuccessMessageResponse(String message) {}

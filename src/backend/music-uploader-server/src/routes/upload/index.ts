@@ -1,4 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
+import crypto from "crypto";
 
 const upload: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   fastify.post("/", async function (request, reply) {
@@ -12,23 +13,24 @@ const upload: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       const buffer = await part!.toBuffer();
       const blob = new Blob([buffer!]);
 
-      const fileName = part?.filename;
-
+      const encryptedFileName = `${crypto.randomUUID()}.${part?.filename
+        .split(".")
+        .pop()}`;
       const body = new FormData();
-      body.set("upload", blob, fileName);
+      body.set("upload", blob, encryptedFileName);
 
-      await fetch(fastify.config.STORAGE_UPLOAD_URL, {
+      await fetch(`${fastify.config.STORAGE_URL}/upload`, {
         method: "POST",
         body,
+      });
+
+      reply.code(200).send({
+        url: `${fastify.config.STORAGE_URL}/${encryptedFileName}`,
       });
     } catch (err) {
       reply.code(400).send(err);
       return;
     }
-
-    reply.status(200).send({
-      message: "success",
-    });
   });
 };
 

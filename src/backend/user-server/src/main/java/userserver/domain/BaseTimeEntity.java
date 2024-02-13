@@ -1,18 +1,18 @@
 package userserver.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
+import java.time.LocalDateTime;
+
 import lombok.Getter;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.MappedSuperclass;
 
-/**
- * 모든 entity의 상위 클래스에서 created_at, updated_at 을 자동으로 관리
- */
+/** 모든 entity 의 상위 클래스에서 created_at, updated_at 을 자동으로 관리 */
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
@@ -21,6 +21,5 @@ public abstract class BaseTimeEntity {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
+    @LastModifiedDate private LocalDateTime updatedAt;
 }

@@ -1,5 +1,9 @@
 package com.lalala.music.entity;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -7,9 +11,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "musics")
@@ -35,24 +36,15 @@ public class MusicEntity extends BaseTimeEntity {
     @Column(name = "artist_id", nullable = false)
     Long artistId;
 
-    @Embedded
-    MusicFile file = new MusicFile();
+    @Embedded MusicFile file = new MusicFile();
 
-    public MusicEntity(
-            String title,
-            Short playTime,
-            String lyrics
-    ) {
+    public MusicEntity(String title, Short playTime, String lyrics) {
         this.title = title;
         this.playTime = playTime;
         this.lyrics = lyrics;
     }
 
-    public void update(
-            String title,
-            Short playTime,
-            String lyrics
-    ) {
+    public void update(String title, Short playTime, String lyrics) {
         this.title = title;
         this.playTime = playTime;
         this.lyrics = lyrics;

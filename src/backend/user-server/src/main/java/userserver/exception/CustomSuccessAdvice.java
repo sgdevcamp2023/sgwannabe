@@ -1,14 +1,16 @@
 package userserver.exception;
 
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpResponse;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+
+import jakarta.servlet.http.HttpServletResponse;
 import userserver.payload.response.SuccessObjectResponse;
 
 @RestControllerAdvice(basePackages = "userserver")
@@ -20,7 +22,7 @@ public class CustomSuccessAdvice implements ResponseBodyAdvice {
 
     @Override
     public Object beforeBodyWrite(
-            Object body,
+            @Nullable Object body,
             MethodParameter returnType,
             MediaType selectedContentType,
             Class selectedConverterType,

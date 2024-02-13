@@ -1,13 +1,15 @@
 package authserver.config.security;
 
-import authserver.domain.User;
+import java.util.Collection;
+import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import authserver.domain.User;
 
 @Slf4j
 public class UserDetailsImpl implements UserDetails {

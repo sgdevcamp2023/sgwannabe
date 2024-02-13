@@ -1,5 +1,19 @@
 package com.lalala.music.service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lalala.music.dto.AlbumDTO;
 import com.lalala.music.dto.AlbumDetailDTO;
 import com.lalala.music.dto.CreateAlbumRequestDTO;
@@ -12,17 +26,6 @@ import com.lalala.music.repository.ArtistRepository;
 import com.lalala.music.repository.MusicRepository;
 import com.lalala.music.util.AlbumUtils;
 import com.lalala.music.util.ArtistUtils;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,46 +39,27 @@ public class AlbumService {
     public AlbumDetailDTO createAlbum(CreateAlbumRequestDTO request) {
         ArtistEntity artist = ArtistUtils.findById(request.getArtistId(), artistRepository);
 
-        AlbumEntity album = new AlbumEntity(
-                request.getTitle(),
-                request.getCoverUrl(),
-                request.getType(),
-                request.getReleasedAt()
-        );
+        AlbumEntity album =
+                new AlbumEntity(
+                        request.getTitle(), request.getCoverUrl(), request.getType(), request.getReleasedAt());
         album.updateArtist(request.getArtistId());
         album = repository.save(album);
 
-        return AlbumDetailDTO.from(
-                album,
-                artist
-        );
+        return AlbumDetailDTO.from(album, artist);
     }
 
     public List<AlbumDTO> getAlbums(int page, int pageSize) {
-        Pageable pageable = PageRequest.of(
-                page,
-                pageSize,
-                Sort.by(Direction.DESC, "id")
-        );
-        List<AlbumEntity> albums = repository
-                .findAll(pageable)
-                .getContent();
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Direction.DESC, "id"));
+        List<AlbumEntity> albums = repository.findAll(pageable).getContent();
 
         List<Long> artistIds = albums.stream().map(AlbumEntity::getArtistId).toList();
-        Map<Long, ArtistEntity> artists = artistRepository.findAllById(artistIds).stream()
-                .collect(
-                        Collectors.toMap(
-                                ArtistEntity::getId,
-                                Function.identity()
-                        )
-                );
+        Map<Long, ArtistEntity> artists =
+                artistRepository.findAllById(artistIds).stream()
+                        .collect(Collectors.toMap(ArtistEntity::getId, Function.identity()));
 
-        return albums.stream().map(
-                album -> AlbumDTO.from(
-                        album,
-                        artists.get(album.getArtistId())
-                )
-        ).toList();
+        return albums.stream()
+                .map(album -> AlbumDTO.from(album, artists.get(album.getArtistId())))
+                .toList();
     }
 
     public AlbumDetailDTO getAlbum(Long id) {
@@ -83,11 +67,7 @@ public class AlbumService {
         ArtistEntity artist = ArtistUtils.findById(album.getArtistId(), artistRepository);
         List<MusicEntity> musics = musicRepository.findAllByAlbumId(id);
 
-        return AlbumDetailDTO.from(
-                album,
-                artist,
-                musics
-        );
+        return AlbumDetailDTO.from(album, artist, musics);
     }
 
     @Transactional
@@ -97,18 +77,10 @@ public class AlbumService {
         List<MusicEntity> musics = musicRepository.findAllByAlbumId(id);
 
         album.update(
-                request.getTitle(),
-                request.getCoverUrl(),
-                request.getType(),
-                request.getReleasedAt()
-        );
+                request.getTitle(), request.getCoverUrl(), request.getType(), request.getReleasedAt());
         album.updateArtist(request.getArtistId());
 
-        return AlbumDetailDTO.from(
-                album,
-                artist,
-                musics
-        );
+        return AlbumDetailDTO.from(album, artist, musics);
     }
 
     @Transactional
@@ -118,9 +90,6 @@ public class AlbumService {
 
         repository.delete(album);
 
-        return AlbumDetailDTO.from(
-                album,
-                artist
-        );
+        return AlbumDetailDTO.from(album, artist);
     }
 }

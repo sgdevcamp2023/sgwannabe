@@ -1,5 +1,9 @@
 package com.lalala.music.entity;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -8,9 +12,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "artists")
@@ -35,24 +36,14 @@ public class ArtistEntity extends BaseTimeEntity {
     @Column(nullable = false, length = 50, columnDefinition = "VARCHAR(50) default ''")
     String agency;
 
-    public ArtistEntity(
-            String name,
-            GenderType gender,
-            ArtistType type,
-            String agency
-    ) {
+    public ArtistEntity(String name, GenderType gender, ArtistType type, String agency) {
         this.name = name;
         this.gender = gender;
         this.type = type;
         this.agency = agency;
     }
 
-    public void update(
-            String name,
-            GenderType gender,
-            ArtistType type,
-            String agency
-    ) {
+    public void update(String name, GenderType gender, ArtistType type, String agency) {
         this.name = name;
         this.gender = gender;
         this.type = type;

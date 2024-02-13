@@ -13,22 +13,16 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/joho/godotenv"
 	"go.uber.org/zap"
 )
 
 func main() {
-	loadEnvironments()
 	configureLogger()
 
 	logger.Info("starting Web Server")
 
 	registerHandlers()
 	listenServe()
-}
-
-func loadEnvironments() {
-	godotenv.Load(".env")
 }
 
 type ReleaseType int
@@ -89,15 +83,17 @@ func handleMusicStaticFiles(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		audioFile, err := os.ReadFile("./resources/" + resourceName)
+		file, err := os.ReadFile("./resources/" + resourceName)
 		if err != nil {
 			logger.Error(err.Error())
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
 
+		mimeType := http.DetectContentType(file)
+
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Content-Type", "audio/mpeg")
+		w.Header().Set("Content-Type", mimeType)
 
 		etag := fmt.Sprintf("%x", md5.Sum([]byte(resourceName)))
 		w.Header().Set("Cache-Control", "public, max-age=600")
@@ -111,7 +107,7 @@ func handleMusicStaticFiles(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		audioChunks := bytes.NewBuffer(audioFile)
+		audioChunks := bytes.NewBuffer(file)
 		if _, err := audioChunks.WriteTo(w); err != nil {
 			logger.Warn(err.Error())
 		}

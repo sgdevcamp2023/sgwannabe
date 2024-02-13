@@ -1,10 +1,12 @@
 package userserver;
 
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.annotation.PostConstruct;
 import userserver.domain.Role;
 import userserver.domain.Status;
 import userserver.domain.User;
@@ -18,21 +20,16 @@ public class TestDataInit {
 
     @PostConstruct
     public void init() {
-//        initService.dbInitAdmin();
         initService.dbInitUsers();
     }
 
     @Component
     @Transactional
     @RequiredArgsConstructor
-    static class InitService{
+    static class InitService {
 
         private final UserRepository userRepository;
         private final PasswordEncoder passwordEncoder;
-
-//        public void dbInitAdmin() {
-//            extracted("a", "a", "관리자", Role.ADMIN);
-//        }
 
         public void dbInitUsers() {
             extracted("신짱구", "jjangu@gmail.com", "aaaaaaaaaa", Status.ACTIVE);
@@ -43,14 +40,14 @@ public class TestDataInit {
         }
 
         private void extracted(String nickname, String email, String password, Status status) {
+            if (userRepository.findByEmail(email).isPresent()) {
+                return;
+            }
+
             String hashPassword = passwordEncoder.encode(password);
             User user = new User(nickname, email, hashPassword, status);
             user.changeUserRole(Role.USER);
             userRepository.save(user);
-
         }
-
-
-
     }
 }

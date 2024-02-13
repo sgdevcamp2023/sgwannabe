@@ -4,11 +4,11 @@ import fastifyEnv, { FastifyEnvOptions } from "@fastify/env";
 export default fp<FastifyEnvOptions>(async (fastify) => {
   const schema = {
     type: "object",
-    required: ["STORAGE_UPLOAD_URL"],
+    required: ["STORAGE_URL"],
     properties: {
-      STORAGE_UPLOAD_URL: {
+      STORAGE_URL: {
         type: "string",
-        default: "http://localhost:20000/upload",
+        default: "http://localhost:30000",
       },
     },
   };
@@ -23,7 +23,7 @@ export default fp<FastifyEnvOptions>(async (fastify) => {
 declare module "fastify" {
   export interface FastifyInstance {
     config: {
-      STORAGE_UPLOAD_URL: string;
+      STORAGE_URL: string;
     };
   }
 }

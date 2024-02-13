@@ -8,16 +8,19 @@ services:
     ports:
       - "30000:30000"
     restart: unless-stopped
-    env_file:
-      - .env
+    environment:
+      - PORT=30000
+      - ENV=develop
     networks:
-      - backend
+      - lalala-network
     volumes:
       - static-data:/resources
-
-networks:
-  backend:
 
 volumes:
   static-data:
     driver: local
+
+networks:
+  lalala-network:
+    driver: bridge
+    external: true
