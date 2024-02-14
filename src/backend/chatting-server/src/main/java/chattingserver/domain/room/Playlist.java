@@ -15,6 +15,6 @@ public class Playlist {
     private List<Music> musics;
 
     public Music getFirstMusic() {
-        return musics.stream().findFirst().get();  // 무조건 있음 신뢰
+        return musics.get(0);  // 무조건 있음 신뢰
     }
 }

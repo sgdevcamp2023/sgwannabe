@@ -29,14 +29,14 @@ public class ChatroomDummyInitializer implements ApplicationRunner {
         User dummyUser1 = User.builder()
                 .uid(1L)
                 .nickName("유저닉네임1")
-                .profileImage("userprofileimage1.url")
+                .profileImage("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png")
                 .enteredAt(LocalDateTime.now())
                 .build();
 
         User dummyUser2 = User.builder()
                 .uid(2L)
                 .nickName("유저닉네임2")
-                .profileImage("userprofileimage2.url")
+                .profileImage("")
                 .enteredAt(LocalDateTime.now())
                 .build();
 
@@ -48,14 +48,14 @@ public class ChatroomDummyInitializer implements ApplicationRunner {
                 .title("음원1")
                 .artist("아티스트1")
                 .playtime("12:34")
-                .thumbnail("thumbnail-1.url")
+                .thumbnail("https://marketplace.canva.com/EAFHtE880QY/1/0/1600w/canva-blue-and-red-modern-music-youtube-thumbnail-cBAYqTj4TLk.jpg")
                 .build();
 
         Music dummyMusic2 = Music.builder()
                 .title("음원2")
                 .artist("아티스트2")
                 .playtime("01:23")
-                .thumbnail("thumbnail-2.url")
+                .thumbnail("https://marketplace.canva.com/EAFOwKVP0Ck/1/0/1600w/canva-blue-orange-colorful-aesthetic-minimalist-lofi-music-youtube-thumbnail-ETT-krmERlk.jpg")
                 .build();
 
         List<Music> dummyMusics = new ArrayList<>();
@@ -73,7 +73,9 @@ public class ChatroomDummyInitializer implements ApplicationRunner {
         Room dummyRoom = Room.builder()
                 .roomName(dummyPlaylist.getName())
                 .playlist(dummyPlaylist)
+                .thumbnailImage(dummyPlaylist.getFirstMusic().getThumbnail())
                 .users(users)
+                .createdAt(LocalDateTime.now())
                 .build();
 
         roomRepository.save(dummyRoom);
@@ -105,14 +107,14 @@ public class ChatroomDummyInitializer implements ApplicationRunner {
         User dummyUser3 = User.builder()
                 .uid(3L)
                 .nickName("유저닉네임3")
-                .profileImage("userprofileimage3.url")
+                .profileImage("https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg")
                 .enteredAt(LocalDateTime.now())
                 .build();
 
         User dummyUser4 = User.builder()
                 .uid(3L)
                 .nickName("유저닉네임4")
-                .profileImage("userprofileimage24url")
+                .profileImage("https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?cs=srgb&dl=pexels-mohamed-abdelghaffar-771742.jpg&fm=jpg")
                 .enteredAt(LocalDateTime.now())
                 .build();
 
@@ -122,15 +124,15 @@ public class ChatroomDummyInitializer implements ApplicationRunner {
         users2.add(dummyUser1);
 
         Music dummyMusic3 = Music.builder()
-                .title("음원1")
-                .artist("아티스트1")
+                .title("음원3")
+                .artist("아티스트3")
                 .playtime("12:34")
-                .thumbnail("thumbnail-1.url")
+                .thumbnail("https://content.wepik.com/statics/13638236/preview-page0.jpg")
                 .build();
 
         List<Music> dummyMusics2 = new ArrayList<>();
-        dummyMusics.add(dummyMusic1);
-        dummyMusics.add(dummyMusic3);
+        dummyMusics2.add(dummyMusic1);
+        dummyMusics2.add(dummyMusic3);
 
 
         Playlist dummyPlaylist2 = Playlist.builder()
@@ -139,11 +141,16 @@ public class ChatroomDummyInitializer implements ApplicationRunner {
                 .musics(dummyMusics2)
                 .build();
 
+        log.info("dummyPlaylist2={}", dummyPlaylist2.toString());
+        log.info("dummyPlaylist2 firstMusic={}", dummyPlaylist2.getFirstMusic().toString());
+
         // room build
         Room dummyRoom2 = Room.builder()
                 .roomName(dummyPlaylist2.getName())
                 .playlist(dummyPlaylist2)
+                .thumbnailImage(dummyPlaylist2.getFirstMusic().getThumbnail())
                 .users(users2)
+                .createdAt(LocalDateTime.now())
                 .build();
 
         roomRepository.save(dummyRoom2);
