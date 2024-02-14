@@ -33,9 +33,6 @@ jwt:
   access-expiration: 1800000 # 30minutes (ms)
   refresh-expiration: 86400000 #1day (ms)
   cookie-max-age: 86400 #1day (s)
-    # ??? ??
-  access-expiration: 30000 # 30sec
-  refresh-expiration: 120000 # 2minutes
 
 eureka:
   instance:
