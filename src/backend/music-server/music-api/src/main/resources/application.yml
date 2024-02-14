@@ -51,7 +51,7 @@ eureka:
       defaultZone: http://localhost:34100/eureka
 
 passport:
-  algorithm: SHA-256
+  algorithm: HmacSHA256
   key: SECRET_KEY
 
 management:
