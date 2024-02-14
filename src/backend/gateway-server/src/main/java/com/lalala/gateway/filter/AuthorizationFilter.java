@@ -1,5 +1,7 @@
 package com.lalala.gateway.filter;
 
+import java.util.Arrays;
+
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.context.annotation.Lazy;
@@ -52,11 +54,7 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<Authorizat
     }
 
     private boolean isWhiteList(String target) {
-        for (WhiteListURI whiteListURI : WhiteListURI.values()) {
-            if (whiteListURI.uri.equals(target)) {
-                return true;
-            }
-        }
-        return false;
+        return Arrays.stream(WhiteListURI.values())
+                .anyMatch(whiteListURI -> whiteListURI.uri.equals(target));
     }
 }
