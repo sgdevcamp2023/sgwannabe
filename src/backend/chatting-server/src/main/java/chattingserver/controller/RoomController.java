@@ -3,6 +3,7 @@ package chattingserver.controller;
 import chattingserver.config.kafka.Producers;
 import chattingserver.domain.room.User;
 import chattingserver.dto.RoomMessageDto;
+import chattingserver.dto.request.ReadMessageUpdateRequestDto;
 import chattingserver.dto.request.RoomCreateRequestDto;
 import chattingserver.dto.response.CommonAPIMessage;
 import chattingserver.dto.response.JoinedRoomResponseDto;
@@ -37,18 +38,21 @@ public class RoomController {
     @Operation(summary = "채팅방 생성 API", description = "신규 채팅방 생성", responses = {
             @ApiResponse(responseCode = "201", description = "생성 성공", content = @Content(schema = @Schema(implementation = RoomResponseDto.class)))})
     @PostMapping("/create")
-    public ResponseEntity<RoomResponseDto> groupCreation(@Valid @RequestBody RoomCreateRequestDto roomCreateRequestDto) {
+    public ResponseEntity<CommonAPIMessage> groupCreation(@Valid @RequestBody RoomCreateRequestDto roomCreateRequestDto) {
 
-        // 채팅방 C
+
         RoomResponseDto roomResponseDto = roomService.create(roomCreateRequestDto);
 
-        // publish
         producers.sendRoomMessage(RoomMessageDto.builder()
                 .receivers(roomResponseDto.getUsers().stream().map(User::getUid).collect(Collectors.toList()))
                 .roomResponseDto(roomResponseDto)
                 .build());
 
-        return new ResponseEntity<>(roomResponseDto, HttpStatus.CREATED);
+        CommonAPIMessage apiMessage = new CommonAPIMessage();
+        apiMessage.setMessage(CommonAPIMessage.ResultEnum.success);
+        apiMessage.setData(roomResponseDto);
+
+        return new ResponseEntity<>(apiMessage, HttpStatus.CREATED);
     }
 
     @Operation(summary = "채팅방 나가기", description = "그룹 채팅방에서 유저 삭제", responses = {
@@ -69,18 +73,24 @@ public class RoomController {
     @Operation(summary = "채팅방 정보 조회 API", description = "특정 채팅방 정보 조회", responses = {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = RoomResponseDto.class)))})
     @GetMapping("/{roomId}")
-    public ResponseEntity<RoomResponseDto> chatRoomInfo(@PathVariable(value = "roomId") String roomId) {
-        return new ResponseEntity<>(roomService.getRoomInfo(roomId), HttpStatus.OK);
+    public ResponseEntity<CommonAPIMessage> chatRoomInfo(@PathVariable(value = "roomId") String roomId) {
+        CommonAPIMessage apiMessage = new CommonAPIMessage();
+        apiMessage.setMessage(CommonAPIMessage.ResultEnum.success);
+        apiMessage.setData(roomService.getRoomInfo(roomId));
+        return new ResponseEntity<>(apiMessage, HttpStatus.OK);
     }
 
     @Operation(summary = "모든 채팅방 정보 조회 API", description = "모든 채팅방 정보 조회", responses = {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = RoomResponseDto.class)))})
     @GetMapping("/rooms")
-    public ResponseEntity<List<RoomResponseDto>> getAllChatRoomInfos() {
-        return new ResponseEntity<>(roomService.getAllRoomInfos(), HttpStatus.OK);
+    public ResponseEntity<CommonAPIMessage> getAllChatRoomInfos() {
+        CommonAPIMessage apiMessage = new CommonAPIMessage();
+        apiMessage.setMessage(CommonAPIMessage.ResultEnum.success);
+        apiMessage.setData(roomService.getAllRoomInfos());
+        return new ResponseEntity<>(apiMessage, HttpStatus.OK);
     }
 
-    @Operation(summary = "채팅방 리스트 조회", description = "특정 유저가 참여중인 채팅방 리스트 조회", responses = {
+    @Operation(summary = "참여중인 채팅방 리스트 조회", description = "특정 유저가 참여중인 채팅방 리스트 조회", responses = {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = CommonAPIMessage.class)))})
     @GetMapping("/joined")
     public ResponseEntity<CommonAPIMessage> myChatRooms(@RequestParam(required = true) Long uid){
@@ -100,6 +110,12 @@ public class RoomController {
         apiMessage.setMessage(CommonAPIMessage.ResultEnum.success);
         apiMessage.setData(unjoinedRooms);
         return new ResponseEntity<>(apiMessage, HttpStatus.OK);
+    }
+
+    @Operation(summary = "마지막 읽은 메시지 id 저장")
+    @PutMapping("/last-message")
+    public ResponseEntity<CommonAPIMessage> updateLastReadMsgId(@RequestBody ReadMessageUpdateRequestDto readMessageUpdateRequestDto){
+        return new ResponseEntity<>(roomService.updateLastReadMsgId(readMessageUpdateRequestDto), HttpStatus.OK);
     }
 
 }
