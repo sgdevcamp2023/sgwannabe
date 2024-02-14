@@ -3,7 +3,9 @@ package chattingserver.controller;
 import chattingserver.config.kafka.Producers;
 import chattingserver.dto.ChatMessageDto;
 import chattingserver.dto.request.UserEntranceRequestDto;
+import chattingserver.dto.response.ChatMessageResponseDto;
 import chattingserver.dto.response.CommonAPIMessage;
+import chattingserver.dto.response.ReEnterResponseDto;
 import chattingserver.service.ChatMessageService;
 import chattingserver.service.RoomService;
 import chattingserver.util.constant.ErrorCode;
@@ -22,6 +24,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "chat", description = "채팅 API")
 @RequiredArgsConstructor
@@ -62,14 +66,21 @@ public class ChatController {
         log.info("메시지 전송 완료 - message={}", chatMessageDto);
     }
 
-    @Operation(summary = "채팅방 새 메시지 조회")
+    @Operation(summary = "참여중인 채팅방 재입장, 새 메시지 조회")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "채팅방 새 메시지 조회 성공", content = @Content(schema = @Schema(implementation = CommonAPIMessage.class)))})
-    @GetMapping("/api/v1/new-message/{roomId}/{readMsgId}")
-    public ResponseEntity<CommonAPIMessage> newMessagesAtRoom(@PathVariable String roomId, @PathVariable String readMsgId) {
+            @ApiResponse(responseCode = "200", description = "채팅방 입장, 새 메시지 조회 성공", content = @Content(schema = @Schema(implementation = CommonAPIMessage.class)))})
+    @GetMapping("/api/v1/rooms/joined/{roomId}")
+    public ResponseEntity<CommonAPIMessage> newMessagesAtRoom(@PathVariable String roomId, @RequestParam String readMsgId) {
         CommonAPIMessage apiMessage = new CommonAPIMessage();
         apiMessage.setMessage(CommonAPIMessage.ResultEnum.success);
-        apiMessage.setData(chatMessageService.getNewMessages(roomId, readMsgId));
+
+        ReEnterResponseDto responseDto = ReEnterResponseDto.builder()
+                .beforeMessages(chatMessageService.getMessagesBefore(roomId, readMsgId))
+                .newMessages(chatMessageService.getNewMessages(roomId, readMsgId))
+                .build();
+
+        apiMessage.setData(responseDto);
+
         return new ResponseEntity<>(apiMessage, HttpStatus.OK);
     }
 
@@ -99,9 +110,4 @@ public class ChatController {
         producers.sendMessage(chatMessageService.join(message));
     }
 
-    @PostMapping("/api/v1/permanent-leave/{roomId}")
-    public void permanentLeaving(@PathVariable String roomId, @RequestBody UserEntranceRequestDto userDto) {
-
-        producers.sendMessage(chatMessageService.permanentLeaving(roomId, userDto));
-    }
 }

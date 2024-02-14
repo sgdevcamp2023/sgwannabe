@@ -74,4 +74,12 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom{
         }
         return chatMessage;
     }
+
+    @Override
+    public List<ChatMessage> findPreviousMessages(String roomId, String readMsgId, int limit) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("roomId").is(roomId).and("_id").lt(readMsgId)); // 이전 메시지만 가져오도록 쿼리 설정
+        query.limit(20); // 최대 20개의 메시지 가져오도록 제한 설정
+        return mongoTemplate.find(query, ChatMessage.class);
+    }
 }

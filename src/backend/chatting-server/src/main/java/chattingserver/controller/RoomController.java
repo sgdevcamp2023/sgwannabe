@@ -5,9 +5,11 @@ import chattingserver.domain.room.User;
 import chattingserver.dto.RoomMessageDto;
 import chattingserver.dto.request.ReadMessageUpdateRequestDto;
 import chattingserver.dto.request.RoomCreateRequestDto;
+import chattingserver.dto.request.UserEntranceRequestDto;
 import chattingserver.dto.response.CommonAPIMessage;
 import chattingserver.dto.response.JoinedRoomResponseDto;
 import chattingserver.dto.response.RoomResponseDto;
+import chattingserver.service.ChatMessageService;
 import chattingserver.service.RoomService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -33,6 +35,7 @@ import java.util.stream.Collectors;
 public class RoomController {
 
     private final RoomService roomService;
+    private final ChatMessageService chatMessageService;
     private final Producers producers;
 
     @Operation(summary = "채팅방 생성 API", description = "신규 채팅방 생성", responses = {
@@ -55,17 +58,18 @@ public class RoomController {
         return new ResponseEntity<>(apiMessage, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "채팅방 나가기", description = "그룹 채팅방에서 유저 삭제", responses = {
+    @Operation(summary = "채팅방 영구적으로 나가기", description = "그룹 채팅방에서 유저 삭제", responses = {
             @ApiResponse(responseCode = "200", description = "삭제 성공", content = @Content(schema = @Schema(implementation = CommonAPIMessage.class)))})
-    @DeleteMapping("/exit/{roomId}")
-    public ResponseEntity<CommonAPIMessage> outOfTheRoom(@PathVariable(value = "roomId") String roomId, @RequestParam Long uid) {
-        if (roomService.exitRoom(roomId, uid)) {
+    @PostMapping("/exit/{roomId}")
+    public ResponseEntity<CommonAPIMessage> outOfTheRoom(@PathVariable(value = "roomId") String roomId, @RequestBody UserEntranceRequestDto userDto) {
+        producers.sendMessage(chatMessageService.permanentLeaving(roomId, userDto));
+        if (roomService.exitRoom(roomId, userDto.getUid())) {
             return new ResponseEntity<>(new CommonAPIMessage(CommonAPIMessage.ResultEnum.success, new HashMap<String, String>() {{
                 put("roomId", roomId);
             }}), HttpStatus.OK);
         }
         return new ResponseEntity<>(new CommonAPIMessage(CommonAPIMessage.ResultEnum.failed, new HashMap<String, String>() {{
-            log.error("exitRoom 채팅방 나가기 실패 roomId: {}, userId: {}", roomId, uid);
+            log.error("exitRoom 채팅방 나가기 실패 roomId: {}, userId: {}", roomId, userDto.getUid());
             put("roomId", roomId);
         }}), HttpStatus.BAD_REQUEST);
     }
@@ -82,7 +86,7 @@ public class RoomController {
 
     @Operation(summary = "모든 채팅방 정보 조회 API", description = "모든 채팅방 정보 조회", responses = {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = RoomResponseDto.class)))})
-    @GetMapping("/rooms")
+    @GetMapping("/")
     public ResponseEntity<CommonAPIMessage> getAllChatRoomInfos() {
         CommonAPIMessage apiMessage = new CommonAPIMessage();
         apiMessage.setMessage(CommonAPIMessage.ResultEnum.success);
@@ -112,8 +116,8 @@ public class RoomController {
         return new ResponseEntity<>(apiMessage, HttpStatus.OK);
     }
 
-    @Operation(summary = "마지막 읽은 메시지 id 저장")
-    @PutMapping("/last-message")
+    @Operation(summary = "채팅방 잠시 나가기, 마지막 읽은 메시지 id 저장", description = "잠시 나가기 (완전히 나가기 아님)")
+    @PutMapping("/leave")
     public ResponseEntity<CommonAPIMessage> updateLastReadMsgId(@RequestBody ReadMessageUpdateRequestDto readMessageUpdateRequestDto){
         return new ResponseEntity<>(roomService.updateLastReadMsgId(readMessageUpdateRequestDto), HttpStatus.OK);
     }
