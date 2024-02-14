@@ -62,10 +62,10 @@ public class ChatMessageService {
         return entityToResponseDtoConverter.convertMessage(message);
     }
 
-    public Object getNewMessages(String roomId, String readMsgId) {
+    public List<ChatMessageResponseDto> getNewMessages(String roomId, String readMsgId) {
         List<ChatMessage> messages = chatMessageRepository.getNewMessages(roomId, readMsgId);
-        log.info("신규 메시지 조회 성공 roomId={}, readMsgId={}", roomId, readMsgId);
-        return messages.stream().map(entityToResponseDtoConverter::convertMessage).collect(Collectors.toList());
+        log.info("신규 메시지 조회 성공 roomId={}, readMsgId={}, messages={}", roomId, readMsgId, messages);
+        return messages.stream().map(entityToResponseDtoConverter::convertToResponseMessage).collect(Collectors.toList());
     }
 
     public List<ChatMessageResponseDto> getAllMessagesAtRoom(String roomId) {
@@ -157,4 +157,11 @@ public class ChatMessageService {
 
 
     }
+
+    public List<ChatMessageResponseDto> getMessagesBefore(String roomId, String readMsgId) {
+        List<ChatMessage> messages = chatMessageRepository.findPreviousMessages(roomId, readMsgId, SIZE);
+        log.info("이전 메시지 조회 성공 roomId={}, readMsgId={}, messages={}", roomId, readMsgId, messages);
+        return messages.stream().map(entityToResponseDtoConverter::convertToResponseMessage).collect(Collectors.toList());
+    }
+
 }

@@ -15,4 +15,6 @@ public interface ChatMessageRepositoryCustom {
     List<ChatMessage> getNewMessages(String roomId, String readMsgId);
 
     ChatMessage getLastMessage(String roomId);
+    List<ChatMessage> findPreviousMessages(String roomId, String readMsgId, int limit);
+
 }

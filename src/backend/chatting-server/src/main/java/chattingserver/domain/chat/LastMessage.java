@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 public class LastMessage {
     private String messageId;
     private Long senderId;
+    private String nickName;
+    private String senderProfileImage;
     private String content;
     private LocalDateTime createdAt;
 }

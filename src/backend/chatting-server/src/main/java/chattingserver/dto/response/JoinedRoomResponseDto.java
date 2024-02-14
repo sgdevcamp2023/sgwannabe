@@ -13,6 +13,7 @@ import java.util.List;
 public class JoinedRoomResponseDto {
     private String roomId;
     private String roomName;
+    private String thumbnailImage;
     private List<User> users;
     private LastMessage lastMessage;
 }

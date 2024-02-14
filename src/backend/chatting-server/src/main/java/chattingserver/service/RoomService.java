@@ -38,23 +38,29 @@ public class RoomService {
         return foundRoom.map(entityToResponseDtoConverter::convertRoom).orElse(null);
     }
 
-    public List<JoinedRoomResponseDto> findJoinedRoomsByUid(Long uid){
+    public List<JoinedRoomResponseDto> findJoinedRoomsByUid(Long uid) {
         List<Room> roomList = roomRepository.findJoinedRoomsByUid(uid);
 
         log.info("참여한 방 리스트 조회 성공 uid={}", uid);
         List<JoinedRoomResponseDto> myRoomsDto = new ArrayList<>();
 
-        for(Room room : roomList){
+        for (Room room : roomList) {
             String roomId = room.getId();
             ChatMessage message = chatMessageRepository.getLastMessage(roomId);
 
             LastMessage lastMessage = LastMessage.builder()
-                    .messageId(message.getId()).senderId(message.getSenderId())
-                    .content(message.getContent()).createdAt(message.getCreatedAt())
+                    .messageId(message.getId())
+                    .senderId(message.getSenderId())
+                    .nickName(message.getNickName())
+                    .senderProfileImage(message.getSenderProfileImage())
+                    .content(message.getContent())
+                    .createdAt(message.getCreatedAt())
                     .build();
 
             myRoomsDto.add(JoinedRoomResponseDto.builder()
-                    .roomId(roomId).roomName(room.getRoomName())
+                    .roomId(roomId)
+                    .roomName(room.getRoomName())
+                    .thumbnailImage(room.getThumbnailImage())
                     .users(room.getUsers())
                     .lastMessage(lastMessage)
                     .build());
@@ -73,8 +79,9 @@ public class RoomService {
                 .map(room -> RoomResponseDto.builder()
                         .id(room.getId())
                         .roomName(room.getRoomName())
+                        .thumbnailImage(room.getThumbnailImage())
                         .userCount(room.getUsers().size())
-                        .users(room.getUsers())
+                        .users(room.getUsers().stream().map(entityToResponseDtoConverter::convertUser).collect(Collectors.toList()))
                         .playlist(room.getPlaylist())
                         .build())
                 .collect(Collectors.toList());
@@ -96,6 +103,7 @@ public class RoomService {
         Room room = Room.builder()
                 .roomName(roomCreateRequestDto.getPlaylist().getName())
                 .playlist(roomCreateRequestDto.getPlaylist())
+                .thumbnailImage(roomCreateRequestDto.getThumbnailImage())
                 .users(users)
                 .build();
 
@@ -118,7 +126,8 @@ public class RoomService {
 
     public CommonAPIMessage updateLastReadMsgId(ReadMessageUpdateRequestDto requestDto) {
         UpdateResult updateResult = roomRepository.updateLastReadMsgId(requestDto);
-        if(updateResult.getModifiedCount() == 0) return new CommonAPIMessage(CommonAPIMessage.ResultEnum.failed, updateResult.getModifiedCount());
+        if (updateResult.getModifiedCount() == 0)
+            return new CommonAPIMessage(CommonAPIMessage.ResultEnum.failed, updateResult.getModifiedCount());
         return new CommonAPIMessage(CommonAPIMessage.ResultEnum.success, updateResult.getModifiedCount());
     }
 

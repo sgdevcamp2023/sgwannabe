@@ -5,6 +5,7 @@ import chattingserver.dto.ChatMessageDto;
 import chattingserver.dto.RoomMessageDto;
 import chattingserver.dto.response.ChatMessageResponseDto;
 import chattingserver.dto.response.RoomResponseDto;
+import chattingserver.dto.response.UserListResponseDto;
 import chattingserver.service.ChatMessageService;
 import chattingserver.service.RoomService;
 import chattingserver.util.constant.MessageType;
@@ -40,7 +41,7 @@ public class Producers {
         if (chatMessageDto.getMessageType() == MessageType.ENTRANCE) {
             log.info("producers.sendMessage.if MessageType == ENTRANCE");
             RoomResponseDto roomResponseDto = roomService.getRoomInfo(chatMessageDto.getRoomId());
-            List<Long> receivers = roomResponseDto.getUsers().stream().map(User::getUid).collect(Collectors.toList());
+            List<Long> receivers = roomResponseDto.getUsers().stream().map(UserListResponseDto::getUid).collect(Collectors.toList());
             receivers.remove(chatMessageDto.getSenderId());
             sendRoomMessage(RoomMessageDto.builder()
                     .receivers(receivers)
@@ -67,6 +68,7 @@ public class Producers {
         completableFuture.whenComplete((result, ex) -> {
             if (ex == null) {
                 log.info("메시지 전송 성공=[" + roomMessageDto.getRoomResponseDto().getId() + "] with offset=[" + result.getRecordMetadata().offset() + "]");
+                log.info("roomMessageDto={}", roomMessageDto.toString());
             } else {
                 log.info("메시지 전송 불가=[" + roomMessageDto.getRoomResponseDto().getId() + "] 원인 : " + ex.getMessage());
             }

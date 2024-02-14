@@ -33,7 +33,7 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                         .andOperator(Criteria.where("users").elemMatch(Criteria.where("uid").is(requestDto.getUid())))
         );
 
-        Update update = new Update().set("users.$.lastReadMsgId", requestDto.getMessageId());
+        Update update = new Update().set("users.$.lastReadMessageId", requestDto.getMessageId());
 
         return mongoTemplate.updateFirst(query, update, Room.class);
     }
