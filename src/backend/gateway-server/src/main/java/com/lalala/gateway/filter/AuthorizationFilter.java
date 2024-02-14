@@ -9,7 +9,8 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
-import com.lalala.gateway.external.FeignAuthClient;
+import com.lalala.gateway.external.feign.FeignAuthClient;
+import com.lalala.response.BaseResponse;
 
 @Component
 public class AuthorizationFilter extends AbstractGatewayFilterFactory<AuthorizationFilter.Config> {
@@ -34,7 +35,9 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<Authorizat
             }
 
             if (isRequestContainsAuthorization(exchange)) {
-                String passport = feignAuthClient.validateAndProvidedPassport(extractJWT(exchange));
+                BaseResponse<String> response =
+                        feignAuthClient.validateAndProvidedPassport(extractJWT(exchange));
+                String passport = response.getData();
 
                 ServerHttpRequest request =
                         exchange.getRequest().mutate().header(AUTHORIZATION_HEADER_NAME, passport).build();
