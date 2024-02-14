@@ -19,7 +19,18 @@ public class EntityToResponseDtoConverter {
                 .build();
     }
 
-    public ChatMessageResponseDto convertMessage(ChatMessage message) {
+    public ChatMessageDto convertMessage(ChatMessage message) {
+        return ChatMessageDto.builder()
+                .id(message.getId())
+                .messageType(message.getMessageType())
+                .roomId(message.getRoomId())
+                .senderId(message.getSenderId())
+                .content(message.getContent())
+                .createdAt(message.getCreatedAt())
+                .build();
+    }
+
+    public ChatMessageResponseDto convertToResponseMessage(ChatMessage message) {
         return ChatMessageResponseDto.builder()
                 .id(message.getId())
                 .messageType(message.getMessageType())

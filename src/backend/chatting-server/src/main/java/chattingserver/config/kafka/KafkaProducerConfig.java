@@ -2,6 +2,7 @@ package chattingserver.config.kafka;
 
 import chattingserver.dto.ChatMessageDto;
 import chattingserver.dto.RoomMessageDto;
+import chattingserver.dto.response.ChatMessageResponseDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +32,7 @@ public class KafkaProducerConfig {
     private String chatValueSerializer;
 
     @Bean
-    public ProducerFactory<String, ChatMessageDto> producerFactory() {
+    public ProducerFactory<String, ChatMessageDto> chatProducerFactory() {
         return new DefaultKafkaProducerFactory<>(chatProducerConfigurations());
     }
 
@@ -46,7 +47,7 @@ public class KafkaProducerConfig {
 
     @Bean
     public KafkaTemplate<String, ChatMessageDto> chatKafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
+        return new KafkaTemplate<>(chatProducerFactory());
     }
 
     @Bean

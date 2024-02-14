@@ -3,6 +3,7 @@ package chattingserver.config.kafka;
 import chattingserver.domain.room.User;
 import chattingserver.dto.ChatMessageDto;
 import chattingserver.dto.RoomMessageDto;
+import chattingserver.dto.response.ChatMessageResponseDto;
 import chattingserver.dto.response.RoomResponseDto;
 import chattingserver.service.ChatMessageService;
 import chattingserver.service.RoomService;
@@ -37,6 +38,7 @@ public class Producers {
 
     public void sendMessage(ChatMessageDto chatMessageDto) {
         if (chatMessageDto.getMessageType() == MessageType.ENTRANCE) {
+            log.info("producers.sendMessage.if MessageType == ENTRANCE");
             RoomResponseDto roomResponseDto = roomService.getRoomInfo(chatMessageDto.getRoomId());
             List<Long> receivers = roomResponseDto.getUsers().stream().map(User::getUid).collect(Collectors.toList());
             receivers.remove(chatMessageDto.getSenderId());
@@ -45,6 +47,8 @@ public class Producers {
                     .roomResponseDto(roomResponseDto)
                     .build());
         } else {
+            log.info("producers.sendMessage.if MessageType != ENTRANCE");
+
             CompletableFuture<SendResult<String, ChatMessageDto>> completableFuture = chatKafkaTemplate.send(topicChatName, chatMessageDto);
             completableFuture.whenComplete((result, ex) -> {
                 if (ex == null) {
