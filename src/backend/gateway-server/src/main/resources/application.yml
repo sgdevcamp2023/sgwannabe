@@ -35,70 +35,70 @@ spring:
           predicates:
             - Path=/auth/**
           filters:
-            - RewritePath=/v1/api/?(?<segment>.*), /$\{segment}
+            - RewritePath=/auth/?(?<segment>.*), /v1/api/$\{segment}
 
         - id: CHART-SERVICE
           uri: lb://CHART-SERVER
           predicates:
             - Path=/chart/**
           filters:
-            - RewritePath=/charts/?(?<segment>.*), /$\{segment}
+            - RewritePath=/chart/?(?<segment>.*), /$\{segment}
 
         - id: CHATTING-CHAT
           uri: lb://CHATTING-SERVER
           predicates:
             - Path=/chatting/chat/**
           filters:
-            - RewritePath=/chat/(?<segment>/?.*), /$\{segment}
+            - RewritePath=/chatting/chat/(?<segment>/?.*), /chat/$\{segment}
 
         - id: CHATTING-ROOM
           uri: lb://CHATTING-SERVER
           predicates:
             - Path=/chatting/room/**
           filters:
-            - RewritePath=/api/v1/rooms/(?<segment>/?.*), /$\{segment}
+            - RewritePath=/chatting/room/(?<segment>/?.*), /api/v1/rooms/$\{segment}
 
         - id: FEED
           uri: lb://FEED-SERVER
           predicates:
             - Path=/feed/**
           filters:
-            - RewritePath=/v1/api/?(?<segment>.*), /$\{segment}
+            - RewritePath=/feed/?(?<segment>.*), /v1/api/$\{segment}
 
         - id: MUSIC
           uri: lb://MUSIC-SERVER
           predicates:
             - Path=/music/**
           filters:
-            - RewritePath=/api/v1/?(?<segment>.*), /$\{segment}
+            - RewritePath=/music/?(?<segment>.*), /api/v1/$\{segment}
 
         - id: PLAYLIST
           uri: lb://PLAYLIST-SERVER
           predicates:
             - Path=/playlist/**
           filters:
-            - RewritePath=/v1/api/?(?<segment>.*), /$\{segment}
+            - RewritePath=/playlist/?(?<segment>.*), /v1/api/$\{segment}
 
         - id: SEARCH
           uri: lb://SEARCH-SERVER
           predicates:
             - Path=/search/**
           filters:
-            - RewritePath=/?(?<segment>.*), /$\{segment}
+            - RewritePath=/search/?(?<segment>.*), /$\{segment}
 
         - id: STREAMING
           uri: lb://ws://STREAMING-SERVER
           predicates:
             - Path=/streaming/**
           filters:
-            - RewritePath=/?(?<segment>.*), /$\{segment}
+            - RewritePath=/streaming/?(?<segment>.*), /streaming/$\{segment}
 
         - id: USER
           uri: lb://USER-SERVER
           predicates:
             - Path=/user/**
           filters:
-            - RewritePath=/api/v1/?(?<segment>.*), /$\{segment}
+            - RewritePath=/user/?(?<segment>.*), /api/v1/$\{segment}
 
       default-filters:
         - name: AuthorizationFilter
