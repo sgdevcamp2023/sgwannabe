@@ -25,6 +25,8 @@ public class EntityToResponseDtoConverter {
                 .messageType(message.getMessageType())
                 .roomId(message.getRoomId())
                 .senderId(message.getSenderId())
+                .nickName(message.getNickName())
+                .senderProfileImage(message.getSenderProfileImage())
                 .content(message.getContent())
                 .createdAt(message.getCreatedAt())
                 .build();
@@ -36,6 +38,8 @@ public class EntityToResponseDtoConverter {
                 .messageType(message.getMessageType())
                 .roomId(message.getRoomId())
                 .senderId(message.getSenderId())
+                .nickName(message.getNickName())
+                .senderProfileImage(message.getSenderProfileImage())
                 .content(message.getContent())
                 .createdAt(message.getCreatedAt())
                 .build();

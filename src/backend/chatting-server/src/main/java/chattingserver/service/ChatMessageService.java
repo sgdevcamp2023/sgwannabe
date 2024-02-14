@@ -45,7 +45,6 @@ public class ChatMessageService {
         }
     }
 
-
     public ChatMessageDto saveChatMessage(ChatMessageDto chatMessageDto) {
 
         ChatMessage message = chatMessageRepository.save(ChatMessage.builder()
@@ -103,6 +102,7 @@ public class ChatMessageService {
                 .messageType(MessageType.ENTRANCE)
                 .roomId(chatMessageDto.getRoomId())
                 .senderId(chatMessageDto.getSenderId())
+                .nickName(chatMessageDto.getNickName())
                 .content(chatMessageDto.getNickName() + "님이 입장하셨습니다.")
                 .senderProfileImage(chatMessageDto.getSenderProfileImage())
                 .createdAt(LocalDateTime.now())
