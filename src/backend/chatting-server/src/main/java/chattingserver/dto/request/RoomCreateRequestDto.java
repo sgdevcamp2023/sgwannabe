@@ -18,4 +18,8 @@ public class RoomCreateRequestDto {
     private String nickName;
     @NotBlank
     private Playlist playlist;
+
+    public String getThumbnailImage() {
+        return this.playlist.getFirstMusic().getThumbnail();
+    }
 }

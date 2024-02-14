@@ -20,6 +20,7 @@ public class Room {
     private String id;
     private String roomName;
     private Playlist playlist;
+    private String thumbnailImage;
 
     private List<User> users;
     private LocalDateTime createdAt;

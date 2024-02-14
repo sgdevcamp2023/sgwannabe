@@ -15,7 +15,7 @@ public class EntityToResponseDtoConverter {
                 .userCount(room.getUsers().size())
                 .users(room.getUsers())
                 .playlist(room.getPlaylist())
-//                .thumbnail(room.getPlaylist().getMusics().get(0)) // 플레이리스트에 곡 무조건 존재함을 신뢰
+                .thumbnailImage(room.getThumbnailImage()) // 플레이리스트에 곡 무조건 존재함을 신뢰
                 .build();
     }
 
