@@ -107,6 +107,13 @@ spring:
             preLogger: true
             postLogger: true
 
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 3000    # default 1,000
+        readTimeout: 10000      # default 60,000
+
 eureka:
   instance:
     hostname: localhost
