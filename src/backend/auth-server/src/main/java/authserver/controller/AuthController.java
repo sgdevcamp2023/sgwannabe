@@ -1,5 +1,6 @@
 package authserver.controller;
 
+<<<<<<< HEAD
 import authserver.service.AuthService;
 import lombok.RequiredArgsConstructor;
 
@@ -11,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+=======
+import authserver.exception.CustomUserProvider;
+>>>>>>> 2e2b46c (feat: exception handling)
 import authserver.payload.request.SignInRequest;
 import authserver.payload.response.UserAndTokenResponse;
 import jakarta.servlet.http.HttpServletRequest;
