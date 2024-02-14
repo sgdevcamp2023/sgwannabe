@@ -13,6 +13,7 @@ public class User {
 
     private Long uid;
     private String nickName;
+    private String profileImage;
     private String lastReadMessageId;
     private LocalDateTime enteredAt;
 }

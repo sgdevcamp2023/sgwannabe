@@ -19,6 +19,5 @@ public class RoomResponseDto {
     private List<User> users;
     private Playlist playlist;
     private LocalDateTime createdAt;
-//    private Music thumbnail;
 
 }

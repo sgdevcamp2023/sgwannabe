@@ -52,6 +52,8 @@ public class ChatMessageService {
                 .messageType(chatMessageDto.getMessageType())
                 .roomId(chatMessageDto.getRoomId())
                 .senderId(chatMessageDto.getSenderId())
+                .nickName(chatMessageDto.getNickName())
+                .senderProfileImage(chatMessageDto.getSenderProfileImage())
                 .content(chatMessageDto.getContent())
                 .createdAt(LocalDateTime.now())
                 .build());
@@ -69,7 +71,6 @@ public class ChatMessageService {
 
     public List<ChatMessageResponseDto> getAllMessagesAtRoom(String roomId) {
         return chatMessageRepository.getAllMessagesAtRoom(roomId).stream().map(entityToResponseDtoConverter::convertToResponseMessage).collect(Collectors.toList());
-
     }
 
     public Page<ChatMessageResponseDto> chatMessagePagination(String roomId, int page) {
@@ -102,13 +103,15 @@ public class ChatMessageService {
                 .messageType(MessageType.ENTRANCE)
                 .roomId(chatMessageDto.getRoomId())
                 .senderId(chatMessageDto.getSenderId())
-                .content(chatMessageDto.getSenderId() + "님이 입장하셨습니다.")
+                .content(chatMessageDto.getNickName() + "님이 입장하셨습니다.")
+                .senderProfileImage(chatMessageDto.getSenderProfileImage())
                 .createdAt(LocalDateTime.now())
                 .build());
 
         User joinedUser = User.builder()
                 .uid(chatMessageDto.getSenderId())
                 .nickName(chatMessageDto.getNickName())
+                .profileImage(chatMessageDto.getSenderProfileImage())
                 .enteredAt(LocalDateTime.now())
                 .lastReadMessageId(message.getId())
                 .build();
@@ -143,6 +146,7 @@ public class ChatMessageService {
                 .roomId(roomId)
                 .senderId(userDto.getUid())
                 .nickName(userDto.getNickName())
+                .senderProfileImage(userDto.getProfileImage())
                 .content(userDto.getNickName() + "님이 퇴장하셨습니다.")
                 .createdAt(LocalDateTime.now())
                 .build();
