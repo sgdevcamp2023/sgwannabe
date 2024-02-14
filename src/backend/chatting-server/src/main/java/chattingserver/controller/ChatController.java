@@ -23,6 +23,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @Tag(name = "chat", description = "채팅 API")
 @RequiredArgsConstructor
 @RestController
@@ -42,9 +44,8 @@ public class ChatController {
             log.error("메시지 전송 에러 : 존재하지 않는 방입니다. roomId={}", chatMessageDto.getRoomId());
             throw new CustomAPIException(ErrorCode.ROOM_NOT_FOUND_ERROR, "채팅방 id=" + chatMessageDto.getRoomId());
         }
-
-        ChatMessageResponseDto savedMessage = chatMessageService.saveChatMessage(chatMessageDto);
-        producers.sendMessage(chatMessageDto);
+        ChatMessageDto savedMessage = chatMessageService.saveChatMessage(chatMessageDto);
+        producers.sendMessage(savedMessage);
 
         log.info("메시지 전송 완료 - message={}", chatMessageDto);
     }
@@ -56,9 +57,9 @@ public class ChatController {
             log.error("메시지 전송 에러 : 존재하지 않는 방입니다. roomId={}", chatMessageDto.getRoomId());
             throw new CustomAPIException(ErrorCode.ROOM_NOT_FOUND_ERROR, "채팅방 id=" + chatMessageDto.getRoomId());
         }
-        ChatMessageResponseDto savedMessage = chatMessageService.saveChatMessage(chatMessageDto);
+        ChatMessageDto savedMessage = chatMessageService.saveChatMessage(chatMessageDto);
 
-        producers.sendMessage(chatMessageDto);
+        producers.sendMessage(savedMessage);
 
         log.info("메시지 전송 완료 - message={}", chatMessageDto);
     }
@@ -94,15 +95,13 @@ public class ChatController {
         return new ResponseEntity<>(apiMessage, HttpStatus.OK);
     }
 
-    @PostMapping("/api/v1/join")
-    @MessageMapping("/api/v1/join")
+    @MessageMapping("/join")
     public void join(ChatMessageDto message) {
 
         producers.sendMessage(chatMessageService.join(message));
     }
 
     @PostMapping("/api/v1/leave")
-    @MessageMapping("/api/v1/leave")
     public void leave(ChatMessageDto message) {
 
         producers.sendMessage(chatMessageService.leave(message));
