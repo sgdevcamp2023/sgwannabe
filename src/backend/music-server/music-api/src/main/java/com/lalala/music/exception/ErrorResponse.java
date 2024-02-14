@@ -14,16 +14,16 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ErrorResponse {
-    private String message;
     private int status;
-    private List<FieldError> errors;
     private String code;
+    private String message;
+    private List<FieldError> errors;
 
     private ErrorResponse(final ErrorCode code, final List<FieldError> errors) {
-        this.message = code.getMessage();
         this.status = code.getStatus();
-        this.errors = errors;
         this.code = code.getCode();
+        this.message = code.getMessage();
+        this.errors = errors;
     }
 
     private ErrorResponse(final ErrorCode code) {
