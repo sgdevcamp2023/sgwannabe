@@ -23,7 +23,7 @@ public class ChatMessageDto {
     private Long senderId;
     @NotBlank
     private String nickName;
-    @NotBlank
+
     private String senderProfileImage;
     @NotBlank
     private String content;

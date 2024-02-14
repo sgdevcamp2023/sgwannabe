@@ -1,6 +1,7 @@
 package chattingserver.domain.chat;
 
 import chattingserver.util.constant.MessageType;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -20,6 +21,8 @@ public class ChatMessage {
     private MessageType messageType;
     private String roomId;
     private Long senderId;
+    private String nickName;
+    private String senderProfileImage;
     private String content;
     private LocalDateTime createdAt;
 
