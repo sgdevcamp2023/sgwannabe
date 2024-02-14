@@ -77,9 +77,11 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom{
 
     @Override
     public List<ChatMessage> findPreviousMessages(String roomId, String readMsgId, int limit) {
+        ObjectId readMsgObjectId = new ObjectId(readMsgId);
         Query query = new Query();
-        query.addCriteria(Criteria.where("roomId").is(roomId).and("_id").lt(readMsgId)); // 이전 메시지만 가져오도록 쿼리 설정
+        query.addCriteria(Criteria.where("roomId").is(roomId).and("_id").lt(readMsgObjectId));
         query.limit(20); // 최대 20개의 메시지 가져오도록 제한 설정
         return mongoTemplate.find(query, ChatMessage.class);
     }
+    //TODO error처리 이전 메시지 못가져오고 빈배열 반환되는중 lt가 문제임
 }

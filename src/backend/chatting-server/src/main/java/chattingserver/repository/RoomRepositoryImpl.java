@@ -30,12 +30,11 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
     public UpdateResult updateLastReadMsgId(ReadMessageUpdateRequestDto requestDto) {
 
         Query query = Query.query(
-                Criteria.where("roomId").is(requestDto.getRoomId())
+                Criteria.where("_id").is(requestDto.getRoomId())
                         .andOperator(Criteria.where("users").elemMatch(Criteria.where("uid").is(requestDto.getUid())))
         );
 
         Update update = new Update().set("users.$.lastReadMessageId", requestDto.getMessageId());
-
         return mongoTemplate.updateFirst(query, update, Room.class);
     }
 

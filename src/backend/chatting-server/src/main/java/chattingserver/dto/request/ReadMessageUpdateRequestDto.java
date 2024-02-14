@@ -14,7 +14,7 @@ public class ReadMessageUpdateRequestDto {
     @NotBlank
     private String roomId;
     @NotBlank
-    private String uid;
+    private Long uid;
     @NotBlank
     private String messageId;
 }
