@@ -5,6 +5,8 @@ import SignupPage from "../pages/SignupPage";
 import ProfilePage from "../pages/ProfilePage";
 import PlaylistPage from "../pages/PlaylistPage";
 import PlayerPage from "../pages/PlayerPage";
+import ChattingListPage from "../pages/ChattingListPage";
+import ChattingPage from "../pages/ChattingPage";
 
 export const router = createBrowserRouter([
   {
@@ -26,6 +28,14 @@ export const router = createBrowserRouter([
   {
     path: "/player",
     element: <PlayerPage />,
+  },
+  {
+    path: "/chat/list",
+    element: <ChattingListPage />,
+  },
+  {
+    path: "/chat/:roomId",
+    element: <ChattingPage />,
   },
   {
     path: "/profile",
