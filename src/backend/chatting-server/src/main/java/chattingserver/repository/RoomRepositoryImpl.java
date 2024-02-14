@@ -1,6 +1,7 @@
 package chattingserver.repository;
 
 import chattingserver.domain.room.Room;
+import chattingserver.domain.room.User;
 import chattingserver.dto.request.ReadMessageUpdateRequestDto;
 import com.mongodb.client.result.UpdateResult;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -35,6 +36,13 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
 
         Update update = new Update().set("users.$.lastReadMessageId", requestDto.getMessageId());
 
+        return mongoTemplate.updateFirst(query, update, Room.class);
+    }
+
+    @Override
+    public UpdateResult addUserToRoom(String roomId, User user) {
+        Query query = new Query(Criteria.where("_id").is(roomId));
+        Update update = new Update().addToSet("users", user);
         return mongoTemplate.updateFirst(query, update, Room.class);
     }
 }

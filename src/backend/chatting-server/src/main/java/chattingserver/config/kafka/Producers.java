@@ -38,7 +38,7 @@ public class Producers {
     private final RoomService roomService;
 
     public void sendMessage(ChatMessageDto chatMessageDto) {
-        if (chatMessageDto.getMessageType() == MessageType.ENTRANCE) {
+        if (chatMessageDto.getMessageType() == MessageType.NOTE) {
             log.info("producers.sendMessage.if MessageType == ENTRANCE");
             RoomResponseDto roomResponseDto = roomService.getRoomInfo(chatMessageDto.getRoomId());
             List<Long> receivers = roomResponseDto.getUsers().stream().map(UserListResponseDto::getUid).collect(Collectors.toList());
@@ -48,7 +48,6 @@ public class Producers {
                     .roomResponseDto(roomResponseDto)
                     .build());
         } else {
-            log.info("producers.sendMessage.if MessageType != ENTRANCE");
 
             CompletableFuture<SendResult<String, ChatMessageDto>> completableFuture = chatKafkaTemplate.send(topicChatName, chatMessageDto);
             completableFuture.whenComplete((result, ex) -> {

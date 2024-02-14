@@ -90,7 +90,7 @@ public class ChatController {
         return new ResponseEntity<>(apiMessage, HttpStatus.OK);
     }
 
-    @Operation(summary = "채팅 메시지 Pagination", description = "내림차순으로 해당 채팅방 메시지 Pagination, 사이즈 N = 12 고정")
+    @Operation(summary = "채팅 메시지 Pagination", description = "내림차순으로 해당 채팅방 메시지 Pagination, 사이즈 N = 20 고정")
     @GetMapping("/history")
     public ResponseEntity<CommonAPIMessage> chatMessagePagination(
             @RequestParam String roomId,

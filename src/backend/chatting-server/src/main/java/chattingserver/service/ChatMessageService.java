@@ -14,7 +14,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -34,6 +36,7 @@ public class ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
     private final RoomRepository roomRepository;
     private final EntityToResponseDtoConverter entityToResponseDtoConverter;
+
 
     private static final int SIZE = 20;
 
@@ -87,39 +90,44 @@ public class ChatMessageService {
         chatMessageRepository.deleteById(id);
     }
 
+    @Transactional
     public ChatMessageDto join(ChatMessageDto chatMessageDto) {
+        try {
+            Optional<Room> optionalRoom = roomRepository.findById(chatMessageDto.getRoomId());
+            if (optionalRoom.isEmpty()) {
+                log.info("해당하는 방이 없습니다. roomId={}", chatMessageDto.getRoomId());
+                // TODO null처리
+                return null;
+            }
 
-        Optional<Room> optionalRoom = roomRepository.findById(chatMessageDto.getRoomId());
-        if (optionalRoom.isEmpty()) {
-            log.info("해당하는 방이 없습니다. roomId={}", chatMessageDto.getRoomId());
-            // TODO null처리
-            return null;
+            Room room = optionalRoom.get();
+
+            ChatMessage message = chatMessageRepository.save(ChatMessage.builder()
+                    .messageType(MessageType.ENTRANCE)
+                    .roomId(chatMessageDto.getRoomId())
+                    .senderId(chatMessageDto.getSenderId())
+                    .nickName(chatMessageDto.getNickName())
+                    .content(chatMessageDto.getNickName() + "님이 입장하셨습니다.")
+                    .senderProfileImage(chatMessageDto.getSenderProfileImage())
+                    .createdAt(LocalDateTime.now())
+                    .build());
+
+            User joinedUser = User.builder()
+                    .uid(chatMessageDto.getSenderId())
+                    .nickName(chatMessageDto.getNickName())
+                    .profileImage(chatMessageDto.getSenderProfileImage())
+                    .enteredAt(LocalDateTime.now())
+                    .lastReadMessageId(message.getId())
+                    .build();
+
+            roomRepository.addUserToRoom(room.getId(), joinedUser);
+
+            return entityToResponseDtoConverter.convertMessage(message);
+        } catch (Exception e) {
+            log.error("트랜잭션 오류: {}", e.getMessage());
+            // TODO 트랜잭션 롤백 또는 예외 처리 로직 추가
+            throw new RuntimeException("트랜잭션 오류 발생");
         }
-
-        Room room = optionalRoom.get();
-
-        ChatMessage message = chatMessageRepository.save(ChatMessage.builder()
-                .messageType(MessageType.ENTRANCE)
-                .roomId(chatMessageDto.getRoomId())
-                .senderId(chatMessageDto.getSenderId())
-                .nickName(chatMessageDto.getNickName())
-                .content(chatMessageDto.getNickName() + "님이 입장하셨습니다.")
-                .senderProfileImage(chatMessageDto.getSenderProfileImage())
-                .createdAt(LocalDateTime.now())
-                .build());
-
-        User joinedUser = User.builder()
-                .uid(chatMessageDto.getSenderId())
-                .nickName(chatMessageDto.getNickName())
-                .profileImage(chatMessageDto.getSenderProfileImage())
-                .enteredAt(LocalDateTime.now())
-                .lastReadMessageId(message.getId())
-                .build();
-
-        room.getUsers().add(joinedUser);
-
-        return entityToResponseDtoConverter.convertMessage(message);
-
     }
 
     public ChatMessageDto permanentLeaving(String roomId, UserEntranceRequestDto userDto) {

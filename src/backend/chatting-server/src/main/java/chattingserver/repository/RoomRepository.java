@@ -1,6 +1,7 @@
 package chattingserver.repository;
 
 import chattingserver.domain.room.Room;
+import chattingserver.domain.room.User;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -24,4 +25,6 @@ public interface RoomRepository extends MongoRepository<Room, String>, RoomRepos
 
     @Override
     boolean existsById(String s);
+
+
 }
