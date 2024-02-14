@@ -35,7 +35,7 @@ public class ChatMessageService {
     private final RoomRepository roomRepository;
     private final EntityToResponseDtoConverter entityToResponseDtoConverter;
 
-    private static final int SIZE = 12;
+    private static final int SIZE = 20;
 
     public <T> void sendMessage(WebSocketSession session, T message) {
         try {
