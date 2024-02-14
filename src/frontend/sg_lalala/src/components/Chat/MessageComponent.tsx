@@ -1,19 +1,7 @@
 import person_icon from "../../assets/person.png";
+import { Message } from "../../pages/ChattingPage";
 
-interface ChattingProps {
-  content: string;
-  id: string;
-  messageType: string;
-  senderId: number;
-  nickName: string;
-  senderProfileImage: string;
-}
-
-function MessageComponent({
-  content,
-  nickName,
-  senderProfileImage,
-}: ChattingProps) {
+function MessageComponent({ content, nickName, senderProfileImage }: Message) {
   return (
     <div className="flex flex-row items-center w-full my-2 text-md font-500">
       <img
