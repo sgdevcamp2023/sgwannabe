@@ -79,7 +79,9 @@ public class ChatController {
             })
     @GetMapping("/api/v1/new-message/{roomId}/{readMsgId}")
     public ResponseEntity<CommonAPIMessage> newMessagesAtRoom(
-            @PathVariable String roomId, @PathVariable String readMsgId) {
+            @PathVariable("roomId") String roomId,
+            @PathVariable("readMsgId") String readMsgId
+    ) {
         CommonAPIMessage apiMessage = new CommonAPIMessage();
         apiMessage.setMessage(CommonAPIMessage.ResultEnum.success);
         apiMessage.setData(chatMessageService.getNewMessages(roomId, readMsgId));
@@ -88,7 +90,7 @@ public class ChatController {
 
     @Operation(summary = "특정 채팅방 히스토리 조회", description = "내림차순으로 특정 채팅방의 전체 메세지를 조회합니다.")
     @GetMapping("/api/v1/history/{roomId}")
-    public ResponseEntity<CommonAPIMessage> allMessagesAtRoom(@PathVariable String roomId) {
+    public ResponseEntity<CommonAPIMessage> allMessagesAtRoom(@PathVariable("roomId") String roomId) {
         CommonAPIMessage apiMessage = new CommonAPIMessage();
         apiMessage.setMessage(CommonAPIMessage.ResultEnum.success);
         apiMessage.setData(chatMessageService.getAllMessagesAtRoom(roomId));
@@ -100,8 +102,8 @@ public class ChatController {
             description = "내림차순으로 해당 채팅방 메시지 Pagination, 사이즈 N = 12 고정")
     @GetMapping("/history")
     public ResponseEntity<CommonAPIMessage> chatMessagePagination(
-            @RequestParam String roomId,
-            @Parameter(description = "첫 페이지는 0부터 시작") @RequestParam int page) {
+            @RequestParam("roomId") String roomId,
+            @Parameter(description = "첫 페이지는 0부터 시작") @RequestParam("page") int page) {
         CommonAPIMessage apiMessage = new CommonAPIMessage();
         apiMessage.setMessage(CommonAPIMessage.ResultEnum.success);
         apiMessage.setData(chatMessageService.chatMessagePagination(roomId, page));

@@ -10,17 +10,15 @@ import com.lalala.config.CommonModuleConfig;
 import com.lalala.config.KafkaConsumerConfig;
 import com.lalala.config.KafkaProducerConfig;
 
-@SpringBootApplication
 @Import({
-    CommonModuleConfig.class,
-    AuthenticationContext.class,
-    PassportAspect.class,
-    KafkaConsumerConfig.class,
-    KafkaProducerConfig.class
+        CommonModuleConfig.class,
+        AuthenticationContext.class,
+        PassportAspect.class,
 })
-public class ChattingserverApplication {
+@SpringBootApplication
+public class ChattingApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ChattingserverApplication.class, args);
+        SpringApplication.run(ChattingApplication.class, args);
     }
 }

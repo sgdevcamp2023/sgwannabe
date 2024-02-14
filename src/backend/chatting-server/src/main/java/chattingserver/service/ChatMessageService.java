@@ -1,5 +1,8 @@
 package chattingserver.service;
 
+import chattingserver.domain.room.User;
+import chattingserver.dto.response.RoomResponseDto;
+import chattingserver.repository.RoomRepository;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +34,8 @@ public class ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
     private final EntityToResponseDtoConverter entityToResponseDtoConverter;
 
+    private final RoomService roomService;
+
     private static final int SIZE = 12;
 
     public <T> void sendMessage(WebSocketSession session, T message) {
@@ -42,6 +47,7 @@ public class ChatMessageService {
     }
 
     public ChatMessageResponseDto saveChatMessage(ChatMessageDto chatMessageDto) {
+        RoomResponseDto room = roomService.getRoomInfo(chatMessageDto.getRoomId());
 
         ChatMessage message =
                 chatMessageRepository.save(
@@ -55,24 +61,30 @@ public class ChatMessageService {
 
         log.info("메시지 저장 성공 message={}", message);
 
-        return entityToResponseDtoConverter.convertMessage(message);
+        return entityToResponseDtoConverter.convertMessage(message, room.getLeader());
     }
 
     public Object getNewMessages(String roomId, String readMsgId) {
+        RoomResponseDto room = roomService.getRoomInfo(roomId);
+
         List<ChatMessage> messages = chatMessageRepository.getNewMessages(roomId, readMsgId);
         log.info("신규 메시지 조회 성공 roomId={}, readMsgId={}", roomId, readMsgId);
         return messages.stream()
-                .map(entityToResponseDtoConverter::convertMessage)
+                .map(chatMessage -> entityToResponseDtoConverter.convertMessage(chatMessage, room.getLeader()))
                 .collect(Collectors.toList());
     }
 
     public List<ChatMessageResponseDto> getAllMessagesAtRoom(String roomId) {
+        RoomResponseDto room = roomService.getRoomInfo(roomId);
+
         return chatMessageRepository.getAllMessagesAtRoom(roomId).stream()
-                .map(entityToResponseDtoConverter::convertMessage)
+                .map(chatMessage -> entityToResponseDtoConverter.convertMessage(chatMessage, room.getLeader()))
                 .collect(Collectors.toList());
     }
 
     public Page<ChatMessageResponseDto> chatMessagePagination(String roomId, int page) {
+        RoomResponseDto room = roomService.getRoomInfo(roomId);
+
         Page<ChatMessage> messagePage =
                 chatMessageRepository.findByRoomIdWithPagingAndFiltering(roomId, page, SIZE);
         log.info("특정 채팅방 메시지 페이지네이션 조회 성공 roomId={}", roomId);
@@ -80,7 +92,7 @@ public class ChatMessageService {
                 new Function<ChatMessage, ChatMessageResponseDto>() {
                     @Override
                     public ChatMessageResponseDto apply(ChatMessage message) {
-                        return entityToResponseDtoConverter.convertMessage(message);
+                        return entityToResponseDtoConverter.convertMessage(message, room.getLeader());
                     }
                 });
     }

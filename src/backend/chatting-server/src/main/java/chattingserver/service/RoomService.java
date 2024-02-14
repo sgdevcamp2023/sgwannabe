@@ -102,6 +102,7 @@ public class RoomService {
                 Room.builder()
                         .roomName(roomCreateRequestDto.getPlaylist().getName())
                         .playlist(roomCreateRequestDto.getPlaylist())
+                        .leader(user)
                         .users(users)
                         .build();
 

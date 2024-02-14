@@ -18,5 +18,7 @@ public class ChatMessageResponseDto {
     private String roomId;
     private Long senderId;
     private String content;
+    private Boolean isLeader;
+    private String profile;
     private LocalDateTime createdAt;
 }

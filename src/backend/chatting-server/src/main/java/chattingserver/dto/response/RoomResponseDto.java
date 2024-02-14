@@ -17,6 +17,7 @@ public class RoomResponseDto {
     private String id;
     private String roomName;
     private long userCount;
+    private User leader;
     private List<User> users;
     private Playlist playlist;
     private LocalDateTime createdAt;
