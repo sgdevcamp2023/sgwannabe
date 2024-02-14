@@ -4,7 +4,6 @@ server:
 spring:
   application:
     name: user-server
-
   datasource:
      driver-class-name: com.mysql.cj.jdbc.Driver
      url: jdbc:mysql://localhost:12100/user?useSSL=false&allowPublicKeyRetrieval=true
