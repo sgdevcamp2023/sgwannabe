@@ -26,7 +26,7 @@ services:
 
       EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:8761/eureka
 
-      PASSPORT_ALGORITHM: SHA-256
+      PASSPORT_ALGORITHM: HmacSHA256
       PASSPORT_KEY: SECRET_KEY
 
       MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://infra-zipkin:9411/api/v2/spans

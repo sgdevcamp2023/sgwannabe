@@ -12,7 +12,7 @@ services:
 
       EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:8761/eureka
 
-      PASSPORT_ALGORITHM: SHA-256
+      PASSPORT_ALGORITHM: HmacSHA256
       PASSPORT_KEY: SECRET_KEY
     ports:
       - 16000:16000
