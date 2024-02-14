@@ -1,38 +1,5 @@
 version: "3.9"
 services:
-  user-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: always
-    ports:
-      - 12000:12000
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://user-mysql:3306/user?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: admin
-      SPRING_DATASOURCE_DRIVER-CLASS-NAME: com.mysql.cj.jdbc.Driver
-
-      SPRING_JPA_PROPERTIES_DIALECT: org.hibernate.dialect.MySQLDialect
-
-      SPRING_MAIL_HOST: smtp.gmail.com
-      SPRING_MAIL_USERNAME: smilegate.wannabe@gmail.com
-      SPRING_MAIL_PASSWORD: hxir xfcg rzec atni
-
-      SPRING_DATA_REDIS_HOST: user-redis
-      SPRING_DATA_REDIS_PORT: 6379
-
-      SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
-
-      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:8761/eureka
-
-      PASSPORT_ALGORITHM: SHA-256
-      PASSPORT_KEY: SECRET_KEY
-    depends_on:
-      - user-mysql
-    networks:
-      - lalala-network
-
   user-mysql:
     image: mysql:8.2.0
     restart: always
