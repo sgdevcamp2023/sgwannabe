@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     restart: always
     ports:
-      - 34100:8761
+      - 34100:34100
     networks:
       - lalala-network
 
