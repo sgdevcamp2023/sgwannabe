@@ -73,6 +73,13 @@ public class RoomController {
         return new ResponseEntity<>(roomService.getRoomInfo(roomId), HttpStatus.OK);
     }
 
+    @Operation(summary = "모든 채팅방 정보 조회 API", description = "모든 채팅방 정보 조회", responses = {
+            @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = RoomResponseDto.class)))})
+    @GetMapping("/rooms")
+    public ResponseEntity<List<RoomResponseDto>> getAllChatRoomInfos() {
+        return new ResponseEntity<>(roomService.getAllRoomInfos(), HttpStatus.OK);
+    }
+
     @Operation(summary = "채팅방 리스트 조회", description = "특정 유저가 참여중인 채팅방 리스트 조회", responses = {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = CommonAPIMessage.class)))})
     @GetMapping("/joined")

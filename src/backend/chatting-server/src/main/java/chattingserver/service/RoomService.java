@@ -124,4 +124,10 @@ public class RoomService {
     public boolean isExistingRoom(String roomId) {
         return roomRepository.existsById(roomId);
     }
+
+    public List<RoomResponseDto> getAllRoomInfos() {
+        return roomRepository.findAll().stream()
+                .map(entityToResponseDtoConverter::convertRoom)
+                .collect(Collectors.toList());
+    }
 }
