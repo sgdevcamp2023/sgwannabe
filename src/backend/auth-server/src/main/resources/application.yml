@@ -8,7 +8,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: admin
-    url: jdbc:mysql://localhost:12100/user?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:12100/lalala?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     properties:

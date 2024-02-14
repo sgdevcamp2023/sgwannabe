@@ -6,7 +6,7 @@ services:
     ports:
       - 12000:12000
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://user-mysql:3306/user?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
+      SPRING_DATASOURCE_URL: jdbc:mysql://user-mysql:3306/lalala?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: admin
       SPRING_DATASOURCE_DRIVER-CLASS-NAME: com.mysql.cj.jdbc.Driver

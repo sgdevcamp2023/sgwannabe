@@ -7,7 +7,7 @@ spring:
 
   datasource:
      driver-class-name: com.mysql.cj.jdbc.Driver
-     url: jdbc:mysql://localhost:12100/user?useSSL=false&allowPublicKeyRetrieval=true
+     url: jdbc:mysql://localhost:12100/lalala?useSSL=false&allowPublicKeyRetrieval=true
      username: root
      password: admin
   jpa:
