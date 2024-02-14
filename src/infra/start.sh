@@ -20,6 +20,8 @@ BACKEND_PWD=`pwd`
 # 서버 시작 순서 조정, 의존성이 있는 경우 앞에 먼저 시작되어야 함
 
 SERVER_ORDER=(
+    "discovery-server"
+
     "user-server"
 
     "auth-server"
@@ -43,7 +45,6 @@ SERVER_ORDER=(
 
     "search-server"
 
-    "discovery-server"
     "gateway-server"
 )
 
