@@ -6,9 +6,14 @@ import { Message } from "../../pages/ChattingPage";
 interface ChattingProps {
   messages?: Message[];
   stompClient: StompJs.Client;
+  roomId: string;
 }
 
-function ChattingComponent({ messages = [], stompClient }: ChattingProps) {
+function ChattingComponent({
+  messages = [],
+  stompClient,
+  roomId,
+}: ChattingProps) {
   const [sendingMessage, setSendingMessage] = useState<string>("");
 
   const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,7 +27,7 @@ function ChattingComponent({ messages = [], stompClient }: ChattingProps) {
           destination: "/chat/pub/send",
           body: JSON.stringify({
             messageType: "MSG",
-            roomId: "65cc5c76663b8a66715c3b29",
+            roomId: roomId,
             senderId: 1,
             nickName: "유저1",
             content: sendingMessage,
