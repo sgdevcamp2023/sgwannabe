@@ -65,7 +65,7 @@ public class AuthService {
     }
 
     @Transactional
-    public ResponseEntity<?> signOut(HttpServletRequest request) {
+    public ResponseEntity<Boolean> signOut(HttpServletRequest request) {
         String accessToken = jwtUtils.getAccessJwtFromCookies(request);
         String id = jwtUtils.getIdFromToken(accessToken);
 
@@ -77,7 +77,7 @@ public class AuthService {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cleanJwtAccessCookie.toString())
                 .header(HttpHeaders.SET_COOKIE, cleanJwtRefreshCookie.toString())
-                .body(null);
+                .body(true);
     }
 
     public String generatePassport(String jwtPayload) {
