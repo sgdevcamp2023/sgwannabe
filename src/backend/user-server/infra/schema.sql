@@ -24,4 +24,4 @@ ALTER TABLE `user`
    ADD CONSTRAINT EMAIL_UNIQUE UNIQUE (email)
 
 -- 테이블 Comment 설정 SQL - user
-ALTER TABLE `user`` COMMENT '유저 테이블';
+ALTER TABLE `user` COMMENT '유저 테이블';
