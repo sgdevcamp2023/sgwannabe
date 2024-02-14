@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.lalala.response.BaseResponse;
 
-@FeignClient(name = "AUTH-SERVICE")
+@FeignClient(name = "AUTH-SERVER", url = "http://localhost:10000")
 public interface FeignAuthClient {
 
-    @PostMapping("/passport")
-    BaseResponse<String> validateAndProvidedPassport(
-            @RequestHeader("Authorization") String jwtPayload);
+    @PostMapping("/v1/api/passport")
+    BaseResponse<String> generatePassport(
+            @RequestHeader("Authorization") String jwtPayload
+    );
 }
