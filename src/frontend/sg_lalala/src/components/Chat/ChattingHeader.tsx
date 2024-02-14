@@ -1,6 +1,13 @@
+import { useNavigate } from "react-router-dom";
+import * as StompJs from "@stomp/stompjs";
 import person_icon from "../../assets/person.png";
 
-function ChattingHeader() {
+interface ChattingProps {
+  stompClient: StompJs.Client;
+}
+
+function ChattingHeader({ stompClient }: ChattingProps) {
+  const navigate = useNavigate();
   return (
     <div className="w-full">
       <div className="flex flex-row p-2">
@@ -30,7 +37,13 @@ function ChattingHeader() {
         </div>
         <div className="flex flex-row items-center justify-between w-1/2 px-2">
           <div className="text-white font-500">1000명 방문</div>
-          <button className="px-4 py-1 rounded-md bg-primary text-textBlack font-700">
+          <button
+            className="px-4 py-1 rounded-md bg-primary text-textBlack font-700"
+            onClick={() => {
+              stompClient.deactivate();
+              navigate("/chat/list");
+            }}
+          >
             나가기
           </button>
         </div>
