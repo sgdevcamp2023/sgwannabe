@@ -4,6 +4,7 @@ import * as StompJs from "@stomp/stompjs";
 import PlaylistComponent from "../components/Chat/PlaylistComponent";
 import ChattingComponent from "../components/Chat/ChattingComponent";
 import ChattingHeader from "../components/Chat/ChattingHeader";
+import { useParams } from "react-router-dom";
 
 // const datas = [
 //   {
@@ -24,7 +25,12 @@ export interface Message {
   senderProfileImage: string;
 }
 
+type ParamsType = {
+  roomId: string;
+};
+
 function ChattingPage() {
+  const { roomId } = useParams() as ParamsType;
   const [stompClient, setStompClient] = useState<StompJs.Client>();
   const [messages, setMessages] = useState<Message[]>();
 
@@ -48,10 +54,7 @@ function ChattingPage() {
       console.log("Connected to WebSocket");
       setStompClient(client);
       fetchChatHistory(client);
-      client.subscribe(
-        "/chat/topic/room/65cc5c76663b8a66715c3b29",
-        handleReceiveMessge
-      );
+      client.subscribe(`/chat/topic/room/${roomId}`, handleReceiveMessge);
     };
 
     client.activate();
@@ -68,7 +71,7 @@ function ChattingPage() {
   const fetchChatHistory = async (client: StompJs.Client) => {
     try {
       const response = await fetch(
-        "http://localhost:18000/chat/api/v1/history/65cc5c76663b8a66715c3b29"
+        `http://localhost:18000/chat/api/v1/history/${roomId}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch chat history");
@@ -89,10 +92,14 @@ function ChattingPage() {
 
   return (
     <div className="flex flex-col w-full h-screen bg-black">
-      <ChattingHeader />
+      <ChattingHeader stompClient={stompClient!} />
       <div className="flex flex-row h-full">
         <PlaylistComponent />
-        <ChattingComponent messages={messages} stompClient={stompClient!} />
+        <ChattingComponent
+          messages={messages}
+          stompClient={stompClient!}
+          roomId={roomId}
+        />
       </div>
     </div>
   );
