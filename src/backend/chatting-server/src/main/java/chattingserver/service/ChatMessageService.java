@@ -1,9 +1,12 @@
 package chattingserver.service;
 
 import chattingserver.domain.chat.ChatMessage;
+import chattingserver.domain.room.Room;
+import chattingserver.domain.room.User;
 import chattingserver.dto.ChatMessageDto;
 import chattingserver.dto.response.ChatMessageResponseDto;
 import chattingserver.repository.ChatMessageRepository;
+import chattingserver.repository.RoomRepository;
 import chattingserver.util.constant.MessageType;
 import chattingserver.util.converter.EntityToResponseDtoConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +20,7 @@ import org.springframework.web.socket.WebSocketSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -27,6 +31,7 @@ public class ChatMessageService {
 
     private final ObjectMapper objectMapper;
     private final ChatMessageRepository chatMessageRepository;
+    private final RoomRepository roomRepository;
     private final EntityToResponseDtoConverter entityToResponseDtoConverter;
 
     private static final int SIZE = 12;
@@ -40,7 +45,7 @@ public class ChatMessageService {
     }
 
 
-    public ChatMessageResponseDto saveChatMessage(ChatMessageDto chatMessageDto) {
+    public ChatMessageDto saveChatMessage(ChatMessageDto chatMessageDto) {
 
         ChatMessage message = chatMessageRepository.save(ChatMessage.builder()
                 .messageType(chatMessageDto.getMessageType())
@@ -62,7 +67,7 @@ public class ChatMessageService {
     }
 
     public List<ChatMessageResponseDto> getAllMessagesAtRoom(String roomId) {
-        return chatMessageRepository.getAllMessagesAtRoom(roomId).stream().map(entityToResponseDtoConverter::convertMessage).collect(Collectors.toList());
+        return chatMessageRepository.getAllMessagesAtRoom(roomId).stream().map(entityToResponseDtoConverter::convertToResponseMessage).collect(Collectors.toList());
 
     }
 
@@ -72,16 +77,25 @@ public class ChatMessageService {
         return messagePage.map(new Function<ChatMessage, ChatMessageResponseDto>() {
             @Override
             public ChatMessageResponseDto apply(ChatMessage message) {
-                return entityToResponseDtoConverter.convertMessage(message);
+                return entityToResponseDtoConverter.convertToResponseMessage(message);
             }
         });
     }
 
-    public void deleteChat(String id){
+    public void deleteChat(String id) {
         chatMessageRepository.deleteById(id);
     }
 
     public ChatMessageDto join(ChatMessageDto chatMessageDto) {
+
+        Optional<Room> optionalRoom = roomRepository.findById(chatMessageDto.getRoomId());
+        if (optionalRoom.isEmpty()) {
+            log.info("해당하는 방이 없습니다. roomId={}", chatMessageDto.getRoomId());
+            // TODO null처리
+            return null;
+        }
+
+        Room room = optionalRoom.get();
 
         ChatMessage message = chatMessageRepository.save(ChatMessage.builder()
                 .messageType(MessageType.ENTRANCE)
@@ -91,19 +105,37 @@ public class ChatMessageService {
                 .createdAt(LocalDateTime.now())
                 .build());
 
-
-        return ChatMessageDto.builder()
-                .id(message.getId())
-                .messageType(message.getMessageType())
-                .roomId(message.getRoomId())
-                .senderId(message.getSenderId())
-                .content(message.getContent())
-                .createdAt(message.getCreatedAt())
+        User joinedUser = User.builder()
+                .uid(chatMessageDto.getSenderId())
+                .nickName(chatMessageDto.getNickName())
+                .enteredAt(LocalDateTime.now())
+                .lastReadMessageId(message.getId())
                 .build();
+
+        room.getUsers().add(joinedUser);
+
+        return entityToResponseDtoConverter.convertMessage(message);
 
     }
 
     public ChatMessageDto leave(ChatMessageDto chatMessageDto) {
+
+        Optional<Room> optionalRoom = roomRepository.findById(chatMessageDto.getRoomId());
+        if (optionalRoom.isEmpty()) {
+            log.info("해당하는 방이 없습니다. roomId={}", chatMessageDto.getRoomId());
+            // TODO null처리
+            return null;
+        }
+
+        Room room = optionalRoom.get();
+        Optional<User> optionalUser = room.getUsers().stream().filter(u -> u.getUid().equals(chatMessageDto.getSenderId())).findAny();
+        if (optionalUser.isEmpty()) {
+            log.info("해당하는 유저가 없습니다. uId={}", chatMessageDto.getSenderId());
+            // TODO null처리
+            return null;
+        }
+
+        room.getUsers().remove(optionalUser.get());
 
         ChatMessage message = chatMessageRepository.save(ChatMessage.builder()
                 .messageType(MessageType.ENTRANCE)
@@ -113,14 +145,8 @@ public class ChatMessageService {
                 .createdAt(LocalDateTime.now())
                 .build());
 
-        return ChatMessageDto.builder()
-                .id(message.getId())
-                .messageType(message.getMessageType())
-                .roomId(message.getRoomId())
-                .senderId(message.getSenderId())
-                .content(message.getContent())
-                .createdAt(message.getCreatedAt())
-                .build();
+        return entityToResponseDtoConverter.convertMessage(message);
+
 
     }
 }
