@@ -2,7 +2,7 @@ package chattingserver.controller;
 
 import chattingserver.config.kafka.Producers;
 import chattingserver.dto.ChatMessageDto;
-import chattingserver.dto.response.ChatMessageResponseDto;
+import chattingserver.dto.request.UserEntranceRequestDto;
 import chattingserver.dto.response.CommonAPIMessage;
 import chattingserver.service.ChatMessageService;
 import chattingserver.service.RoomService;
@@ -22,8 +22,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 @Tag(name = "chat", description = "채팅 API")
 @RequiredArgsConstructor
@@ -101,9 +99,9 @@ public class ChatController {
         producers.sendMessage(chatMessageService.join(message));
     }
 
-    @PostMapping("/api/v1/leave")
-    public void leave(ChatMessageDto message) {
+    @PostMapping("/api/v1/permanent-leave/{roomId}")
+    public void permanentLeaving(@PathVariable String roomId, @RequestBody UserEntranceRequestDto userDto) {
 
-        producers.sendMessage(chatMessageService.leave(message));
+        producers.sendMessage(chatMessageService.permanentLeaving(roomId, userDto));
     }
 }

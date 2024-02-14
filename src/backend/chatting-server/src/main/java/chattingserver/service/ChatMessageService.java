@@ -4,6 +4,7 @@ import chattingserver.domain.chat.ChatMessage;
 import chattingserver.domain.room.Room;
 import chattingserver.domain.room.User;
 import chattingserver.dto.ChatMessageDto;
+import chattingserver.dto.request.UserEntranceRequestDto;
 import chattingserver.dto.response.ChatMessageResponseDto;
 import chattingserver.repository.ChatMessageRepository;
 import chattingserver.repository.RoomRepository;
@@ -118,34 +119,37 @@ public class ChatMessageService {
 
     }
 
-    public ChatMessageDto leave(ChatMessageDto chatMessageDto) {
+    public ChatMessageDto permanentLeaving(String roomId, UserEntranceRequestDto userDto) {
 
-        Optional<Room> optionalRoom = roomRepository.findById(chatMessageDto.getRoomId());
+        Optional<Room> optionalRoom = roomRepository.findById(roomId);
         if (optionalRoom.isEmpty()) {
-            log.info("해당하는 방이 없습니다. roomId={}", chatMessageDto.getRoomId());
+            log.info("해당하는 방이 없습니다. roomId={}", roomId);
             // TODO null처리
             return null;
         }
 
         Room room = optionalRoom.get();
-        Optional<User> optionalUser = room.getUsers().stream().filter(u -> u.getUid().equals(chatMessageDto.getSenderId())).findAny();
+        Optional<User> optionalUser = room.getUsers().stream().filter(u -> u.getUid().equals(userDto.getUid())).findAny();
         if (optionalUser.isEmpty()) {
-            log.info("해당하는 유저가 없습니다. uId={}", chatMessageDto.getSenderId());
+            log.info("해당하는 유저가 없습니다. uId={}", userDto.getUid());
             // TODO null처리
             return null;
         }
 
         room.getUsers().remove(optionalUser.get());
 
-        ChatMessage message = chatMessageRepository.save(ChatMessage.builder()
+        ChatMessage chatMessage = ChatMessage.builder()
                 .messageType(MessageType.ENTRANCE)
-                .roomId(chatMessageDto.getRoomId())
-                .senderId(chatMessageDto.getSenderId())
-                .content(chatMessageDto.getSenderId() + "님이 퇴장하셨습니다.")
+                .roomId(roomId)
+                .senderId(userDto.getUid())
+                .nickName(userDto.getNickName())
+                .content(userDto.getNickName() + "님이 퇴장하셨습니다.")
                 .createdAt(LocalDateTime.now())
-                .build());
+                .build();
 
-        return entityToResponseDtoConverter.convertMessage(message);
+        chatMessageRepository.save(chatMessage);
+
+        return entityToResponseDtoConverter.convertMessage(chatMessage);
 
 
     }
