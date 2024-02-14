@@ -49,8 +49,12 @@ public class RoomService {
             ChatMessage message = chatMessageRepository.getLastMessage(roomId);
 
             LastMessage lastMessage = LastMessage.builder()
-                    .messageId(message.getId()).senderId(message.getSenderId())
-                    .content(message.getContent()).createdAt(message.getCreatedAt())
+                    .messageId(message.getId())
+                    .senderId(message.getSenderId())
+                    .nickName(message.getNickName())
+                    .senderProfileImage(message.getSenderProfileImage())
+                    .content(message.getContent())
+                    .createdAt(message.getCreatedAt())
                     .build();
 
             myRoomsDto.add(JoinedRoomResponseDto.builder()
@@ -77,7 +81,7 @@ public class RoomService {
                         .roomName(room.getRoomName())
                         .thumbnailImage(room.getThumbnailImage())
                         .userCount(room.getUsers().size())
-                        .users(room.getUsers())
+                        .users(room.getUsers().stream().map(entityToResponseDtoConverter::convertUser).collect(Collectors.toList()))
                         .playlist(room.getPlaylist())
                         .build())
                 .collect(Collectors.toList());

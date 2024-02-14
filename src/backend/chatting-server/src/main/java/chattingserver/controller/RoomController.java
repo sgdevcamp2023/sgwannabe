@@ -9,6 +9,7 @@ import chattingserver.dto.request.UserEntranceRequestDto;
 import chattingserver.dto.response.CommonAPIMessage;
 import chattingserver.dto.response.JoinedRoomResponseDto;
 import chattingserver.dto.response.RoomResponseDto;
+import chattingserver.dto.response.UserListResponseDto;
 import chattingserver.service.ChatMessageService;
 import chattingserver.service.RoomService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,7 +48,7 @@ public class RoomController {
         RoomResponseDto roomResponseDto = roomService.create(roomCreateRequestDto);
 
         producers.sendRoomMessage(RoomMessageDto.builder()
-                .receivers(roomResponseDto.getUsers().stream().map(User::getUid).collect(Collectors.toList()))
+                .receivers(roomResponseDto.getUsers().stream().map(UserListResponseDto::getUid).collect(Collectors.toList()))
                 .roomResponseDto(roomResponseDto)
                 .build());
 
@@ -105,7 +106,7 @@ public class RoomController {
         return new ResponseEntity<>(apiMessage,HttpStatus.OK);
     }
 
-    @Operation(summary = "채팅방 리스트 조회", description = "특정 유저가 참여할 수 있는 채팅방 리스트 조회", responses = {
+    @Operation(summary = "참여 가능한 채팅방 리스트 조회", description = "특정 유저가 참여할 수 있는 채팅방 리스트 조회", responses = {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = CommonAPIMessage.class)))})
     @GetMapping("/unjoined")
     public ResponseEntity<CommonAPIMessage> unjoinedChatRooms(@RequestParam(required = true) Long uid) {

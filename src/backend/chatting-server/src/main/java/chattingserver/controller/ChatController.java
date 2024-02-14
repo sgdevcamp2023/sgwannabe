@@ -2,8 +2,6 @@ package chattingserver.controller;
 
 import chattingserver.config.kafka.Producers;
 import chattingserver.dto.ChatMessageDto;
-import chattingserver.dto.request.UserEntranceRequestDto;
-import chattingserver.dto.response.ChatMessageResponseDto;
 import chattingserver.dto.response.CommonAPIMessage;
 import chattingserver.dto.response.ReEnterResponseDto;
 import chattingserver.service.ChatMessageService;
@@ -25,7 +23,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @Tag(name = "chat", description = "채팅 API")
 @RequiredArgsConstructor
