@@ -29,12 +29,14 @@ public class ChatroomDummyInitializer implements ApplicationRunner {
         User dummyUser1 = User.builder()
                 .uid(1L)
                 .nickName("유저닉네임1")
+                .profileImage("userprofileimage1.url")
                 .enteredAt(LocalDateTime.now())
                 .build();
 
         User dummyUser2 = User.builder()
                 .uid(2L)
                 .nickName("유저닉네임2")
+                .profileImage("userprofileimage2.url")
                 .enteredAt(LocalDateTime.now())
                 .build();
 
@@ -80,7 +82,9 @@ public class ChatroomDummyInitializer implements ApplicationRunner {
         ChatMessage message1 = chatMessageRepository.save(ChatMessage.builder()
                 .messageType(MessageType.MSG)
                 .roomId(dummyRoom.getId())
-                .senderId(1L)
+                .senderId(dummyUser1.getUid())
+                .nickName(dummyUser1.getNickName())
+                .senderProfileImage(dummyUser1.getProfileImage())
                 .content("메시지메시지1")
                 .createdAt(LocalDateTime.now())
                 .build());
@@ -88,13 +92,86 @@ public class ChatroomDummyInitializer implements ApplicationRunner {
         ChatMessage message2 = chatMessageRepository.save(ChatMessage.builder()
                 .messageType(MessageType.MSG)
                 .roomId(dummyRoom.getId())
-                .senderId(2L)
+                .senderId(dummyUser2.getUid())
+                .nickName(dummyUser2.getNickName())
+                .senderProfileImage(dummyUser2.getProfileImage())
                 .content("메시지메시지2")
                 .createdAt(LocalDateTime.now())
                 .build());
 
         log.info("메시지 생성 성공 message1={}", message1);
         log.info("메시지 생성 성공 message2={}", message2);
+
+        User dummyUser3 = User.builder()
+                .uid(3L)
+                .nickName("유저닉네임3")
+                .profileImage("userprofileimage3.url")
+                .enteredAt(LocalDateTime.now())
+                .build();
+
+        User dummyUser4 = User.builder()
+                .uid(3L)
+                .nickName("유저닉네임4")
+                .profileImage("userprofileimage24url")
+                .enteredAt(LocalDateTime.now())
+                .build();
+
+        List<User> users2 = new ArrayList<>();
+        users2.add(dummyUser3);
+        users2.add(dummyUser4);
+        users2.add(dummyUser1);
+
+        Music dummyMusic3 = Music.builder()
+                .title("음원1")
+                .artist("아티스트1")
+                .playtime("12:34")
+                .thumbnail("thumbnail-1.url")
+                .build();
+
+        List<Music> dummyMusics2 = new ArrayList<>();
+        dummyMusics.add(dummyMusic1);
+        dummyMusics.add(dummyMusic3);
+
+
+        Playlist dummyPlaylist2 = Playlist.builder()
+                .id("098765432qwerty")
+                .name("플레이리스트2")
+                .musics(dummyMusics2)
+                .build();
+
+        // room build
+        Room dummyRoom2 = Room.builder()
+                .roomName(dummyPlaylist2.getName())
+                .playlist(dummyPlaylist2)
+                .users(users2)
+                .build();
+
+        roomRepository.save(dummyRoom2);
+        log.info("방 생성 성공 room={}", dummyRoom);
+
+        ChatMessage message3 = chatMessageRepository.save(ChatMessage.builder()
+                .messageType(MessageType.MSG)
+                .roomId(dummyRoom2.getId())
+                .senderId(dummyUser1.getUid())
+                .nickName(dummyUser1.getNickName())
+                .senderProfileImage(dummyUser1.getProfileImage())
+                .content("메시지메시지3")
+                .createdAt(LocalDateTime.now())
+                .build());
+
+        ChatMessage message4 = chatMessageRepository.save(ChatMessage.builder()
+                .messageType(MessageType.MSG)
+                .roomId(dummyRoom2.getId())
+                .senderId(dummyUser4.getUid())
+                .nickName(dummyUser4.getNickName())
+                .senderProfileImage(dummyUser4.getProfileImage())
+                .content("메시지메시지4")
+                .createdAt(LocalDateTime.now())
+                .build());
+
+        log.info("메시지 생성 성공 message3={}", message3);
+        log.info("메시지 생성 성공 message4={}", message4);
+
 
     }
 }
