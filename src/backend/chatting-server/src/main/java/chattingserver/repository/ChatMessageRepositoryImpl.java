@@ -59,4 +59,19 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepositoryCustom{
                                 Sort.by(Sort.Direction.DESC,"createdAt"))
                 , ChatMessage.class);
     }
+
+    @Override
+    public ChatMessage getLastMessage(String roomId) {
+
+        Query query = Query.query(Criteria.where("roomId").is(roomId)).with(Sort.by(Sort.Direction.DESC,"createdAt"));
+
+        query.fields().exclude("roomId");
+        query.fields().exclude("type");
+
+        ChatMessage chatMessage = mongoTemplate.findOne(query, ChatMessage.class);
+        if(chatMessage == null){
+            return new ChatMessage();
+        }
+        return chatMessage;
+    }
 }
