@@ -12,9 +12,11 @@ services:
       - PORT=20000
       - ENV=develop
       - ELASTICSEARCH_HOST=elasticsearch
+      - EUREKA_HOST=http://localhost:34100
     depends_on:
       - elasticsearch
     networks:
+      - default
       - lalala-network
 
   elasticsearch:
