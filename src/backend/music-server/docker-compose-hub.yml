@@ -13,6 +13,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: admin
 
       SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
+      SPRING_KAFKA_CONSUMER_GROUP-ID: music-group
 
       EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:8761/eureka
 
@@ -23,6 +24,7 @@ services:
     depends_on:
       - music-mysql
     networks:
+      - default
       - lalala-network
 
   music-mysql:
@@ -41,8 +43,6 @@ services:
     volumes:
       - ./.docker/mysql/:/var/lib/mysql
       - ./infra/:/docker-entrypoint-initdb.d
-    networks:
-      - lalala-network
 
   music-adminer:
     image: adminer
@@ -50,8 +50,6 @@ services:
     restart: always
     ports:
       - 24900:8080
-    networks:
-      - lalala-network
 
 networks:
   lalala-network:
