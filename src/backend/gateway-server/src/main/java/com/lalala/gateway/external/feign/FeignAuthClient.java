@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.lalala.response.BaseResponse;
 
-@FeignClient(name = "AUTH-SERVER", url = "http://localhost:10000")
+@FeignClient(name = "AUTH-SERVER")
 public interface FeignAuthClient {
 
     @PostMapping("/v1/api/passport")
