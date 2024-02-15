@@ -35,8 +35,7 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<Authorizat
             }
 
             if (isRequestContainsAuthorization(exchange)) {
-                BaseResponse<String> response =
-                        feignAuthClient.generatePassport(extractJWT(exchange));
+                BaseResponse<String> response = feignAuthClient.generatePassport(extractJWT(exchange));
                 String passport = response.getData();
 
                 ServerHttpRequest request =

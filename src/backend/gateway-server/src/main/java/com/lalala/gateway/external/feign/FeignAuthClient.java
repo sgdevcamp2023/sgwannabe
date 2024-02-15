@@ -10,7 +10,5 @@ import com.lalala.response.BaseResponse;
 public interface FeignAuthClient {
 
     @PostMapping("/v1/api/passport")
-    BaseResponse<String> generatePassport(
-            @RequestHeader("Authorization") String jwtPayload
-    );
+    BaseResponse<String> generatePassport(@RequestHeader("Authorization") String jwtPayload);
 }
