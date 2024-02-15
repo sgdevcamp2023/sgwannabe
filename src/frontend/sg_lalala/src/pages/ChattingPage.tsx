@@ -4,17 +4,8 @@ import * as StompJs from "@stomp/stompjs";
 import PlaylistComponent from "../components/Chat/PlaylistComponent";
 import ChattingComponent from "../components/Chat/ChattingComponent";
 import ChattingHeader from "../components/Chat/ChattingHeader";
-import { useParams } from "react-router-dom";
-
-// const datas = [
-//   {
-//     content: "asdasd",
-//     id: "asdasd",
-//     messageType: "asdasd",
-//     senderId: 1,
-//     nickName: "asdasd",
-//   },
-// ];
+import { useNavigate } from "react-router-dom";
+import { useParamsHook } from "../hooks/useParamsHook";
 
 export interface Message {
   content: string;
@@ -25,12 +16,14 @@ export interface Message {
   senderProfileImage: string;
 }
 
-type ParamsType = {
-  roomId: string;
-};
-
 function ChattingPage() {
-  const { roomId } = useParams() as ParamsType;
+  const navigate = useNavigate();
+  const { roomId } = useParamsHook<{ roomId: string }>({
+    onInValidParams: () => navigate("/chat/list"),
+    validateParams: (params) =>
+      typeof params?.roomId !== "undefined" &&
+      /^([0-9]|[A-Za-z]|[A-Za-z0-9])*$/.test(params.roomId),
+  });
   const [stompClient, setStompClient] = useState<StompJs.Client>();
   const [messages, setMessages] = useState<Message[]>();
 
