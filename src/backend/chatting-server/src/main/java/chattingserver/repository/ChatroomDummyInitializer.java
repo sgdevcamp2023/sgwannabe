@@ -45,6 +45,7 @@ public class ChatroomDummyInitializer implements ApplicationRunner {
         users.add(dummyUser2);
 
         Music dummyMusic1 = Music.builder()
+                .id(1L)
                 .title("음원1")
                 .artist("아티스트1")
                 .playtime("12:34")
@@ -52,6 +53,7 @@ public class ChatroomDummyInitializer implements ApplicationRunner {
                 .build();
 
         Music dummyMusic2 = Music.builder()
+                .id(2L)
                 .title("음원2")
                 .artist("아티스트2")
                 .playtime("01:23")
@@ -128,6 +130,7 @@ public class ChatroomDummyInitializer implements ApplicationRunner {
         users2.add(dummyUser1);
 
         Music dummyMusic3 = Music.builder()
+                .id(3L)
                 .title("음원3")
                 .artist("아티스트3")
                 .playtime("12:34")
