@@ -24,7 +24,7 @@ public class AlbumEntity extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(nullable = false, length = 50, columnDefinition = "VARCHAR(50) default ''")
+    @Column(nullable = false, length = 100, columnDefinition = "VARCHAR(100) default ''")
     String title;
 
     @Column(name = "cover_url", nullable = false, columnDefinition = "VARCHAR(255) default ''")
