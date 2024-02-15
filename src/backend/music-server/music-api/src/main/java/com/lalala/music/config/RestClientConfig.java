@@ -7,7 +7,7 @@ import org.springframework.web.client.RestClient;
 
 @Configuration
 public class RestClientConfig {
-    @Value("${uploader.url:http://localhost:25000}")
+    @Value("${uploader.url}")
     private String uploaderURL;
 
     @Bean(name = {"uploaderClient"})
