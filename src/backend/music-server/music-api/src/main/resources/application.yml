@@ -25,6 +25,8 @@ spring:
 
   kafka:
     bootstrap-servers: localhost:40000,localhost:40001,localhost:40002
+    consumer:
+      group-id: music-group
 
 logging:
   pattern:
@@ -64,3 +66,6 @@ management:
   zipkin:
     tracing:
       endpoint: "http://localhost:43000/api/v2/spans"
+
+uploader:
+  url: http://localhost:25000

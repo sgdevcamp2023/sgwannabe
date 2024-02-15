@@ -18,4 +18,12 @@ public class CreateAlbumRequestDTO {
     private AlbumType type;
     private LocalDateTime releasedAt;
     private Long artistId;
+
+    public String getCoverUrl() {
+        if (coverUrl == null) {
+            return "";
+        }
+
+        return coverUrl;
+    }
 }

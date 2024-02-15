@@ -11,6 +11,8 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import com.lalala.exception.ErrorResponse;
+
 @ControllerAdvice
 @Slf4j
 public class BaseResponseBodyAdvice implements ResponseBodyAdvice<Object> {
@@ -28,6 +30,10 @@ public class BaseResponseBodyAdvice implements ResponseBodyAdvice<Object> {
             Class<? extends HttpMessageConverter<?>> selectedConverterType,
             ServerHttpRequest request,
             ServerHttpResponse response) {
+        if (body instanceof ErrorResponse) {
+            return body;
+        }
+
         if (body instanceof BaseResponse<?>) {
             return body;
         }

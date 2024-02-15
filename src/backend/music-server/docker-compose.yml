@@ -1,30 +1,5 @@
 version: '3.9'
 services:
-  music-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: always
-    ports:
-      - 24000:24000
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://music-mysql:3306/music?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: admin
-
-      SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
-
-      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:8761/eureka
-
-      PASSPORT_ALGORITHM: HmacSHA256
-      PASSPORT_KEY: SECRET_KEY
-
-      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://infra-zipkin:9411/api/v2/spans
-    depends_on:
-      - music-mysql
-    networks:
-      - lalala-network
-
   music-mysql:
     image: mysql:8.2.0
     container_name: music-db
