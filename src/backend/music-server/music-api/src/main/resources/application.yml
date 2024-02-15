@@ -64,3 +64,6 @@ management:
   zipkin:
     tracing:
       endpoint: "http://localhost:43000/api/v2/spans"
+
+uploader:
+  url: http://localhost:25000

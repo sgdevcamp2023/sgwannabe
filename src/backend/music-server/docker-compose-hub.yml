@@ -6,6 +6,8 @@ services:
     ports:
       - 24000:24000
     environment:
+      UPLOADER_URL: http://music-uploader-server:3000
+
       SPRING_DATASOURCE_URL: jdbc:mysql://music-mysql:3306/music?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: admin
