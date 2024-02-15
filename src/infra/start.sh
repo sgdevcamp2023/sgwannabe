@@ -48,8 +48,6 @@ SERVER_ORDER=(
     "gateway-server"
 )
 
-echo "$BACKEND_PWD"
-
 for SERVER in ${SERVER_ORDER[@]}; do
     cd $BACKEND_PWD/$SERVER/
     docker-compose down
