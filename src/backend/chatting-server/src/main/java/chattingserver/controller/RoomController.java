@@ -12,6 +12,7 @@ import chattingserver.dto.response.RoomResponseDto;
 import chattingserver.dto.response.UserListResponseDto;
 import chattingserver.service.ChatMessageService;
 import chattingserver.service.RoomService;
+import chattingserver.service.SearchService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -37,6 +38,7 @@ public class RoomController {
 
     private final RoomService roomService;
     private final ChatMessageService chatMessageService;
+    private final SearchService searchService;
     private final Producers producers;
 
     @Operation(summary = "채팅방 생성 API", description = "신규 채팅방 생성", responses = {
@@ -55,6 +57,8 @@ public class RoomController {
         CommonAPIMessage apiMessage = new CommonAPIMessage();
         apiMessage.setMessage(CommonAPIMessage.ResultEnum.success);
         apiMessage.setData(roomResponseDto);
+
+        searchService.sendIndexingRequestToSearchServer(roomResponseDto);
 
         return new ResponseEntity<>(apiMessage, HttpStatus.CREATED);
     }
