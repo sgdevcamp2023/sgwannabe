@@ -1,5 +1,7 @@
 package com.lalala.music;
 
+import com.lalala.exception.GlobalExceptionHandler;
+import com.lalala.response.BaseResponseBodyAdvice;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
@@ -16,7 +18,9 @@ import com.lalala.config.KafkaProducerConfig;
     AuthenticationContext.class,
     PassportAspect.class,
     KafkaConsumerConfig.class,
-    KafkaProducerConfig.class
+    KafkaProducerConfig.class,
+    BaseResponseBodyAdvice.class,
+    GlobalExceptionHandler.class,
 })
 public class MusicApplication {
 

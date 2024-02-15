@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: ./Dockerfile
     environment:
-      - STORAGE_URL=http://fileserver-app
+      - STORAGE_URL=http://fileserver-app:30000
     ports:
       - "25000:3000"
     volumes:
