@@ -20,10 +20,10 @@ class WsConfig(
 ) : WebSocketConfigurer {
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
         registry
-            .addHandler(streamingHandler(), "/streaming")
+            .addHandler(streamingHandler(), "/v1/ws/streaming")
             .setAllowedOrigins("*")
         registry
-            .addHandler(streamingHandler(), "/streaming")
+            .addHandler(streamingHandler(), "/v1/ws/streaming")
             .setAllowedOrigins("*")
             .withSockJS()
     }

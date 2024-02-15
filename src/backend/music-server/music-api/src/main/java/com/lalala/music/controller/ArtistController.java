@@ -25,7 +25,7 @@ import com.lalala.music.service.ArtistService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/artists")
+@RequestMapping("/v1/api/artists")
 public class ArtistController {
     private final ArtistService service;
 
