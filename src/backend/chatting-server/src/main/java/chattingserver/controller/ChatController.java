@@ -50,7 +50,7 @@ public class ChatController {
     }
 
     @Operation(summary = "메시지 전송")
-    @PostMapping(value = "/api/v1/message", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/message", consumes = "application/json", produces = "application/json")
     public void sendMessage(@Valid @RequestBody ChatMessageDto chatMessageDto) {
         if (!roomService.isExistingRoom(chatMessageDto.getRoomId())) {
             log.error("메시지 전송 에러 : 존재하지 않는 방입니다. roomId={}", chatMessageDto.getRoomId());
@@ -66,7 +66,7 @@ public class ChatController {
     @Operation(summary = "참여중인 채팅방 재입장, 새 메시지 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "채팅방 입장, 새 메시지 조회 성공", content = @Content(schema = @Schema(implementation = CommonAPIMessage.class)))})
-    @GetMapping("/api/v1/rooms/joined/{roomId}")
+    @GetMapping("/rooms/joined/{roomId}")  // TODO 웹소켓 연결
     public ResponseEntity<CommonAPIMessage> newMessagesAtRoom(@PathVariable String roomId, @RequestParam String readMsgId) {
         CommonAPIMessage apiMessage = new CommonAPIMessage();
         apiMessage.setMessage(CommonAPIMessage.ResultEnum.success);
@@ -82,7 +82,7 @@ public class ChatController {
     }
 
     @Operation(summary = "특정 채팅방 히스토리 조회", description = "내림차순으로 특정 채팅방의 전체 메세지를 조회합니다.")
-    @GetMapping("/api/v1/history/{roomId}")
+    @GetMapping("/history/{roomId}")
     public ResponseEntity<CommonAPIMessage> allMessagesAtRoom(@PathVariable String roomId) {
         CommonAPIMessage apiMessage = new CommonAPIMessage();
         apiMessage.setMessage(CommonAPIMessage.ResultEnum.success);
