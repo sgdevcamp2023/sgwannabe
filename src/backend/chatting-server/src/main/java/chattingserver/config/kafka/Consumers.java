@@ -21,10 +21,9 @@ public class Consumers {
     }
 
     @KafkaListener(groupId = "${spring.kafka.consumer.room-consumer.group-id}", topics = "${kafka.topic.room-name}", containerFactory = "kafkaListenerContainerFactory")
-    public void listenGroupCreation(RoomMessageDto roomMessageDto) {
+    public void listenRoomMessage(RoomMessageDto roomMessageDto) {
         RoomResponseDto roomResponseDto = roomMessageDto.getRoomResponseDto();
-        for (Long userId : roomMessageDto.getReceivers()) {
-            template.convertAndSend("/chat/topic/new-room/" + userId, roomResponseDto);
-        }
+        template.convertAndSend("/chat/topic/room/" + roomMessageDto.getRoomResponseDto().getId(), roomResponseDto);
+
     }
 }

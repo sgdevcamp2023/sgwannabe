@@ -36,17 +36,6 @@ services:
     networks:
       - lalala-network
 
-  sonarqube:
-    image: sonarqube:latest
-    ports:
-      - 18200:9000
-    networks:
-      - lalala-network
-    environment:
-      - SONAR_JDBC_URL=jdbc:postgresql://postgres:5432/sonar
-      - SONAR_JDBC_USERNAME=sonar
-      - SONAR_JDBC_PASSWORD=sonar
-
 volumes:
   chatting-mongodbdata:
 
