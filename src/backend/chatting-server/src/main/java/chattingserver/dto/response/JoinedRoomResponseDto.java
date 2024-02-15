@@ -15,5 +15,6 @@ public class JoinedRoomResponseDto {
     private String roomName;
     private String thumbnailImage;
     private List<User> users;
+    private UserListResponseDto playlistOwner;
     private LastMessage lastMessage;
 }

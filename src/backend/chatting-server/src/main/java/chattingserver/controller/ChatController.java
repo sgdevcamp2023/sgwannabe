@@ -66,7 +66,7 @@ public class ChatController {
     @Operation(summary = "참여중인 채팅방 재입장, 새 메시지 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "채팅방 입장, 새 메시지 조회 성공", content = @Content(schema = @Schema(implementation = CommonAPIMessage.class)))})
-    @GetMapping("/rooms/joined/{roomId}")  // TODO 웹소켓 연결
+    @GetMapping("/rooms/joined/{roomId}")  // TODO 웹소켓 연결 ??
     public ResponseEntity<CommonAPIMessage> newMessagesAtRoom(@PathVariable String roomId, @RequestParam String readMsgId) {
         CommonAPIMessage apiMessage = new CommonAPIMessage();
         apiMessage.setMessage(CommonAPIMessage.ResultEnum.success);

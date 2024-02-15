@@ -62,6 +62,7 @@ public class RoomService {
                     .roomName(room.getRoomName())
                     .thumbnailImage(room.getThumbnailImage())
                     .users(room.getUsers())
+                    .playlistOwner(entityToResponseDtoConverter.convertUser(room.getPlaylistOwner()))
                     .lastMessage(lastMessage)
                     .build());
         }
@@ -83,6 +84,7 @@ public class RoomService {
                         .userCount(room.getUsers().size())
                         .users(room.getUsers().stream().map(entityToResponseDtoConverter::convertUser).collect(Collectors.toList()))
                         .playlist(room.getPlaylist())
+                        .playlistOwner(entityToResponseDtoConverter.convertUser(room.getPlaylistOwner()))
                         .build())
                 .collect(Collectors.toList());
     }
@@ -90,20 +92,22 @@ public class RoomService {
 
     public RoomResponseDto create(RoomCreateRequestDto roomCreateRequestDto) {
         // user build
-        User user = User.builder()
+        User owner = User.builder()
                 .uid(roomCreateRequestDto.getUid())
                 .nickName(roomCreateRequestDto.getNickName())
+                .profileImage(roomCreateRequestDto.getUserProfileImage())
                 .enteredAt(LocalDateTime.now())
                 .build();
 
         List<User> users = new ArrayList<>();
-        users.add(user);
+        users.add(owner);
 
         // room build
         Room room = Room.builder()
                 .roomName(roomCreateRequestDto.getPlaylist().getName())
                 .playlist(roomCreateRequestDto.getPlaylist())
                 .thumbnailImage(roomCreateRequestDto.getThumbnailImage())
+                .playlistOwner(owner)
                 .users(users)
                 .build();
 

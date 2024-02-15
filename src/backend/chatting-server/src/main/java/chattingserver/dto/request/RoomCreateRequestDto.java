@@ -17,6 +17,8 @@ public class RoomCreateRequestDto {
     @NotBlank
     private String nickName;
     @NotBlank
+    private String userProfileImage;
+    @NotBlank
     private Playlist playlist;
 
     public String getThumbnailImage() {

@@ -24,6 +24,8 @@ public class Room {
 
     private List<User> users;
     private LocalDateTime createdAt;
+
+    private User playlistOwner;
     public void setMembers(List<User> users) {
         this.users = users;
     }

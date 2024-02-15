@@ -67,6 +67,9 @@ public class ChatroomDummyInitializer implements ApplicationRunner {
                 .id("qwer1234")
                 .name("플레이리스트1")
                 .musics(dummyMusics)
+                .playlistOwnerId(dummyUser1.getUid())
+                .playlistOwnerNickName(dummyUser1.getNickName())
+                .playlistOwnerProfileImage(dummyUser1.getProfileImage())
                 .build();
 
         // room build
@@ -75,6 +78,7 @@ public class ChatroomDummyInitializer implements ApplicationRunner {
                 .playlist(dummyPlaylist)
                 .thumbnailImage(dummyPlaylist.getFirstMusic().getThumbnail())
                 .users(users)
+                .playlistOwner(dummyUser1)
                 .createdAt(LocalDateTime.now())
                 .build();
 
@@ -139,6 +143,9 @@ public class ChatroomDummyInitializer implements ApplicationRunner {
                 .id("098765432qwerty")
                 .name("플레이리스트2")
                 .musics(dummyMusics2)
+                .playlistOwnerId(dummyUser3.getUid())
+                .playlistOwnerNickName(dummyUser3.getNickName())
+                .playlistOwnerProfileImage(dummyUser3.getProfileImage())
                 .build();
 
         log.info("dummyPlaylist2={}", dummyPlaylist2.toString());
@@ -150,6 +157,7 @@ public class ChatroomDummyInitializer implements ApplicationRunner {
                 .playlist(dummyPlaylist2)
                 .thumbnailImage(dummyPlaylist2.getFirstMusic().getThumbnail())
                 .users(users2)
+                .playlistOwner(dummyUser3)
                 .createdAt(LocalDateTime.now())
                 .build();
 
