@@ -1,14 +1,12 @@
 package chattingserver.dto.request;
 
-import chattingserver.domain.room.Playlist;
-import chattingserver.dto.response.UserListResponseDto;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-import java.time.LocalDateTime;
-import java.util.List;
 
-@Data
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 @Builder
 public class IndexingRequestMessageDto {
     private String roomId;

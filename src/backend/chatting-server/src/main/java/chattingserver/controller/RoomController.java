@@ -3,6 +3,7 @@ package chattingserver.controller;
 import chattingserver.config.kafka.Producers;
 import chattingserver.domain.room.User;
 import chattingserver.dto.RoomMessageDto;
+import chattingserver.dto.request.IndexingRequestMessageDto;
 import chattingserver.dto.request.ReadMessageUpdateRequestDto;
 import chattingserver.dto.request.RoomCreateRequestDto;
 import chattingserver.dto.request.UserEntranceRequestDto;
@@ -49,9 +50,11 @@ public class RoomController {
 
         RoomResponseDto roomResponseDto = roomService.create(roomCreateRequestDto);
 
-        producers.sendRoomMessage(RoomMessageDto.builder()
-                .receivers(roomResponseDto.getUsers().stream().map(UserListResponseDto::getUid).collect(Collectors.toList()))
-                .roomResponseDto(roomResponseDto)
+        producers.sendRoomMessage(IndexingRequestMessageDto.builder()
+                .roomId(roomResponseDto.getId())
+                .roomName(roomResponseDto.getRoomName())
+                .playlistId(roomResponseDto.getPlaylist().getId())
+                .thumbnailImage(roomResponseDto.getThumbnailImage())
                 .build());
 
         CommonAPIMessage apiMessage = new CommonAPIMessage();

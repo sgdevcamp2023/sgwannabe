@@ -1,9 +1,8 @@
 package chattingserver.config.kafka;
 
-import chattingserver.domain.room.User;
 import chattingserver.dto.ChatMessageDto;
 import chattingserver.dto.RoomMessageDto;
-import chattingserver.dto.response.ChatMessageResponseDto;
+import chattingserver.dto.request.IndexingRequestMessageDto;
 import chattingserver.dto.response.RoomResponseDto;
 import chattingserver.dto.response.UserListResponseDto;
 import chattingserver.service.ChatMessageService;
@@ -32,22 +31,23 @@ public class Producers {
     @Value("${kafka.topic.room-name}")
     private String topicRoomName;
 
-    private final KafkaTemplate<String, RoomMessageDto> roomKafkaTemplate;
+    private final KafkaTemplate<String, IndexingRequestMessageDto> roomKafkaTemplate;
 
     private final ChatMessageService chatMessageService;
     private final RoomService roomService;
 
     public void sendMessage(ChatMessageDto chatMessageDto) {
-        if (chatMessageDto.getMessageType() == MessageType.ENTRANCE) {
-            log.info("producers.sendMessage.if MessageType == ENTRANCE");
+        if (chatMessageDto.getMessageType() == MessageType.CREATION) {
             RoomResponseDto roomResponseDto = roomService.getRoomInfo(chatMessageDto.getRoomId());
             List<Long> receivers = roomResponseDto.getUsers().stream().map(UserListResponseDto::getUid).collect(Collectors.toList());
             receivers.remove(chatMessageDto.getSenderId());
-            sendRoomMessage(RoomMessageDto.builder()
-                    .receivers(receivers)
-                    .roomResponseDto(roomResponseDto)
+            sendRoomMessage(IndexingRequestMessageDto.builder()
+                    .roomId(roomResponseDto.getId())
+                    .roomName(roomResponseDto.getRoomName())
+                    .playlistId(roomResponseDto.getPlaylist().getId())
+                    .thumbnailImage(roomResponseDto.getThumbnailImage())
                     .build());
-        } else if (chatMessageDto.getMessageType() == MessageType.MSG){
+        } else {
 
             CompletableFuture<SendResult<String, ChatMessageDto>> completableFuture = chatKafkaTemplate.send(topicChatName, chatMessageDto);
             completableFuture.whenComplete((result, ex) -> {
@@ -62,14 +62,14 @@ public class Producers {
         }
     }
 
-    public void sendRoomMessage(RoomMessageDto roomMessageDto) {
-        CompletableFuture<SendResult<String, RoomMessageDto>> completableFuture = roomKafkaTemplate.send(topicRoomName, roomMessageDto);
+    public void sendRoomMessage(IndexingRequestMessageDto roomMessageDto) {
+        CompletableFuture<SendResult<String, IndexingRequestMessageDto>> completableFuture = roomKafkaTemplate.send(topicRoomName, roomMessageDto);
         completableFuture.whenComplete((result, ex) -> {
             if (ex == null) {
-                log.info("메시지 전송 성공=[" + roomMessageDto.getRoomResponseDto().getId() + "] with offset=[" + result.getRecordMetadata().offset() + "]");
+                log.info("메시지 전송 성공=[" + roomMessageDto.getRoomId() + "] with offset=[" + result.getRecordMetadata().offset() + "]");
                 log.info("roomMessageDto={}", roomMessageDto.toString());
             } else {
-                log.info("메시지 전송 불가=[" + roomMessageDto.getRoomResponseDto().getId() + "] 원인 : " + ex.getMessage());
+                log.info("메시지 전송 불가=[" + roomMessageDto.getRoomId() + "] 원인 : " + ex.getMessage());
             }
         });
     }
