@@ -1,8 +1,6 @@
 package chattingserver.controller;
 
 import chattingserver.config.kafka.Producers;
-import chattingserver.domain.room.User;
-import chattingserver.dto.RoomMessageDto;
 import chattingserver.dto.request.IndexingRequestMessageDto;
 import chattingserver.dto.request.ReadMessageUpdateRequestDto;
 import chattingserver.dto.request.RoomCreateRequestDto;
@@ -10,7 +8,6 @@ import chattingserver.dto.request.UserEntranceRequestDto;
 import chattingserver.dto.response.CommonAPIMessage;
 import chattingserver.dto.response.JoinedRoomResponseDto;
 import chattingserver.dto.response.RoomResponseDto;
-import chattingserver.dto.response.UserListResponseDto;
 import chattingserver.service.ChatMessageService;
 import chattingserver.service.RoomService;
 import chattingserver.service.SearchService;
@@ -28,12 +25,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Tag(name = "room", description = "채팅방 API")
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/rooms")
+@RequestMapping("/v1/api/rooms")
 @RequiredArgsConstructor
 public class RoomController {
 
