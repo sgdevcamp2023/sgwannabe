@@ -1,36 +1,31 @@
 version: "3.9"
 services:
   user-mysql:
-    image: mysql:8.2.0
-    restart: always
-    ports:
-      - 12100:3306
+    container_name: user-mysql
+    image: mysql/mysql-server:8.0.27
     environment:
-      MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: user
-      TZ: Asia/Seoul
-    command:
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_unicode_ci
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_DATABASE=lalala
+      - TZ=Asia/Seoul
+    command: [ "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--lower_case_table_names=1", "--max_connections=2048", "--wait_timeout=3600" ]
+    ports:
+      - "12100:3306"
     volumes:
-      - ./.docker/mysql/:/var/lib/mysql
       - ./infra/:/docker-entrypoint-initdb.d
-    networks:
-      - default
-      - lalala-network
 
   user-redis:
+    container_name: user-redis
     image: redis:7.0
     ports:
       - 12200:6379
 
-  user-adminer:
+  user-adminer: # mysql web admin
+    container_name: user-adminer
     image: adminer
-    restart: always
     ports:
-      - 13900:8080
-
-networks:
-  lalala-network:
-    driver: bridge
-    external: true
+      - "13900:8080"
+    environment:
+      - ADMINER_DEFAULT_SERVER=user-mysql
+      - ADMINER_DESIGN=nette
+      - ADMINER_PLUGINS=tables-filter tinymce

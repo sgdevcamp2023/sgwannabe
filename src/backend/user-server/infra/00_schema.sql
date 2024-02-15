@@ -6,7 +6,7 @@ USE lalala;
 
 -- user Table Create SQL
 -- 테이블 생성 SQL - user
-CREATE TABLE `user` (
+CREATE TABLE user (
     id            BIGINT        NOT NULL    AUTO_INCREMENT,
     email         VARCHAR(60)   NOT NULL,
     last_access   DATETIME(6),
