@@ -58,7 +58,7 @@ CREATE TABLE musics
     `id`           BIGINT               NOT NULL    AUTO_INCREMENT COMMENT '고유 번호', 
     `album_id`     BIGINT               NOT NULL    COMMENT '앨범', 
     `artist_id`    BIGINT               NOT NULL    COMMENT '아티스트', 
-    `title`        VARCHAR(50)          NOT NULL    DEFAULT '' COMMENT '제목', 
+    `title`        VARCHAR(100)         NOT NULL    DEFAULT '' COMMENT '제목',
     `play_time`    SMALLINT UNSIGNED    NOT NULL    DEFAULT 0 COMMENT '재생 시간',
     `lyrics`       TEXT                 NOT NULL    COMMENT '가사',
     `file_url`     VARCHAR(255)         NOT NULL    DEFAULT '' COMMENT '파일 주소',
