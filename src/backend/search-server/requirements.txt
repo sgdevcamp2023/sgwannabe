@@ -2,4 +2,5 @@ fastapi
 uvicorn
 httpx
 elasticsearch
+nest_asyncio
 py_eureka_client
