@@ -25,7 +25,7 @@ import com.lalala.music.service.AlbumService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/albums")
+@RequestMapping("/v1/api/albums")
 public class AlbumController {
     private final AlbumService service;
 

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/streaming")
+@RequestMapping("/v1/api/streaming")
 class StreamingRestController(
     val audioLocation: String = "./static"
 ) {

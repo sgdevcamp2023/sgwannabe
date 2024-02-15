@@ -20,7 +20,7 @@ import com.lalala.user.service.UserService;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/v1/api/users")
 @RequiredArgsConstructor
 public class UserController {
 

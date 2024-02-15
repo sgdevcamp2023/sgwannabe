@@ -102,7 +102,7 @@ public class MusicUploaderService {
 
         return restClient
                 .post()
-                .uri("/upload")
+                .uri("/v1/api/upload")
                 .headers(httpHeaders -> httpHeaders.setContentType(MediaType.MULTIPART_FORM_DATA))
                 .body(parts)
                 .retrieve()
@@ -138,7 +138,7 @@ public class MusicUploaderService {
 
             return restClient
                     .post()
-                    .uri("/upload")
+                    .uri("/v1/api/upload")
                     .headers(httpHeaders -> httpHeaders.setContentType(MediaType.MULTIPART_FORM_DATA))
                     .body(parts)
                     .retrieve()

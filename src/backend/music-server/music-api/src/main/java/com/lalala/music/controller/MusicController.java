@@ -27,7 +27,7 @@ import com.lalala.music.service.MusicUploaderService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/musics")
+@RequestMapping("/v1/api/musics")
 public class MusicController {
     private final MusicService service;
     private final MusicUploaderService uploaderService;
