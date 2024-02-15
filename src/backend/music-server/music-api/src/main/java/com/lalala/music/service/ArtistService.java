@@ -2,6 +2,7 @@ package com.lalala.music.service;
 
 import java.util.List;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -32,11 +33,20 @@ public class ArtistService {
 
     @Transactional
     public ArtistDTO createArtist(CreateArtistRequestDTO request) {
-        ArtistEntity artist =
-                new ArtistEntity(
-                        request.getName(), request.getGender(), request.getType(), request.getAgency());
-        artist = repository.save(artist);
-        return ArtistDTO.from(artist);
+        Optional<ArtistEntity> artist = repository.findByNameAndAgency(request.getName(), request.getAgency());
+
+        if (artist.isPresent()) {
+            return ArtistDTO.from(artist.get());
+        }
+
+        ArtistEntity newArtist = new ArtistEntity(
+                request.getName(),
+                request.getGender(),
+                request.getType(),
+                request.getAgency()
+        );
+        newArtist = repository.save(newArtist);
+        return ArtistDTO.from(newArtist);
     }
 
     public List<ArtistDTO> getArtists(int page, int pageSize) {
