@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.2.1'
+	id 'org.springframework.boot' version '3.2.2'
 	id 'io.spring.dependency-management' version '1.1.4'
 }
 
@@ -22,6 +22,8 @@ repositories {
 }
 
 dependencies {
+	implementation project(":common-module")
+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
@@ -38,6 +40,22 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.0'
 
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+	// Eureka
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.1.0'
+
+	// OpenFeign
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.0'
+
+	// Actuator
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	// Open Tracing
+	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+
+	// Logback for LogStash
+	implementation 'net.logstash.logback:logstash-logback-encoder:6.3'
 }
 
 ext {

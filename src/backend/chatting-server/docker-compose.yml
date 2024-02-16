@@ -1,26 +1,6 @@
 version: '3.9'
 
 services:
-  chatting-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: always
-    ports:
-      - 18000:18000
-    environment:
-      SPRING_DATA_MONGODB_HOST: chatting-mongo
-      SPRING_DATA_MONGODB_PORT: 27017
-      SPRING_DATA_MONGODB_DATABASE: chatting
-      SPRING_DATA_MONGODB_USERNAME: chatting-admin
-      SPRING_DATA_MONGODB_PASSWORD: JMTpdsu8YkLEX4RA
-
-      SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
-    depends_on:
-      - chatting-mongo
-    networks:
-      - lalala-network
-
   chatting-mongo:
     image: mongo:7.0.5
     restart: always
@@ -34,7 +14,20 @@ services:
       - chatting-mongodbdata:/data/db:cached
       - ./init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
+      - default
       - lalala-network
+
+  chatting-mongo-express:
+    image: mongo-express:1.0.2
+    restart: always
+    ports:
+      - 18200:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: chatting-admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: JMTpdsu8YkLEX4RA
+      ME_CONFIG_MONGODB_SERVER: chatting-mongo
+      ME_CONFIG_BASICAUTH_USERNAME: chatting-admin
+      ME_CONFIG_BASICAUTH_PASSWORD: JMTpdsu8YkLEX4RA
 
 volumes:
   chatting-mongodbdata:
