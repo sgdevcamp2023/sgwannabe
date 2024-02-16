@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import {
   MdPlayArrow,
   MdPause,
@@ -10,6 +9,7 @@ import {
 import { CgSpinner } from "react-icons/cg";
 import IconButton from "./IconButton";
 import AudioProgressBar from "./AudioProgressBar";
+import { useEffect, useRef, useState } from "react";
 import { setState } from "../../@types/react";
 
 function timeFormat(duration: number) {
@@ -49,11 +49,10 @@ export default function AudioPlayer({
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const [playingState, setPlayingState] = useState<"ready" | "pause" | "play">(
-    "ready"
-  );
+  const [isReady, setIsReady] = useState<boolean>(false);
   const [buffered, setBuffered] = useState<number>(INITIAL_AUDIO_BUFFER);
   const [volume, setVolume] = useState<number>(MAX_VOLUME);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   const durationDisplay = timeFormat(duration);
   const elapsedDisplay = timeFormat(currentProgress);
@@ -61,10 +60,10 @@ export default function AudioPlayer({
   useEffect(() => {
     audioRef.current?.pause();
 
-    if (audioRef.current?.paused) {
+    if (songIndex !== 0) {
       const timeout = setTimeout(() => {
         audioRef.current?.play();
-      }, 1000);
+      }, 500);
 
       return () => {
         clearTimeout(timeout);
@@ -72,32 +71,22 @@ export default function AudioPlayer({
     }
   }, [songIndex]);
 
-  useEffect(() => {
-    if (playingState === "play") {
-      if (audioRef.current?.paused) {
-        const timeout = setTimeout(() => {
-          audioRef.current?.play();
-        }, 1000);
-
-        return () => {
-          clearTimeout(timeout);
-        };
-      }
-    } else {
-      audioRef.current?.pause();
-    }
-  }, [playingState]);
-
   const togglePlayPause = () => {
-    if (playingState === "play") setPlayingState("pause");
-    if (playingState === "pause") setPlayingState("play");
+    if (isPlaying) {
+      audioRef.current?.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current?.play();
+      setIsPlaying(true);
+    }
   };
 
   const handleBufferProgress: React.ReactEventHandler<HTMLAudioElement> = (
     e
   ) => {
     const audio = e.currentTarget;
-    if (audio.duration > 0) {
+    const dur = audio.duration;
+    if (dur > 0) {
       for (let i = 0; i < audio.buffered.length; i++) {
         if (
           audio.buffered.start(audio.buffered.length - 1 - i) <
@@ -130,12 +119,12 @@ export default function AudioPlayer({
           ref={audioRef}
           preload="metadata"
           onDurationChange={(e) => setDuration(e.currentTarget.duration)}
-          onPlaying={() => setPlayingState("play")}
-          onPause={() => setPlayingState("pause")}
+          onPlaying={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
           onEnded={() => onNext()}
           onCanPlay={(e) => {
             e.currentTarget.volume = volume;
-            setPlayingState("ready");
+            setIsReady(true);
           }}
           onTimeUpdate={(e) => {
             setCurrentProgress(e.currentTarget.currentTime);
@@ -182,16 +171,18 @@ export default function AudioPlayer({
             <MdSkipPrevious size={24} />
           </IconButton>
           <IconButton
-            disabled={playingState !== "ready"}
+            disabled={!isReady}
             onClick={togglePlayPause}
-            aria-label={playingState}
+            aria-label={isPlaying ? "Pause" : "Play"}
             size="lg"
           >
-            {playingState === "ready" && (
+            {!isReady && currentSong ? (
               <CgSpinner size={24} className="animate-spin" />
+            ) : isPlaying ? (
+              <MdPause size={30} />
+            ) : (
+              <MdPlayArrow size={30} />
             )}
-            {playingState === "play" && <MdPause size={30} />}
-            {playingState === "pause" && <MdPlayArrow size={30} />}
           </IconButton>
           <IconButton
             onClick={() => onNext()}
