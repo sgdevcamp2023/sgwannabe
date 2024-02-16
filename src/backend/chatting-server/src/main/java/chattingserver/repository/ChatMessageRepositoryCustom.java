@@ -1,11 +1,10 @@
 package chattingserver.repository;
 
-import java.util.Collection;
-import java.util.List;
-
+import chattingserver.domain.chat.ChatMessage;
 import org.springframework.data.domain.Page;
 
-import chattingserver.domain.chat.ChatMessage;
+import java.util.Collection;
+import java.util.List;
 
 public interface ChatMessageRepositoryCustom {
 

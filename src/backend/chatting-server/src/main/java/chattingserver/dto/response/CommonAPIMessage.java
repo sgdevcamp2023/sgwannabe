@@ -1,18 +1,21 @@
 package chattingserver.dto.response;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 public class CommonAPIMessage {
     private ResultEnum message;
     private Object data;
 
-    public enum ResultEnum {
-        success,
-        failed
+    public enum ResultEnum{
+        success, failed
     }
 
-    public CommonAPIMessage() {}
+    public CommonAPIMessage() {
+    }
 
     public CommonAPIMessage(ResultEnum message) {
         this.message = message;

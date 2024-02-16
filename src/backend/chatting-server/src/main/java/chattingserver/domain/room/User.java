@@ -1,8 +1,8 @@
 package chattingserver.domain.room;
 
-import java.time.LocalDateTime;
-
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
