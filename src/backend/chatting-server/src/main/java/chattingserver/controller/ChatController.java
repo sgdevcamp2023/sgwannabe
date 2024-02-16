@@ -8,7 +8,6 @@ import chattingserver.dto.response.ReEnterResponseDto;
 import chattingserver.service.ChatMessageService;
 import chattingserver.service.RoomService;
 //import chattingserver.util.constant.ErrorCode;
-import chattingserver.util.exception.CustomAPIException;
 import com.lalala.exception.BusinessException;
 import com.lalala.exception.ErrorCode;
 import com.lalala.response.BaseResponse;
