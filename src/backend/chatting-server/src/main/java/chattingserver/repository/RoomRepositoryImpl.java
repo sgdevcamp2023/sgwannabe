@@ -5,14 +5,10 @@ import chattingserver.domain.room.User;
 import chattingserver.dto.request.ReadMessageUpdateRequestDto;
 import com.mongodb.client.result.UpdateResult;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.stereotype.Repository;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.stereotype.Repository;
-
-import chattingserver.domain.room.Room;
-import chattingserver.dto.request.ReadMessageUpdateRequestDto;
-import com.mongodb.client.result.UpdateResult;
 
 @Repository
 public class RoomRepositoryImpl implements RoomRepositoryCustom {

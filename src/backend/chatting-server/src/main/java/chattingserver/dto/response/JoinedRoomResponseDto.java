@@ -5,10 +5,6 @@ import chattingserver.domain.room.User;
 import lombok.*;
 import java.util.List;
 
-import lombok.*;
-
-import chattingserver.domain.room.User;
-
 @Getter
 @Builder
 @NoArgsConstructor
