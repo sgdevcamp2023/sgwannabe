@@ -10,7 +10,8 @@ public enum WhiteListURI {
     USER_EMAIL("/user/users/email"),
     USER_VERIFICATION("/user/users/verification"),
     USER_SIGN_UP("/user/users/signup"),
-    STREAMING("/streaming/streaming");
+    STREAMING("/streaming"),
+    ;
 
     final String uri;
 }

@@ -47,16 +47,16 @@ spring:
         - id: CHATTING-SERVICE-API
           uri: lb://CHATTING-SERVER
           predicates:
-            - Path=/chatting/v1/api/
+            - Path=/chatting/chat/**, /chatting/rooms/**
           filters:
-            - RewritePath=/chatting/v1/api/(?<segment>/?.*), /v1/api/$\{segment}
+            - RewritePath=/chatting/(?<segment>/?.*), /v1/api/${segment}
 
         - id: CHATTING-SERVICE-STOMP
           uri: lb:ws://CHATTING-SERVER
           predicates:
             - Path=/chatting/**
           filters:
-            - RewritePath=/chatting/(?<segment>/?.*), /$\{segment}
+            - RewritePath=/chatting/(?<segment>/?.*), /${segment}
 
         - id: FEED
           uri: lb://FEED-SERVER

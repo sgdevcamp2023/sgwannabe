@@ -35,7 +35,8 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<Authorizat
             }
 
             if (isRequestContainsAuthorization(exchange)) {
-                BaseResponse<String> response = feignAuthClient.generatePassport(extractJWT(exchange));
+                String jwtToken = extractJWT(exchange);
+                BaseResponse<String> response = feignAuthClient.generatePassport(jwtToken);
                 String passport = response.getData();
 
                 ServerHttpRequest request =
@@ -48,14 +49,14 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<Authorizat
     }
 
     private String extractJWT(ServerWebExchange exchange) {
-        String authorizaiton = exchange.getRequest().getHeaders().get(AUTHORIZATION_HEADER_NAME).get(0);
+        String authorization = exchange.getRequest().getHeaders().get(AUTHORIZATION_HEADER_NAME).get(0);
 
-        if (!authorizaiton.startsWith("Bearer ")) {
-            return authorizaiton;
+        if (!authorization.startsWith("Bearer ")) {
+            return authorization;
         }
 
-        int spaceIndex = authorizaiton.indexOf(" ");
-        return authorizaiton.substring(spaceIndex + 1);
+        int spaceIndex = authorization.indexOf(" ");
+        return authorization.substring(spaceIndex + 1);
     }
 
     private boolean isRequestContainsAuthorization(ServerWebExchange exchange) {
