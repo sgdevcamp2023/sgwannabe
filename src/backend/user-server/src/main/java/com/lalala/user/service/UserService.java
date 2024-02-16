@@ -1,5 +1,6 @@
 package com.lalala.user.service;
 
+import com.lalala.user.payload.response.UserInfoResponse;
 import com.lalala.user.repository.UserRepository;
 import java.time.Duration;
 import java.util.concurrent.ThreadLocalRandom;
@@ -112,5 +113,20 @@ public class UserService {
         userRepository.save(user);
 
         return BaseResponse.from(HttpStatus.OK, "프로필 이미지 변경에 성공했습니다.", true);
+    }
+
+    public BaseResponse<UserInfoResponse> userInfo(UserInfo userInfo) {
+        User user =
+                userRepository
+                        .findById(userInfo.id())
+                        .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+
+        UserInfoResponse userInfoResponse = UserInfoResponse.builder()
+                .profile(user.getProfile())
+                .nickname(user.getNickname())
+                .build();
+
+        return BaseResponse.from(HttpStatus.OK, "회원가입에 성공했습니다.", userInfoResponse);
     }
 }

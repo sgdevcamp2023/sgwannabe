@@ -5,6 +5,7 @@ import com.lalala.user.payload.request.EmailVerifyRequest;
 import com.lalala.user.payload.request.PasswordChangeRequest;
 import com.lalala.user.payload.request.ProfileChangeRequest;
 import com.lalala.user.payload.request.SignUpRequest;
+import com.lalala.user.payload.response.UserInfoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,5 +58,14 @@ public class UserController {
     @PassportAuthentication
     public BaseResponse<Boolean> profileChange(@RequestBody ProfileChangeRequest request) {
         return userService.profileChange(AuthenticationContext.getUserInfo(), request.profile());
+    }
+
+    /**
+     * 회원정보 조회
+     */
+    @GetMapping("/info")
+    @PassportAuthentication
+    public BaseResponse<UserInfoResponse> userInfo() {
+        return userService.userInfo(AuthenticationContext.getUserInfo());
     }
 }
