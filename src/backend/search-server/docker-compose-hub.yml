@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  search-server:
+    image: smilegatewannabe/search
+    ports:
+      - "20000:20000"
+    restart: unless-stopped
+    environment:
+      - PORT=20000
+      - ENV=develop
+      - ELASTICSEARCH_HOST=elasticsearch
+    depends_on:
+      - elasticsearch
+    networks:
+      - lalala-network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+    build:
+      context: .
+      dockerfile: Dockerfile.elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "21000:9200"
+    volumes:
+      - ./es_data_volume:/usr/share/elasticsearch/data
+      - ./elasticsearch.yml:/etc/elasticsearch/elasticsearch.yml
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.6.1
+    container_name: kibana
+    ports:
+      - 21900:5601
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - xpack.security.enabled=false
+    depends_on:
+      - elasticsearch
+
+networks:
+  lalala-network:
+    driver: bridge
+    external: true

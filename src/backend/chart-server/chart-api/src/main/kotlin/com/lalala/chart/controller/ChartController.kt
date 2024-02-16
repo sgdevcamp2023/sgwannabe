@@ -18,17 +18,20 @@ import reactor.core.publisher.Mono
 @Tag(name = "Chart", description = "Chart API 문서")
 class ChartController(
     private val chartService: ChartService,
-)
-{
+) {
     @GetMapping
     @Operation(summary = "차트 조회", description = "차트 조회 API")
-    fun getChart(@RequestParam(required = false) timeStamp: Int?): Mono<ChartResponse> =
+    fun getChart(
+        @RequestParam(required = false) timeStamp: Int?,
+    ): Mono<ChartResponse> =
         chartService.getChart(timeStamp)
             .map { ChartResponse.of(it) }
 
     @PostMapping
     @Operation(summary = "차트 생성", description = "차트 생성 API")
-    fun createChart(@RequestBody request: CreateChartRequest): Mono<ChartResponse> =
+    fun createChart(
+        @RequestBody request: CreateChartRequest,
+    ): Mono<ChartResponse> =
         chartService.createChart(request.timeStamp, request.records)
             .map { ChartResponse.of(it) }
 }

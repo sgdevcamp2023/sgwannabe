@@ -18,6 +18,8 @@ cd "../backend/"
 BACKEND_PWD=`pwd`
 
 SERVER_ORDER=(
+    "discovery-server"
+
     "user-server"
 
     "auth-server"
@@ -43,8 +45,6 @@ SERVER_ORDER=(
 
     "gateway-server"
 )
-
-echo "$BACKEND_PWD"
 
 for SERVER in ${SERVER_ORDER[@]}; do
     cd $BACKEND_PWD/$SERVER/

@@ -9,6 +9,14 @@ services:
       SPRING_NEO4J_URI: bolt://feed-neo4j:14200
       SPRING_NEO4J_AUTHENTICATION_USERNAME: neo4j
       SPRING_NEO4J_AUTHENTICATION_PASSWORD: password
+
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
+
+      EUREKA_INSTANCE_HOSTNAME: localhost
+      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:34100/eureka
+
+      PASSPORT_ALGORITHM: HmacSHA256
+      PASSPORT_KEY: SECRET_KEY
     ports:
       - 16000:16000
     depends_on:

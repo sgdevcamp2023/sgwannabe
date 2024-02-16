@@ -2,6 +2,50 @@ server:
   port: 8200
 
 spring:
+  application:
+    name: chart-server
+
   data:
     mongodb:
-      uri: mongodb://chipmunk:JMTpdsu8YkLEXBW4RA@localhost:27017/chart
+      uri: mongodb://chipmunk:JMTpdsu8YkLEXBW4RA@localhost:26100/chart
+
+  kafka:
+    bootstrap-servers: localhost:40000,localhost:40001,localhost:40002
+
+springdoc:
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  cache:
+    disabled: true
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:34100/eureka
+
+passport:
+  algorithm: HmacSHA256
+  key: SECRET_KEY
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+    propagation:
+      consume: [b3, w3c]
+      produce: [b3, w3c]
+  zipkin:
+    tracing:
+      endpoint: "http://localhost:43000/api/v2/spans"
+
+logging:
+  pattern:
+    level: "%5p [%X{traceId:-},%X{spanId:-}]"

@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: playlist-server
+
+  data:
+    mongodb:
+      host: mongodb
+      port: 27017
+      database: playlistdb
+      username: root
+      password: 1234
+      authentication-database: admin
+
+    redis:
+      port: 6379
+      host: redis
+
+  kafka:
+    bootstrap-servers: localhost:40000,localhost:40001,localhost:40002
+
+server:
+  port: 16002
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:34100/eureka
+
+passport:
+  algorithm: HmacSHA256
+  key: SECRET_KEY
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+    propagation:
+      consume: [b3, w3c]
+      produce: [b3, w3c]
+  zipkin:
+    tracing:
+      endpoint: "http://localhost:43000/api/v2/spans"
+
+logging:
+  pattern:
+    level: "%5p [%X{traceId:-},%X{spanId:-}]"

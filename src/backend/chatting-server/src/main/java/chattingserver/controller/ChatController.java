@@ -1,5 +1,13 @@
 package chattingserver.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.web.bind.annotation.*;
+
 import chattingserver.config.kafka.Producers;
 import chattingserver.dto.ChatMessageDto;
 import chattingserver.dto.response.CommonAPIMessage;
@@ -16,12 +24,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.web.bind.annotation.*;
 
 
 @Tag(name = "chat", description = "채팅 API")
@@ -30,7 +32,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("v1/api/chat")
 @Slf4j
 public class ChatController {
-
 
     private final Producers producers;
     private final ChatMessageService chatMessageService;
@@ -41,7 +42,8 @@ public class ChatController {
     public void sendSocketMessage(@Valid @RequestBody ChatMessageDto chatMessageDto) {
         if (!roomService.isExistingRoom(chatMessageDto.getRoomId())) {
             log.error("메시지 전송 에러 : 존재하지 않는 방입니다. roomId={}", chatMessageDto.getRoomId());
-            throw new CustomAPIException(ErrorCode.ROOM_NOT_FOUND_ERROR, "채팅방 id=" + chatMessageDto.getRoomId());
+            throw new CustomAPIException(
+                    ErrorCode.ROOM_NOT_FOUND_ERROR, "채팅방 id=" + chatMessageDto.getRoomId());
         }
         ChatMessageDto savedMessage = chatMessageService.saveChatMessage(chatMessageDto);
         producers.sendMessage(savedMessage);
@@ -54,7 +56,8 @@ public class ChatController {
     public void sendMessage(@Valid @RequestBody ChatMessageDto chatMessageDto) {
         if (!roomService.isExistingRoom(chatMessageDto.getRoomId())) {
             log.error("메시지 전송 에러 : 존재하지 않는 방입니다. roomId={}", chatMessageDto.getRoomId());
-            throw new CustomAPIException(ErrorCode.ROOM_NOT_FOUND_ERROR, "채팅방 id=" + chatMessageDto.getRoomId());
+            throw new CustomAPIException(
+                    ErrorCode.ROOM_NOT_FOUND_ERROR, "채팅방 id=" + chatMessageDto.getRoomId());
         }
         ChatMessageDto savedMessage = chatMessageService.saveChatMessage(chatMessageDto);
 

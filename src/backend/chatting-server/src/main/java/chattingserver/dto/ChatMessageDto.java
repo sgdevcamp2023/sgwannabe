@@ -1,10 +1,11 @@
 package chattingserver.dto;
 
-import chattingserver.util.constant.MessageType;
-import jakarta.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
+
 import lombok.*;
 
-import java.time.LocalDateTime;
+import chattingserver.util.constant.MessageType;
+import jakarta.validation.constraints.NotBlank;
 
 @Getter
 @Setter

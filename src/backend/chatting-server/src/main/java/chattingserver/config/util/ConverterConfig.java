@@ -1,8 +1,9 @@
 package chattingserver.config.util;
 
-import chattingserver.util.converter.EntityToResponseDtoConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import chattingserver.util.converter.EntityToResponseDtoConverter;
 
 @Configuration
 public class ConverterConfig {

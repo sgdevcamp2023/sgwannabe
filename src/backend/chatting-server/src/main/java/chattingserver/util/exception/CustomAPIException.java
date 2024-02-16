@@ -1,10 +1,11 @@
 package chattingserver.util.exception;
 
-import chattingserver.util.constant.ErrorCode;
 import lombok.Getter;
 
+import chattingserver.util.constant.ErrorCode;
+
 @Getter
-public class CustomAPIException extends RuntimeException{
+public class CustomAPIException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
@@ -13,7 +14,7 @@ public class CustomAPIException extends RuntimeException{
     private final int status;
     private String errorMsg;
 
-    public CustomAPIException(ErrorCode errorCode, String errorMsg){
+    public CustomAPIException(ErrorCode errorCode, String errorMsg) {
         this.description = errorCode.getDescription();
         this.status = errorCode.getStatus();
         this.code = errorCode.getCode();

@@ -82,7 +82,7 @@ class StreamingHandler(
 
     fun getMusic(session: WebSocketSession, musicId: String): MusicDetailDTO {
         return musicClient.get()
-            .uri("/api/v1/musics/${musicId}")
+            .uri("/v1/api/musics/${musicId}")
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .onStatus(HttpStatusCode::is4xxClientError) { _, _ ->

@@ -1,11 +1,11 @@
 package chattingserver.dto.request;
 
-import chattingserver.domain.room.Playlist;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import chattingserver.domain.room.Playlist;
+import jakarta.validation.constraints.NotBlank;
 
 @Getter
 @ToString

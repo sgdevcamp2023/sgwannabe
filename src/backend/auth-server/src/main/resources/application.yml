@@ -7,12 +7,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: 12345678
-    url: jdbc:mysql://localhost:3306/test_db?useSSL=false&allowPublicKeyRetrieval=true
-#    url: jdbc:h2:mem:local;MODE=MySQL;DATABASE_TO_LOWER=TRUE
-#    username: sa
-#    password:
-#    driver-class-name: org.h2.Driver
+    password: admin
+    url: jdbc:mysql://localhost:12100/lalala?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     properties:
@@ -22,16 +18,13 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: validate
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-      settings:
-        web-allow-others: true
   data:
     redis:
       host: localhost
-      port: 16379
+      port: 10100
+
+  kafka:
+    bootstrap-servers: localhost:40000,localhost:40001,localhost:40002
 
 jwt:
   access-cookie-name: soy-access-jwt
@@ -41,5 +34,33 @@ jwt:
 #  refresh-expiration: 86400000 #1day (ms)
   cookie-max-age: 86400 #1day (s)
     # ??? ??
-  access-expiration: 30000 # 30sec
-  refresh-expiration: 120000 # 2minutes
+  access-expiration: 3000000 # 30sec
+  refresh-expiration: 12000000 # 2minutes
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:34100/eureka
+
+passport:
+  algorithm: HmacSHA256
+  key: SECRET_KEY
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+    propagation:
+      consume: [b3, w3c]
+      produce: [b3, w3c]
+  zipkin:
+    tracing:
+      endpoint: "http://localhost:43000/api/v2/spans"
+
+logging:
+  pattern:
+    level: "%5p [%X{traceId:-},%X{spanId:-}]"

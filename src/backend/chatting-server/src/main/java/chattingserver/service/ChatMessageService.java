@@ -13,6 +13,7 @@ import chattingserver.util.converter.EntityToResponseDtoConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.stereotype.Service;
@@ -76,7 +77,8 @@ public class ChatMessageService {
     }
 
     public Page<ChatMessageResponseDto> chatMessagePagination(String roomId, int page) {
-        Page<ChatMessage> messagePage = chatMessageRepository.findByRoomIdWithPagingAndFiltering(roomId, page, SIZE);
+        Page<ChatMessage> messagePage =
+                chatMessageRepository.findByRoomIdWithPagingAndFiltering(roomId, page, SIZE);
         log.info("특정 채팅방 메시지 페이지네이션 조회 성공 roomId={}", roomId);
         return messagePage.map(new Function<ChatMessage, ChatMessageResponseDto>() {
             @Override
@@ -162,7 +164,6 @@ public class ChatMessageService {
         chatMessageRepository.save(chatMessage);
 
         return entityToResponseDtoConverter.convertMessage(chatMessage);
-
 
     }
 

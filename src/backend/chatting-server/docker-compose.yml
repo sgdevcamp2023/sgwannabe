@@ -16,6 +16,14 @@ services:
       SPRING_DATA_MONGODB_PASSWORD: JMTpdsu8YkLEX4RA
 
       SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
+
+      EUREKA_INSTANCE_HOSTNAME: localhost
+      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:34100/eureka
+
+      PASSPORT_ALGORITHM: HmacSHA256
+      PASSPORT_KEY: SECRET_KEY
+
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://infra-zipkin:9411/api/v2/spans
     depends_on:
       - chatting-mongo
     networks:
@@ -35,6 +43,19 @@ services:
       - ./init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
       - lalala-network
+
+  chatting-mongo-express:
+    image: mongo-express:1.0.2
+    restart: always
+    ports:
+      - 18200:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: chatting-admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: JMTpdsu8YkLEX4RA
+      ME_CONFIG_MONGODB_SERVER: chatting-mongo
+      ME_CONFIG_BASICAUTH_USERNAME: chatting-admin
+      ME_CONFIG_BASICAUTH_PASSWORD: JMTpdsu8YkLEX4RA
+
 
 volumes:
   chatting-mongodbdata:

@@ -1,5 +1,7 @@
 package com.lalala.music.service;
 
+import com.lalala.exception.BusinessException;
+import com.lalala.exception.ErrorCode;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -35,7 +37,6 @@ import com.lalala.music.entity.ArtistType;
 import com.lalala.music.entity.FormatType;
 import com.lalala.music.entity.GenderType;
 import com.lalala.music.entity.MusicFile;
-import com.lalala.music.exception.UploadFailedException;
 
 @Service
 @RequiredArgsConstructor
@@ -101,7 +102,7 @@ public class MusicUploaderService {
 
         return restClient
                 .post()
-                .uri("/upload")
+                .uri("/v1/api/upload")
                 .headers(httpHeaders -> httpHeaders.setContentType(MediaType.MULTIPART_FORM_DATA))
                 .body(parts)
                 .retrieve()
@@ -109,13 +110,13 @@ public class MusicUploaderService {
                         HttpStatusCode::is4xxClientError,
                         (req, res) -> {
                             log.error("앨범커버 업로드 실패(4xx) - " + imageResource.getFilename());
-                            throw new UploadFailedException();
+                            throw new BusinessException(ErrorCode.MUSIC_UPLOAD_FAILED);
                         })
                 .onStatus(
                         HttpStatusCode::is5xxServerError,
                         (req, res) -> {
                             log.error("앨범커버 업로드 실패(5xx) - " + imageResource.getFilename());
-                            throw new UploadFailedException();
+                            throw new BusinessException(ErrorCode.MUSIC_UPLOAD_FAILED);
                         })
                 .body(UploadResponseDTO.class);
     }
@@ -137,7 +138,7 @@ public class MusicUploaderService {
 
             return restClient
                     .post()
-                    .uri("/upload")
+                    .uri("/v1/api/upload")
                     .headers(httpHeaders -> httpHeaders.setContentType(MediaType.MULTIPART_FORM_DATA))
                     .body(parts)
                     .retrieve()
@@ -145,18 +146,18 @@ public class MusicUploaderService {
                             HttpStatusCode::is4xxClientError,
                             (req, res) -> {
                                 log.error("음원 업로드 실패(4xx) - " + musicResource.getFilename());
-                                throw new UploadFailedException();
+                                throw new BusinessException(ErrorCode.MUSIC_UPLOAD_FAILED);
                             })
                     .onStatus(
                             HttpStatusCode::is5xxServerError,
                             (req, res) -> {
                                 log.error("음원 업로드 실패(5xx) - " + musicResource.getFilename());
-                                throw new UploadFailedException();
+                                throw new BusinessException(ErrorCode.MUSIC_UPLOAD_FAILED);
                             })
                     .body(UploadResponseDTO.class);
         } catch (IOException exception) {
             log.error("음원 업로드 실패", exception);
-            throw new UploadFailedException();
+            throw new BusinessException(ErrorCode.MUSIC_UPLOAD_FAILED);
         }
     }
 }

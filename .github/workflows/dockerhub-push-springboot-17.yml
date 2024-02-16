@@ -8,6 +8,7 @@ on:
       - "chatting/develop"
       - "feed/develop"
       - "gateway/develop"
+      - "discovery/develop"
       - "music/develop"
       - "playlist/develop"
       - "streaming/develop"

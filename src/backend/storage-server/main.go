@@ -69,7 +69,7 @@ func listenServe() {
 
 func registerHandlers() {
 	http.HandleFunc("/", handleMusicStaticFiles)
-	http.HandleFunc("/upload", handleUploadMusic)
+	http.HandleFunc("/v1/api/upload", handleUploadMusic)
 }
 
 func handleMusicStaticFiles(w http.ResponseWriter, r *http.Request) {

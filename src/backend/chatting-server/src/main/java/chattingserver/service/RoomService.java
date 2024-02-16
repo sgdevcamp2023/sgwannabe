@@ -72,7 +72,9 @@ public class RoomService {
 
     public List<RoomResponseDto> findUnjoinedRooms(Long uid) {
 
-        List<Room> unjoinedRooms = roomRepository.findUnjoinedRoomsSortedByCreationDate(uid, Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<Room> unjoinedRooms =
+                roomRepository.findUnjoinedRoomsSortedByCreationDate(
+                        uid, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         log.info("참여하지 않은 방 리스트 조회 성공 uid={}", uid);
 
@@ -88,7 +90,6 @@ public class RoomService {
                         .build())
                 .collect(Collectors.toList());
     }
-
 
     public RoomResponseDto create(RoomCreateRequestDto roomCreateRequestDto) {
         // user build

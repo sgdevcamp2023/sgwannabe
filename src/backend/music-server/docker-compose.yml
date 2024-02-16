@@ -1,21 +1,5 @@
 version: '3.9'
 services:
-  music-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: always
-    ports:
-      - 24000:24000
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://music-mysql:3306/music?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: admin
-    depends_on:
-      - music-mysql
-    networks:
-      - lalala-network
-
   music-mysql:
     image: mysql:8.2.0
     container_name: music-db

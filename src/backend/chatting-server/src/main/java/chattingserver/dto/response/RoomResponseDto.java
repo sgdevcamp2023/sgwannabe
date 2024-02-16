@@ -1,11 +1,12 @@
 package chattingserver.dto.response;
 
-import chattingserver.domain.room.Playlist;
-import chattingserver.domain.room.User;
-import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
+
+import lombok.*;
+
+import chattingserver.domain.room.Playlist;
+import chattingserver.domain.room.User;
 
 @Builder
 @Getter

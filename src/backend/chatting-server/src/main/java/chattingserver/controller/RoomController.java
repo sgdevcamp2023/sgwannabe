@@ -1,5 +1,16 @@
 package chattingserver.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import chattingserver.config.kafka.Producers;
 import chattingserver.dto.request.IndexingRequestMessageDto;
 import chattingserver.dto.request.ReadMessageUpdateRequestDto;
@@ -38,8 +49,15 @@ public class RoomController {
     private final SearchService searchService;
     private final Producers producers;
 
-    @Operation(summary = "채팅방 생성 API", description = "신규 채팅방 생성", responses = {
-            @ApiResponse(responseCode = "201", description = "생성 성공", content = @Content(schema = @Schema(implementation = RoomResponseDto.class)))})
+    @Operation(
+            summary = "채팅방 생성 API",
+            description = "신규 채팅방 생성",
+            responses = {
+                @ApiResponse(
+                        responseCode = "201",
+                        description = "생성 성공",
+                        content = @Content(schema = @Schema(implementation = RoomResponseDto.class)))
+            })
     @PostMapping("/create")
     public ResponseEntity<CommonAPIMessage> groupCreation(@Valid @RequestBody RoomCreateRequestDto roomCreateRequestDto) {
 
@@ -52,7 +70,6 @@ public class RoomController {
                 .playlistId(roomResponseDto.getPlaylist().getId())
                 .thumbnailImage(roomResponseDto.getThumbnailImage())
                 .build());
-
         CommonAPIMessage apiMessage = new CommonAPIMessage();
         apiMessage.setMessage(CommonAPIMessage.ResultEnum.success);
         apiMessage.setData(roomResponseDto);
@@ -78,8 +95,15 @@ public class RoomController {
         }}), HttpStatus.BAD_REQUEST);
     }
 
-    @Operation(summary = "채팅방 정보 조회 API", description = "특정 채팅방 정보 조회", responses = {
-            @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = RoomResponseDto.class)))})
+    @Operation(
+            summary = "채팅방 정보 조회 API",
+            description = "특정 채팅방 정보 조회",
+            responses = {
+                @ApiResponse(
+                        responseCode = "200",
+                        description = "조회 성공",
+                        content = @Content(schema = @Schema(implementation = RoomResponseDto.class)))
+            })
     @GetMapping("/{roomId}")
     public ResponseEntity<CommonAPIMessage> chatRoomInfo(@PathVariable(value = "roomId") String roomId) {
         CommonAPIMessage apiMessage = new CommonAPIMessage();
@@ -100,19 +124,22 @@ public class RoomController {
 
     @Operation(summary = "참여중인 채팅방 리스트 조회", description = "특정 유저가 참여중인 채팅방 리스트 조회", responses = {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = CommonAPIMessage.class)))})
+
     @GetMapping("/joined")
-    public ResponseEntity<CommonAPIMessage> myChatRooms(@RequestParam(required = true) Long uid){
+    public ResponseEntity<CommonAPIMessage> myChatRooms(@RequestParam(required = true) Long uid) {
         List<JoinedRoomResponseDto> joinedRoomResponseDtos = roomService.findJoinedRoomsByUid(uid);
         CommonAPIMessage apiMessage = new CommonAPIMessage();
         apiMessage.setMessage(CommonAPIMessage.ResultEnum.success);
         apiMessage.setData(joinedRoomResponseDtos);
-        return new ResponseEntity<>(apiMessage,HttpStatus.OK);
+        return new ResponseEntity<>(apiMessage, HttpStatus.OK);
     }
 
     @Operation(summary = "참여 가능한 채팅방 리스트 조회", description = "특정 유저가 참여할 수 있는 채팅방 리스트 조회", responses = {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = CommonAPIMessage.class)))})
+
     @GetMapping("/unjoined")
-    public ResponseEntity<CommonAPIMessage> unjoinedChatRooms(@RequestParam(required = true) Long uid) {
+    public ResponseEntity<CommonAPIMessage> unjoinedChatRooms(
+            @RequestParam(required = true) Long uid) {
         List<RoomResponseDto> unjoinedRooms = roomService.findUnjoinedRooms(uid);
         CommonAPIMessage apiMessage = new CommonAPIMessage();
         apiMessage.setMessage(CommonAPIMessage.ResultEnum.success);

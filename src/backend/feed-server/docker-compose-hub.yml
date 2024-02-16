@@ -1,0 +1,47 @@
+version: "3.9"
+services:
+  feed-app:
+    image: smilegatewannabe/feed
+    restart: always
+    environment:
+      SPRING_NEO4J_URI: bolt://feed-neo4j:7687
+      SPRING_NEO4J_AUTHENTICATION_USERNAME: neo4j
+      SPRING_NEO4J_AUTHENTICATION_PASSWORD: password
+
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
+
+      EUREKA_INSTANCE_HOSTNAME: feed-app
+      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:34100/eureka
+
+      PASSPORT_ALGORITHM: HmacSHA256
+      PASSPORT_KEY: SECRET_KEY
+
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://infra-zipkin:9411/api/v2/spans
+    ports:
+      - 14000:14000
+    networks:
+      - lalala-network
+
+  feed-neo4j:
+    image: neo4j
+    ports:
+      - "14100:7474"
+      - "14200:7687"
+    environment:
+      NEO4J_AUTH: neo4j/password
+    volumes:
+      - neo4j-data:/data
+      - neo4j-logs:/logs
+      - neo4j-import:/var/lib/neo4j/import
+      - neo4j-plugins:/plugins
+
+volumes:
+  neo4j-data:
+  neo4j-logs:
+  neo4j-import:
+  neo4j-plugins:
+
+networks:
+  lalala-network:
+    driver: bridge
+    external: true

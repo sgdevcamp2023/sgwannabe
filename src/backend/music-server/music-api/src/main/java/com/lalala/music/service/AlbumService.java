@@ -2,6 +2,7 @@ package com.lalala.music.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -39,13 +40,18 @@ public class AlbumService {
     public AlbumDetailDTO createAlbum(CreateAlbumRequestDTO request) {
         ArtistEntity artist = ArtistUtils.findById(request.getArtistId(), artistRepository);
 
-        AlbumEntity album =
+        Optional<AlbumEntity> album = repository.findByTitleAndArtistId(request.getTitle(), artist.getId());
+        if (album.isPresent()) {
+            return AlbumDetailDTO.from(album.get(), artist);
+        }
+
+        AlbumEntity newAlbum =
                 new AlbumEntity(
                         request.getTitle(), request.getCoverUrl(), request.getType(), request.getReleasedAt());
-        album.updateArtist(request.getArtistId());
-        album = repository.save(album);
+        newAlbum.updateArtist(request.getArtistId());
+        newAlbum = repository.save(newAlbum);
 
-        return AlbumDetailDTO.from(album, artist);
+        return AlbumDetailDTO.from(newAlbum, artist);
     }
 
     public List<AlbumDTO> getAlbums(int page, int pageSize) {

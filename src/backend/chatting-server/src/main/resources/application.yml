@@ -1,12 +1,10 @@
 server:
   port: 18000
 
-kafka:
-    topic:
-      chat-name: message
-      room-name: room
-
 spring:
+  application:
+    name: chatting-server
+
   data:
     mongodb:
       host: chatting-mongo
@@ -40,3 +38,31 @@ spring:
       chat-producer:
         key-serializer: org.apache.kafka.common.serialization.StringSerializer
         value-serializer: org.apache.kafka.common.serialization.JsonSerializer
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:34100/eureka
+
+passport:
+  algorithm: HmacSHA256
+  key: SECRET_KEY
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+    propagation:
+      consume: [b3, w3c]
+      produce: [b3, w3c]
+  zipkin:
+    tracing:
+      endpoint: "http://localhost:43000/api/v2/spans"
+
+logging:
+  pattern:
+    level: "%5p [%X{traceId:-},%X{spanId:-}]"

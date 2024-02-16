@@ -1,11 +1,11 @@
 package com.lalala.music.util;
 
+import com.lalala.exception.BusinessException;
+import com.lalala.exception.ErrorCode;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import com.lalala.music.entity.AlbumEntity;
-import com.lalala.music.exception.BusinessException;
-import com.lalala.music.exception.ErrorCode;
 import com.lalala.music.repository.AlbumRepository;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
