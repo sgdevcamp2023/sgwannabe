@@ -1,0 +1,17 @@
+import apiHook from "./axios";
+
+const chatApi = {
+  getChatList: async ({ uid }: { uid: number }) => {
+    try {
+      const response = await apiHook.chat.get(
+        `chatting/chat/v1/api/rooms/unjoined?uid=${uid}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("에러 발생:", error);
+      throw error;
+    }
+  },
+};
+
+export default chatApi;
