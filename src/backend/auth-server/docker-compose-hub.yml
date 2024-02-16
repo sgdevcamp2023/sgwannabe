@@ -18,6 +18,7 @@ services:
 
       SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
 
+      EUREKA_INSTANCE_HOSTNAME: auth-app
       EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:34100/eureka
 
       PASSPORT_ALGORITHM: HmacSHA256
@@ -27,6 +28,7 @@ services:
     depends_on:
       - auth-redis
     networks:
+      - default
       - lalala-network
 
   auth-redis:
