@@ -11,6 +11,8 @@ import chattingserver.repository.RoomRepository;
 import chattingserver.util.constant.MessageType;
 import chattingserver.util.converter.EntityToResponseDtoConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lalala.exception.BusinessException;
+import com.lalala.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -95,9 +97,7 @@ public class ChatMessageService {
         try {
             Optional<Room> optionalRoom = roomRepository.findById(chatMessageDto.getRoomId());
             if (optionalRoom.isEmpty()) {
-                log.info("해당하는 방이 없습니다. roomId={}", chatMessageDto.getRoomId());
-                // TODO null처리
-                return null;
+                throw new BusinessException("존재하지 않는 채팅방입니다. 채팅방 id=" + chatMessageDto.getRoomId(), ErrorCode.UNKNOWN_ERROR);
             }
 
             Room room = optionalRoom.get();
@@ -134,9 +134,7 @@ public class ChatMessageService {
 
         Optional<Room> optionalRoom = roomRepository.findById(roomId);
         if (optionalRoom.isEmpty()) {
-            log.info("해당하는 방이 없습니다. roomId={}", roomId);
-            // TODO null처리
-            return null;
+            throw new BusinessException("존재하지 않는 채팅방입니다. 채팅방 id=" + roomId, ErrorCode.UNKNOWN_ERROR);
         }
 
         Room room = optionalRoom.get();

@@ -7,8 +7,10 @@ import chattingserver.dto.response.CommonAPIMessage;
 import chattingserver.dto.response.ReEnterResponseDto;
 import chattingserver.service.ChatMessageService;
 import chattingserver.service.RoomService;
-import chattingserver.util.constant.ErrorCode;
+//import chattingserver.util.constant.ErrorCode;
 import chattingserver.util.exception.CustomAPIException;
+import com.lalala.exception.BusinessException;
+import com.lalala.exception.ErrorCode;
 import com.lalala.response.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -45,8 +47,9 @@ public class ChatController {
     @Operation(summary = "웹소켓 메시지 전송")
     public void sendSocketMessage(@Valid @RequestBody ChatMessageDto chatMessageDto) {
         if (!roomService.isExistingRoom(chatMessageDto.getRoomId())) {
-            log.error("메시지 전송 에러 : 존재하지 않는 방입니다. roomId={}", chatMessageDto.getRoomId());
-            throw new CustomAPIException(ErrorCode.ROOM_NOT_FOUND_ERROR, "채팅방 id=" + chatMessageDto.getRoomId());
+//            log.error("메시지 전송 에러 : 존재하지 않는 방입니다. roomId={}", chatMessageDto.getRoomId());
+//            throw new CustomAPIException(ErrorCode.ROOM_NOT_FOUND_ERROR, "채팅방 id=" + chatMessageDto.getRoomId());
+            throw new BusinessException("존재하지 않는 채팅방입니다. 채팅방 id=" + chatMessageDto.getRoomId(), ErrorCode.UNKNOWN_ERROR);
         }
         ChatMessageDto savedMessage = chatMessageService.saveChatMessage(chatMessageDto);
         producers.sendMessage(savedMessage);
@@ -58,8 +61,8 @@ public class ChatController {
     @PostMapping(value = "/message", consumes = "application/json", produces = "application/json")
     public void sendMessage(@Valid @RequestBody ChatMessageDto chatMessageDto) {
         if (!roomService.isExistingRoom(chatMessageDto.getRoomId())) {
-            log.error("메시지 전송 에러 : 존재하지 않는 방입니다. roomId={}", chatMessageDto.getRoomId());
-            throw new CustomAPIException(ErrorCode.ROOM_NOT_FOUND_ERROR, "채팅방 id=" + chatMessageDto.getRoomId());
+            throw new BusinessException("메시지 전송 에러 - 존재하지 않는 채팅방입니다. 채팅방 id=" + chatMessageDto.getRoomId(), ErrorCode.UNKNOWN_ERROR);
+
         }
         ChatMessageDto savedMessage = chatMessageService.saveChatMessage(chatMessageDto);
 
