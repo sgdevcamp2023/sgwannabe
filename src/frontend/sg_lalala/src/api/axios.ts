@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 
-const baseURL = "http://localhost:34000";
+const baseURL = "http://localhost";
 
 interface ServiceEndpoints {
   [key: string]: number;
@@ -8,8 +8,8 @@ interface ServiceEndpoints {
 
 const CreateServiceApi = (service: string): AxiosInstance => {
   const portMap: ServiceEndpoints = {
-    login: 10000,
-    chat: 34000,
+    login: 34000,
+    chat: 18000,
     // stream:0,
   };
 
@@ -23,10 +23,10 @@ const CreateServiceApi = (service: string): AxiosInstance => {
   // const { authToken } = useAuthStore();
   // const accessToken = localStorage.getItem('accessToken');
 
-  // api.interceptors.request.use((config) => {
-  //   config.headers.Authorization = "Bearer accessToken";
-  //   return config;
-  // });
+  api.interceptors.request.use((config) => {
+    config.headers.Authorization = "Bearer accessToken";
+    return config;
+  });
   return api;
 };
 

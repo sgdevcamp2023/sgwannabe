@@ -7,6 +7,7 @@ function ChattingListComponent({
   roomName,
   thumbnailImage,
   userCount,
+  playlistOwner,
 }: ChatRoom) {
   const navigate = useNavigate();
   return (
@@ -17,6 +18,7 @@ function ChattingListComponent({
           state: {
             playlist: playlist,
             userCount: userCount,
+            playlistOwner: playlistOwner,
           },
         })
       }
