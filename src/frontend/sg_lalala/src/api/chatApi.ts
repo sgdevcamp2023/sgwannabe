@@ -4,7 +4,7 @@ const chatApi = {
   getChatList: async ({ uid }: { uid: number }) => {
     try {
       const response = await apiHook.chat.get(
-        `chatting/chat/v1/api/rooms/unjoined?uid=${uid}`
+        `v1/api/rooms/unjoined?uid=${uid}`
       );
       return response.data;
     } catch (error) {

@@ -8,12 +8,18 @@ export interface PlaylistInfo {
   name: string;
 }
 
+export interface PlaylistOwner {
+  nickName: string;
+  profileImage: string;
+  uid: number;
+}
 export interface ChatRoom {
   id: string;
   playlist: PlaylistInfo;
   roomName: string;
   thumbnailImage: string;
   userCount: number;
+  playlistOwner: PlaylistOwner;
 }
 
 function ChattingListPage() {
@@ -44,6 +50,7 @@ function ChattingListPage() {
             roomName={room.roomName}
             thumbnailImage={room.thumbnailImage}
             userCount={room.userCount}
+            playlistOwner={room.playlistOwner}
           />
         ))}
     </div>

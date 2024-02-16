@@ -17,9 +17,7 @@ function ChattingHeader({ stompClient }: ChattingProps) {
           <div className="flex flex-row items-center">
             <img
               className="mr-5 w-14"
-              src={
-                "https://cdnimg.melon.co.kr/cm2/album/images/113/23/044/11323044_20230918120653_500.jpg?96485815b31c83574ba34db820882316/melon/resize/282/quality/80/optimize"
-              }
+              src={state.playlist.firstMusic.thumbnail}
               alt="Album Cover"
             />
             <div className="text-lg text-primary font-600">
@@ -30,9 +28,15 @@ function ChattingHeader({ stompClient }: ChattingProps) {
             <button className="px-4 py-1 rounded-md bg-primary font-700 text-textBlack">
               팔로잉
             </button>
-            <div className="mx-4 text-white">디모</div>
+            <div className="mx-4 text-white">
+              {state.playlistOwner.nickName}
+            </div>
             <img
-              src={person_icon}
+              src={
+                state.playlistOwner.profileImage === ""
+                  ? person_icon
+                  : state.playlistOwner.profileImage
+              }
               className="object-contain w-10 mr-3 bg-white border-2 rounded-full border-primary"
             />
           </div>
