@@ -54,6 +54,8 @@ subprojects {
 	dependencies {
 		testImplementation("org.springframework.boot:spring-boot-starter-test")
 		testImplementation("org.jetbrains.kotlin:kotlin-test")
+
+		implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.1.0")
 	}
 
     configure<com.diffplug.gradle.spotless.SpotlessExtension> {
