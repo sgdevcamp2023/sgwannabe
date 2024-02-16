@@ -127,6 +127,6 @@ public class UserService {
                 .nickname(user.getNickname())
                 .build();
 
-        return BaseResponse.from(HttpStatus.OK, "회원가입에 성공했습니다.", userInfoResponse);
+        return BaseResponse.from(HttpStatus.OK, "회원정보를 조회합니다.", userInfoResponse);
     }
 }
