@@ -6,7 +6,7 @@ USE lalala;
 
 -- user Table Create SQL
 -- 테이블 생성 SQL - user
-CREATE TABLE `user` (
+CREATE TABLE user (
     id            BIGINT        NOT NULL    AUTO_INCREMENT,
     email         VARCHAR(60)   NOT NULL,
     last_access   DATETIME(6),
@@ -21,7 +21,7 @@ CREATE TABLE `user` (
 ) engine=InnoDB;
 
 ALTER TABLE `user`
-   ADD CONSTRAINT EMAIL_UNIQUE UNIQUE (email)
+   ADD CONSTRAINT EMAIL_UNIQUE UNIQUE (email);
 
 -- 테이블 Comment 설정 SQL - user
-ALTER TABLE `user` COMMENT '유저 테이블';
+ALTER TABLE `user` COMMENT 'user table';

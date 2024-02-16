@@ -85,3 +85,22 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+task buildDockerImage {
+	dependsOn bootJar
+
+	doLast {
+		exec {
+			workingDir '.'
+			commandLine 'docker','run','--privileged','--rm','tonistiigi/binfmt','--install','all'
+		}
+		exec {
+			workingDir '.'
+			commandLine 'docker','buildx','create','--use'
+		}
+		exec {
+			workingDir '.'
+			commandLine 'docker','buildx', 'build','--platform=linux/amd64,linux/arm64', '-t', "smilegatewannabe/user", '--build-arg', "RELEASE_VERSION=null", '.', '--push'
+		}
+	}
+}

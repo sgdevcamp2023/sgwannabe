@@ -1,54 +1,41 @@
 server:
-  port: 12000
+  port: 10000
 
 spring:
   application:
-    name: user-server
-
+    name: auth-server
   datasource:
-     driver-class-name: com.mysql.cj.jdbc.Driver
-     url: jdbc:mysql://localhost:12100/lalala?useSSL=false&allowPublicKeyRetrieval=true
-     username: root
-     password: admin
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: admin
+    url: jdbc:mysql://localhost:12100/lalala?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
   jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
     properties:
       hibernate:
-#        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: org.hibernate.dialect.MySQLDialect
         show_sql: true
         format_sql: true
     hibernate:
-      ddl-auto: none
-    defer-datasource-initialization: true
-    generate-ddl: true
-    database-platform: org.hibernate.dialect.MySQLDialect
-
-  sql:
-    init:
-#      schema-locations: classpath:schema.sql
-#      data-locations: classpath:data.sql
-      mode: always
-      platform: mysql
-
+      ddl-auto: validate
   data:
     redis:
       host: localhost
-      port: 12200
-  mail:
-    host: smtp.gmail.com
-    port: 465
-    username: smilegate.wannabe@gmail.com
-    password: hxir xfcg rzec atni
-    auth: true
-    starttls:
-      enable: true
-    protocol: smtps
+      port: 10100
 
   kafka:
     bootstrap-servers: localhost:40000,localhost:40001,localhost:40002
 
 jwt:
-  cookie-max-age: 86400 #1day
+  access-cookie-name: soy-access-jwt
+  refresh-cookie-name: soy-refresh-jwt
   secret-key: c21pbGVnYXRlLWNvbXBhbnktaXMtdG9vLWZhci1zby1pLXdhbnQtdG8td29yay1mcm9tLWhvbWUtZXZlcnktb3RoZXItZGF5Cg==
+#  access-expiration: 1800000 # 30minutes (ms)
+#  refresh-expiration: 86400000 #1day (ms)
+  cookie-max-age: 86400 #1day (s)
+    # ??? ??
+  access-expiration: 30000 # 30sec
+  refresh-expiration: 120000 # 2minutes
 
 eureka:
   instance:
@@ -60,7 +47,7 @@ eureka:
       defaultZone: http://localhost:34100/eureka
 
 passport:
-  algorithm: HmacSHA256
+  algorithm: SHA-256
   key: SECRET_KEY
 
 management:

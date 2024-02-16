@@ -4,7 +4,7 @@ services:
     image: smilegatewannabe/user
     restart: always
     ports:
-      - 12000:12000
+      - 12099:12000
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://user-mysql:3306/lalala?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
       SPRING_DATASOURCE_USERNAME: root
@@ -47,6 +47,7 @@ services:
       - ./.docker/mysql/:/var/lib/mysql
       - ./infra/:/docker-entrypoint-initdb.d
     networks:
+      - default
       - lalala-network
 
   user-redis:
