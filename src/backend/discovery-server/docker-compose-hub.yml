@@ -4,7 +4,9 @@ services:
     image: smilegatewannabe/discovery
     restart: always
     ports:
-      - 34100:8761
+      - 34100:34100
+    environment:
+      - eureka.instance.hostname=localhost
     networks:
       - lalala-network
 

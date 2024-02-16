@@ -4,7 +4,7 @@ services:
     image: smilegatewannabe/user
     restart: always
     ports:
-      - 12099:12000
+      - 12000:12000
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://user-mysql:3306/lalala?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
       SPRING_DATASOURCE_USERNAME: root
@@ -22,7 +22,7 @@ services:
 
       SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
 
-      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:8761/eureka
+      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:34100/eureka
 
       PASSPORT_ALGORITHM: HmacSHA256
       PASSPORT_KEY: SECRET_KEY

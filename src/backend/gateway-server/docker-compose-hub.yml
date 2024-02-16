@@ -4,7 +4,7 @@ services:
     image: smilegatewannabe/gateway
     environment:
       eureka.instance.hostname: localhost
-      eureka.client.service-url.defaultZone: http://discovery-app:8761/eureka
+      eureka.client.service-url.defaultZone: http://discovery-app:34100/eureka
     restart: always
     ports:
       - 34000:34000
