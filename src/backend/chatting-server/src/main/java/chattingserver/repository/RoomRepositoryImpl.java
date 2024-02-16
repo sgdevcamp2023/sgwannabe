@@ -1,5 +1,9 @@
 package chattingserver.repository;
 
+import chattingserver.domain.room.Room;
+import chattingserver.domain.room.User;
+import chattingserver.dto.request.ReadMessageUpdateRequestDto;
+import com.mongodb.client.result.UpdateResult;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -29,16 +33,19 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
     @Override
     public UpdateResult updateLastReadMsgId(ReadMessageUpdateRequestDto requestDto) {
 
-        Query query =
-                Query.query(
-                        Criteria.where("roomId")
-                                .is(requestDto.getRoomId())
-                                .andOperator(
-                                        Criteria.where("users")
-                                                .elemMatch(Criteria.where("uid").is(requestDto.getUid()))));
+        Query query = Query.query(
+                Criteria.where("_id").is(requestDto.getRoomId())
+                        .andOperator(Criteria.where("users").elemMatch(Criteria.where("uid").is(requestDto.getUid())))
+        );
 
-        Update update = new Update().set("users.$.lastReadMsgId", requestDto.getMessageId());
+        Update update = new Update().set("users.$.lastReadMessageId", requestDto.getMessageId());
+        return mongoTemplate.updateFirst(query, update, Room.class);
+    }
 
+    @Override
+    public UpdateResult addUserToRoom(String roomId, User user) {
+        Query query = new Query(Criteria.where("_id").is(roomId));
+        Update update = new Update().addToSet("users", user);
         return mongoTemplate.updateFirst(query, update, Room.class);
     }
 }

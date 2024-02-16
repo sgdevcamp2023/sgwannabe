@@ -19,10 +19,12 @@ public class Room {
     @Id private String id;
     private String roomName;
     private Playlist playlist;
+    private String thumbnailImage;
 
     private List<User> users;
     private LocalDateTime createdAt;
 
+    private User playlistOwner;
     public void setMembers(List<User> users) {
         this.users = users;
     }

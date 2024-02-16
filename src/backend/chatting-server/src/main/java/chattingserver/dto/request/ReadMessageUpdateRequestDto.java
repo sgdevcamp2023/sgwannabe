@@ -12,7 +12,10 @@ import jakarta.validation.constraints.NotBlank;
 @AllArgsConstructor
 @Builder
 public class ReadMessageUpdateRequestDto {
-    @NotBlank private String roomId;
-    @NotBlank private String uid;
-    @NotBlank private String messageId;
+    @NotBlank
+    private String roomId;
+    @NotBlank
+    private Long uid;
+    @NotBlank
+    private String messageId;
 }

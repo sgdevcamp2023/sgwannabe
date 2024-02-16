@@ -12,7 +12,16 @@ import jakarta.validation.constraints.NotBlank;
 @Builder
 public class RoomCreateRequestDto {
 
-    @NotBlank private Long uid;
-    @NotBlank private String nickName;
-    @NotBlank private Playlist playlist;
+    @NotBlank
+    private Long uid;
+    @NotBlank
+    private String nickName;
+    @NotBlank
+    private String userProfileImage;
+    @NotBlank
+    private Playlist playlist;
+
+    public String getThumbnailImage() {
+        return this.playlist.getFirstMusic().getThumbnail();
+    }
 }

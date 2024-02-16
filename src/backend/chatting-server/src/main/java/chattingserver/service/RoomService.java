@@ -1,31 +1,35 @@
 package chattingserver.service;
 
+import chattingserver.domain.chat.ChatMessage;
+import chattingserver.domain.chat.LastMessage;
+import chattingserver.domain.room.Room;
+import chattingserver.domain.room.User;
+import chattingserver.dto.request.ReadMessageUpdateRequestDto;
+import chattingserver.dto.request.RoomCreateRequestDto;
+import chattingserver.dto.response.CommonAPIMessage;
+import chattingserver.dto.response.JoinedRoomResponseDto;
+import chattingserver.dto.response.RoomResponseDto;
+import chattingserver.repository.ChatMessageRepository;
+import chattingserver.repository.RoomRepository;
+import chattingserver.util.converter.EntityToResponseDtoConverter;
+import com.mongodb.client.result.UpdateResult;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-
-import chattingserver.domain.room.Room;
-import chattingserver.domain.room.User;
-import chattingserver.dto.request.ReadMessageUpdateRequestDto;
-import chattingserver.dto.request.RoomCreateRequestDto;
-import chattingserver.dto.response.JoinedRoomResponseDto;
-import chattingserver.dto.response.RoomResponseDto;
-import chattingserver.repository.RoomRepository;
-import chattingserver.util.converter.EntityToResponseDtoConverter;
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class RoomService {
     private final RoomRepository roomRepository;
+    private final ChatMessageRepository chatMessageRepository;
     private final EntityToResponseDtoConverter entityToResponseDtoConverter;
 
     public RoomResponseDto getRoomInfo(String roomId) {
@@ -42,23 +46,25 @@ public class RoomService {
 
         for (Room room : roomList) {
             String roomId = room.getId();
-            //            MessageCollection messageCollection =
-            // chatMessageRepository.getLastMessage(roomId);
+            ChatMessage message = chatMessageRepository.getLastMessage(roomId);
 
-            //            LastMessage lastMessage = LastMessage.builder()
-            //
-            // .message_id(messageCollection.get_id()).sender_id(messageCollection.getSenderId())
-            //
-            // .content(messageCollection.getContent()).created_at(messageCollection.getCreatedAt())
-            //                    .build();
+            LastMessage lastMessage = LastMessage.builder()
+                    .messageId(message.getId())
+                    .senderId(message.getSenderId())
+                    .nickName(message.getNickName())
+                    .senderProfileImage(message.getSenderProfileImage())
+                    .content(message.getContent())
+                    .createdAt(message.getCreatedAt())
+                    .build();
 
-            myRoomsDto.add(
-                    JoinedRoomResponseDto.builder()
-                            .roomId(roomId)
-                            .roomName(room.getRoomName())
-                            .users(room.getUsers())
-                            //                    .last_message(lastMessage)
-                            .build());
+            myRoomsDto.add(JoinedRoomResponseDto.builder()
+                    .roomId(roomId)
+                    .roomName(room.getRoomName())
+                    .thumbnailImage(room.getThumbnailImage())
+                    .users(room.getUsers())
+                    .playlistOwner(entityToResponseDtoConverter.convertUser(room.getPlaylistOwner()))
+                    .lastMessage(lastMessage)
+                    .build());
         }
 
         return myRoomsDto;
@@ -73,37 +79,38 @@ public class RoomService {
         log.info("참여하지 않은 방 리스트 조회 성공 uid={}", uid);
 
         return unjoinedRooms.stream()
-                .map(
-                        room ->
-                                RoomResponseDto.builder()
-                                        .id(room.getId())
-                                        .roomName(room.getRoomName())
-                                        .userCount(room.getUsers().size())
-                                        .users(room.getUsers())
-                                        .playlist(room.getPlaylist())
-                                        .build())
+                .map(room -> RoomResponseDto.builder()
+                        .id(room.getId())
+                        .roomName(room.getRoomName())
+                        .thumbnailImage(room.getThumbnailImage())
+                        .userCount(room.getUsers().size())
+                        .users(room.getUsers().stream().map(entityToResponseDtoConverter::convertUser).collect(Collectors.toList()))
+                        .playlist(room.getPlaylist())
+                        .playlistOwner(entityToResponseDtoConverter.convertUser(room.getPlaylistOwner()))
+                        .build())
                 .collect(Collectors.toList());
     }
 
     public RoomResponseDto create(RoomCreateRequestDto roomCreateRequestDto) {
         // user build
-        User user =
-                User.builder()
-                        .uid(roomCreateRequestDto.getUid())
-                        .nickName(roomCreateRequestDto.getNickName())
-                        .enteredAt(LocalDateTime.now())
-                        .build();
+        User owner = User.builder()
+                .uid(roomCreateRequestDto.getUid())
+                .nickName(roomCreateRequestDto.getNickName())
+                .profileImage(roomCreateRequestDto.getUserProfileImage())
+                .enteredAt(LocalDateTime.now())
+                .build();
 
         List<User> users = new ArrayList<>();
-        users.add(user);
+        users.add(owner);
 
         // room build
-        Room room =
-                Room.builder()
-                        .roomName(roomCreateRequestDto.getPlaylist().getName())
-                        .playlist(roomCreateRequestDto.getPlaylist())
-                        .users(users)
-                        .build();
+        Room room = Room.builder()
+                .roomName(roomCreateRequestDto.getPlaylist().getName())
+                .playlist(roomCreateRequestDto.getPlaylist())
+                .thumbnailImage(roomCreateRequestDto.getThumbnailImage())
+                .playlistOwner(owner)
+                .users(users)
+                .build();
 
         log.info("생성된 방에 생성자 추가 성공 user={}", room.getUsers().toString());
         Room savedRoom = roomRepository.save(room);
@@ -122,23 +129,20 @@ public class RoomService {
         }
     }
 
-    public boolean updateLastReadMsgId(
-            String roomId, Long uid, ReadMessageUpdateRequestDto requestDto) {
-        try {
-            roomRepository.updateLastReadMsgId(requestDto);
-            log.info(
-                    "LastReadMsgId 업데이트 성공 uid={}, roomId={}, 업데이트 완료 message_id={}",
-                    uid,
-                    roomId,
-                    requestDto.getMessageId());
-            return true;
-        } catch (Exception e) {
-            log.error("LastReadMsgId 업데이트 실패 uid={}, roomId={}: {}", uid, roomId, e.getMessage());
-            return false;
-        }
+    public CommonAPIMessage updateLastReadMsgId(ReadMessageUpdateRequestDto requestDto) {
+        UpdateResult updateResult = roomRepository.updateLastReadMsgId(requestDto);
+        if (updateResult.getModifiedCount() == 0)
+            return new CommonAPIMessage(CommonAPIMessage.ResultEnum.failed, updateResult.getModifiedCount());
+        return new CommonAPIMessage(CommonAPIMessage.ResultEnum.success, updateResult.getModifiedCount());
     }
 
     public boolean isExistingRoom(String roomId) {
         return roomRepository.existsById(roomId);
+    }
+
+    public List<RoomResponseDto> getAllRoomInfos() {
+        return roomRepository.findAll().stream()
+                .map(entityToResponseDtoConverter::convertRoom)
+                .collect(Collectors.toList());
     }
 }

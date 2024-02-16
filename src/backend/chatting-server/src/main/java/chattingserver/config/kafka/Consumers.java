@@ -1,5 +1,7 @@
 package chattingserver.config.kafka;
 
+import chattingserver.dto.ChatMessageDto;
+import chattingserver.dto.request.IndexingRequestMessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,14 +26,10 @@ public class Consumers {
         template.convertAndSend("/chat/topic/room/" + chatMessageDto.getRoomId(), chatMessageDto);
     }
 
-    @KafkaListener(
-            groupId = "${spring.kafka.consumer.room-consumer.group-id}",
-            topics = "${spring.kafka.topic.room-name}",
-            containerFactory = "kafkaListenerContainerFactory")
-    public void listenGroupCreation(RoomMessageDto roomMessageDto) {
-        RoomResponseDto roomResponseDto = roomMessageDto.getRoomResponseDto();
-        for (Long userId : roomMessageDto.getReceivers()) {
-            template.convertAndSend("/chat/topic/new-room/" + userId, roomResponseDto);
-        }
+    // TODO search indexing test용 추후 삭제 예정
+    @KafkaListener(groupId = "${spring.kafka.consumer.room-consumer.group-id}", topics = "${kafka.topic.room-name}", containerFactory = "kafkaListenerContainerFactory")
+    public void listenRoomCreation(IndexingRequestMessageDto indexingRequestMessageDto) {
+
+        template.convertAndSend("/chat/topic/search/room/index", indexingRequestMessageDto);
     }
 }

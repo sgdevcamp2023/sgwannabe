@@ -7,19 +7,15 @@ spring:
 
   data:
     mongodb:
-      host: localhost
-      port: 18100
+      host: chatting-mongo
+      port: 27017
       database: chatting
       username: chatting-admin
       password: JMTpdsu8YkLEX4RA
       authentication-database: admin
 
   kafka:
-    bootstrap-servers: localhost:40000,localhost:40001,localhost:40002
-
-    topic:
-      chat-name: message
-      room-name: room
+    bootstrap-servers: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
 
     consumer:
       room-consumer:

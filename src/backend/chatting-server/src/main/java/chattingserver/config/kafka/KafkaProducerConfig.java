@@ -1,8 +1,9 @@
 package chattingserver.config.kafka;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import chattingserver.dto.ChatMessageDto;
+import chattingserver.dto.request.IndexingRequestMessageDto;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +37,7 @@ public class KafkaProducerConfig {
     private String chatValueSerializer;
 
     @Bean
-    public ProducerFactory<String, ChatMessageDto> producerFactory() {
+    public ProducerFactory<String, ChatMessageDto> chatProducerFactory() {
         return new DefaultKafkaProducerFactory<>(chatProducerConfigurations());
     }
 
@@ -51,11 +52,11 @@ public class KafkaProducerConfig {
 
     @Bean
     public KafkaTemplate<String, ChatMessageDto> chatKafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
+        return new KafkaTemplate<>(chatProducerFactory());
     }
 
     @Bean
-    public ProducerFactory<String, RoomMessageDto> roomProducerFactory() {
+    public ProducerFactory<String, IndexingRequestMessageDto> roomProducerFactory() {
         return new DefaultKafkaProducerFactory<>(roomProducerConfigurations());
     }
 
@@ -69,7 +70,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, RoomMessageDto> roomKafkaTemplate() {
+    public KafkaTemplate<String, IndexingRequestMessageDto> roomKafkaTemplate() {
         return new KafkaTemplate<>(roomProducerFactory());
     }
 }
