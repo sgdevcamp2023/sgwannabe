@@ -1,8 +1,8 @@
 package chattingserver.domain.room;
 
-import java.util.List;
-
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @ToString

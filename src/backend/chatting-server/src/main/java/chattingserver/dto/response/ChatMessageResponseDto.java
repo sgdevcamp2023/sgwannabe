@@ -1,10 +1,9 @@
 package chattingserver.dto.response;
 
-import java.time.LocalDateTime;
-
+import chattingserver.util.constant.MessageType;
 import lombok.*;
 
-import chattingserver.util.constant.MessageType;
+import java.time.LocalDateTime;
 
 @Getter
 @ToString
