@@ -63,16 +63,15 @@ public class RoomController {
     @Operation(summary = "채팅방 영구적으로 나가기", description = "그룹 채팅방에서 유저 삭제", responses = {
             @ApiResponse(responseCode = "200", description = "삭제 성공", content = @Content(schema = @Schema(implementation = CommonAPIMessage.class)))})
     @PostMapping("/exit/{roomId}")
-    public ResponseEntity<BaseResponse<HashMap<String, String>>> outOfTheRoom(@PathVariable(value = "roomId") String roomId, @RequestBody UserEntranceRequestDto userDto) {
-        producers.sendMessage(chatMessageService.permanentLeaving(roomId, userDto));
-        if (roomService.exitRoom(roomId, userDto.getUid())) {
+    public ResponseEntity<BaseResponse<HashMap<String, String>>> outOfTheRoom(@PathVariable(value = "roomId") String roomId, @RequestParam Long uid) {
+        if (roomService.exitRoom(roomId, uid)) {
 
             HashMap<String, String> roomId1 = new HashMap<>();
             roomId1.put("roomId", roomId);
 
             return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "채팅방 영구 퇴장 성공", roomId1));
         }
-        log.error("exitRoom 채팅방 나가기 실패 roomId: {}, userId: {}", roomId, userDto.getUid());
+        log.error("exitRoom 채팅방 나가기 실패 roomId: {}, userId: {}", roomId, uid);
         return null; // TODO common err 처리
     }
 
