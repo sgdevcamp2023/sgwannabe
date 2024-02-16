@@ -11,6 +11,7 @@ services:
       SPRING_DATA_MONGODB_URI: mongodb://chipmunk:JMTpdsu8YkLEXBW4RA@chart-mongo:27017/chart
 
       SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
+      SPRING_KAFKA_CONSUMER_GROUP-ID: chart-group
 
       EUREKA_INSTANCE_HOSTNAME: chart-app
       EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:34100/eureka
