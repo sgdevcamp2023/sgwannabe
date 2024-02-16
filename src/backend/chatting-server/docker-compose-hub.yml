@@ -25,6 +25,7 @@ services:
     depends_on:
       - chatting-mongo
     networks:
+      - default
       - lalala-network
 
   chatting-mongo:
