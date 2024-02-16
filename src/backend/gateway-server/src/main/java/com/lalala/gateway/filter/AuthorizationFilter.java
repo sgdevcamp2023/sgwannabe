@@ -48,7 +48,14 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<Authorizat
     }
 
     private String extractJWT(ServerWebExchange exchange) {
-        return exchange.getRequest().getHeaders().get(AUTHORIZATION_HEADER_NAME).get(0);
+        String authorizaiton = exchange.getRequest().getHeaders().get(AUTHORIZATION_HEADER_NAME).get(0);
+
+        if (!authorizaiton.startsWith("Bearer ")) {
+            return authorizaiton;
+        }
+
+        int spaceIndex = authorizaiton.indexOf(" ");
+        return authorizaiton.substring(spaceIndex + 1);
     }
 
     private boolean isRequestContainsAuthorization(ServerWebExchange exchange) {
