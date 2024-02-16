@@ -15,8 +15,8 @@ CREATE TABLE user (
     profile       VARCHAR(255)              DEFAULT '',
     role          VARCHAR(15)   NOT NULL    DEFAULT 'USER',
     status        VARCHAR(10)   NOT NULL    DEFAULT 'ACTIVE',
-    created_at    DATETIME(6)   DEFAULT CURRENT_TIMESTAMP
-    updated_at    DATETIME(6)   DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    created_at    DATETIME      DEFAULT     CURRENT_TIMESTAMP,
+    updated_at    DATETIME      DEFAULT     CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 ) engine=InnoDB;
 
