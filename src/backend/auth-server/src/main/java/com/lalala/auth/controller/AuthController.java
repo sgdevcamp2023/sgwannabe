@@ -37,7 +37,7 @@ public class AuthController {
     @PostMapping("/passport")
     public BaseResponse<String> generatePassport(@RequestHeader("Authorization") String jwtPayload) {
         return BaseResponse.from(
-                HttpStatus.OK,
+                HttpStatus.OK.value(),
                 "패스포트를 발급했습니다.",
                 authService.generatePassport(jwtPayload)
         );
