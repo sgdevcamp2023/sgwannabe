@@ -1,9 +1,11 @@
 package com.lalala.streaming.handler
 
+import com.lalala.exception.BusinessException
+import com.lalala.exception.ErrorCode
+import com.lalala.response.BaseResponse
 import com.lalala.streaming.constant.StreamingConstant
 import com.lalala.streaming.dto.MusicDetailDTO
-import com.lalala.streaming.exception.MusicNotFoundException
-import com.lalala.streaming.exception.StorageFileNotFoundException
+import com.lalala.streaming.handler.Command.*
 import io.github.oshai.kotlinlogging.KotlinLogging
 import net.bramp.ffmpeg.FFmpeg
 import net.bramp.ffmpeg.FFprobe
@@ -63,16 +65,18 @@ class StreamingHandler(
 
         try {
             when (commandType) {
-                Command.GET -> {
+                GET -> {
                     val musicId = payload.split("/")[1]
                     sendPlayTime(session, musicId)
                 }
 
-                Command.STREAM -> {
+                STREAM -> {
                     val musicId = payload.split("/")[1]
                     val startTime = payload.split("/")[2]
                     startStream(session, musicId, startTime)
                 }
+
+                TRACK_CHANGED -> TODO()
             }
         } catch (err: Exception) {
             err.printStackTrace()
@@ -80,31 +84,31 @@ class StreamingHandler(
         }
     }
 
-    fun getMusic(session: WebSocketSession, musicId: String): MusicDetailDTO {
+    fun getMusic(session: WebSocketSession, musicId: String): BaseResponse<MusicDetailDTO> {
         return musicClient.get()
             .uri("/v1/api/musics/${musicId}")
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .onStatus(HttpStatusCode::is4xxClientError) { _, _ ->
                 session.sendMessage(TextMessage("failed music"))
-                throw MusicNotFoundException("음원을 조회할 수 없습니다.")
+                throw BusinessException(ErrorCode.MUSIC_NOT_FOUND)
             }
             .onStatus(HttpStatusCode::is5xxServerError) { _, _ ->
                 session.sendMessage(TextMessage("failed music"))
-                throw MusicNotFoundException("음원을 조회할 수 없습니다.")
+                throw BusinessException(ErrorCode.MUSIC_NOT_FOUND)
             }
-            .body<MusicDetailDTO>()!!
+            .body<BaseResponse<MusicDetailDTO>>()!!
     }
 
     fun sendPlayTime(session: WebSocketSession, musicId: String) {
         // 음원 서버에서 파일 주소 조회
-        val music = getMusic(session, musicId)
+        val music = getMusic(session, musicId).data
         music.playTime.let { session.sendMessage(TextMessage("$it")) }
     }
 
     fun startStream(session: WebSocketSession, musicId: String, startTime: String) {
         // 음원 서버에서 파일 주소 조회
-        val music = getMusic(session, musicId)
+        val music = getMusic(session, musicId).data
         val fileName = music.file.fileUrl.split('/').last()
 
         // 파일 서버에서 파일 다운로드
@@ -177,11 +181,11 @@ class StreamingHandler(
             .retrieve()
             .onStatus(HttpStatusCode::is4xxClientError) { _, _ ->
                 session.sendMessage(TextMessage("failed storage"))
-                throw StorageFileNotFoundException("음원 파일을 조회할 수 없습니다.")
+                throw BusinessException(ErrorCode.STORAGE_FILE_NOT_FOUND)
             }
             .onStatus(HttpStatusCode::is5xxServerError) { _, _ ->
                 session.sendMessage(TextMessage("failed storage"))
-                throw StorageFileNotFoundException("음원 파일을 조회할 수 없습니다.")
+                throw BusinessException(ErrorCode.STORAGE_FILE_NOT_FOUND)
             }
             .body<ByteArray>()
 

@@ -1,7 +1,13 @@
 server:
   port: 22000
+#  servlet:
+#    container: none
+#  websocket:
+#    server:
+#      path: /v1/ws
+#  netty:
+#    worker-count: 2
 
-spring:
   application:
     name: streaming-server
 

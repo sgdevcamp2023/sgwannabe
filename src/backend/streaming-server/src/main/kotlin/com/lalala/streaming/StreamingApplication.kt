@@ -1,13 +1,13 @@
 package com.lalala.streaming
 
-import com.lalala.reactive.config.CommonReactiveModuleConfig
+import com.lalala.mvc.config.CommonMvcModuleConfig
 import lombok.extern.slf4j.Slf4j
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Import
 
 @Import(
-	CommonReactiveModuleConfig::class,
+	CommonMvcModuleConfig::class,
 )
 @Slf4j
 @SpringBootApplication
