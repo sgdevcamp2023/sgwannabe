@@ -12,6 +12,10 @@ spring:
 
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true
+
       globalcors:
         cors-configurations:
           '[/**]':
