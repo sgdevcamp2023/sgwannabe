@@ -86,13 +86,6 @@ spring:
           filters:
             - RewritePath=/search/?(?<segment>.*), /v1/api/$\{segment}
 
-        - id: STREAMING
-          uri: lb:ws://STREAMING-SERVER
-          predicates:
-            - Path=/streaming/**
-          filters:
-            - RewritePath=/streaming/?(?<segment>.*), /v1/ws/streaming/$\{segment}
-
         - id: USER
           uri: lb://USER-SERVER
           predicates:
