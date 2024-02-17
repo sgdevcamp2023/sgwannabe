@@ -1,5 +1,7 @@
 server:
   port: 34000
+  netty:
+    worker-count: 2
 
 spring:
   application:
@@ -99,6 +101,9 @@ spring:
             baseMessage: Gateway Authorization Filter
             preLogger: true
             postLogger: true
+
+      websockets:
+        enabled: true
 
 feign:
   client:
