@@ -33,7 +33,7 @@ public class AlbumController {
     public ResponseEntity<BaseResponse<AlbumDetailDTO>> createAlbum(
             @RequestBody CreateAlbumRequestDTO request) {
         AlbumDetailDTO album = service.createAlbum(request);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "앨범을 생성했습니다.", album));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "앨범을 생성했습니다.", album));
     }
 
     @GetMapping
@@ -41,25 +41,25 @@ public class AlbumController {
             @RequestParam(required = false, defaultValue = "0", name = "page") int page,
             @RequestParam(required = false, defaultValue = "50", name = "size") int pageSize) {
         List<AlbumDTO> albums = service.getAlbums(page, pageSize);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "앨범 목록을 조회했습니다.", albums));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "앨범 목록을 조회했습니다.", albums));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse<AlbumDetailDTO>> readAlbum(@PathVariable("id") Long id) {
         AlbumDetailDTO album = service.getAlbum(id);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "앨범을 조회했습니다.", album));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "앨범을 조회했습니다.", album));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<BaseResponse<AlbumDetailDTO>> updateAlbum(
             @PathVariable("id") Long id, @RequestBody UpdateAlbumRequestDTO request) {
         AlbumDetailDTO album = service.updateAlbum(id, request);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "앨범을 수정했습니다.", album));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "앨범을 수정했습니다.", album));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponse<AlbumDetailDTO>> deleteAlbum(@PathVariable("id") Long id) {
         AlbumDetailDTO album = service.deleteAlbum(id);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "앨범을 삭제했습니다.", album));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "앨범을 삭제했습니다.", album));
     }
 }

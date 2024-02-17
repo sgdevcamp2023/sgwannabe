@@ -33,7 +33,7 @@ public class ArtistController {
     public ResponseEntity<BaseResponse<ArtistDTO>> createArtist(
             @RequestBody CreateArtistRequestDTO request) {
         ArtistDTO artist = service.createArtist(request);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "아티스트를 생성했습니다.", artist));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "아티스트를 생성했습니다.", artist));
     }
 
     @GetMapping
@@ -41,25 +41,25 @@ public class ArtistController {
             @RequestParam(required = false, defaultValue = "0", name = "page") int page,
             @RequestParam(required = false, defaultValue = "50", name = "size") int pageSize) {
         List<ArtistDTO> artists = service.getArtists(page, pageSize);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "아티스트 목록을 조회했습니다.", artists));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "아티스트 목록을 조회했습니다.", artists));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse<ArtistDetailDTO>> readArtist(@PathVariable("id") Long id) {
         ArtistDetailDTO artist = service.getArtist(id);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "아티스트를 조회했습니다.", artist));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "아티스트를 조회했습니다.", artist));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<BaseResponse<ArtistDTO>> updateArtist(
             @PathVariable("id") Long id, @RequestBody UpdateArtistRequestDTO request) {
         ArtistDTO artist = service.updateArtist(id, request);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "아티스트를 수정했습니다.", artist));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "아티스트를 수정했습니다.", artist));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponse<ArtistDTO>> deleteArtist(@PathVariable("id") Long id) {
         ArtistDTO artist = service.deleteArtist(id);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "아티스트를 삭제했습니다.", artist));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "아티스트를 삭제했습니다.", artist));
     }
 }

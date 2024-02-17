@@ -36,14 +36,14 @@ public class MusicController {
     public ResponseEntity<BaseResponse<MusicDetailDTO>> createMusic(
             @RequestBody CreateMusicRequestDTO request) {
         MusicDetailDTO music = service.createMusic(request);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "음원을 생성했습니다.", music));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "음원을 생성했습니다.", music));
     }
 
     @PostMapping(value = "/upload", consumes = "multipart/form-data")
     public ResponseEntity<BaseResponse<MusicDetailDTO>> uploadMusic(
             @RequestParam(value = "upload") MultipartFile file) {
         MusicDetailDTO music = uploaderService.upload(file);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "음원을 업로드했습니다.", music));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "음원을 업로드했습니다.", music));
     }
 
     @GetMapping
@@ -51,25 +51,25 @@ public class MusicController {
             @RequestParam(required = false, defaultValue = "0", name = "page") int page,
             @RequestParam(required = false, defaultValue = "50", name = "size") int pageSize) {
         List<MusicDTO> musics = service.getMusics(page, pageSize);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "음원을 조회했습니다.", musics));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "음원을 조회했습니다.", musics));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse<MusicDetailDTO>> readMusic(@PathVariable("id") Long id) {
         MusicDetailDTO music = service.getMusic(id);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "음원을 업로드했습니다.", music));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "음원을 업로드했습니다.", music));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<BaseResponse<MusicDetailDTO>> updateMusic(
             @PathVariable("id") Long id, @RequestBody UpdateMusicRequestDTO request) {
         MusicDetailDTO music = service.updateMusic(id, request);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "음원을 업로드했습니다.", music));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "음원을 업로드했습니다.", music));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponse<MusicDetailDTO>> deleteMusic(@PathVariable("id") Long id) {
         MusicDetailDTO music = service.deleteMusic(id);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "음원을 업로드했습니다.", music));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "음원을 업로드했습니다.", music));
     }
 }
