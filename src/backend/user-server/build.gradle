@@ -22,7 +22,8 @@ repositories {
 }
 
 dependencies {
-	implementation project(":common-module")
+	implementation project(":common-module:common")
+	implementation project(":common-module:common-mvc")
 
 	// Spring MVC
 	implementation 'org.springframework.boot:spring-boot-starter-web'
