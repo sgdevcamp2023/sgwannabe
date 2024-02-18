@@ -109,6 +109,9 @@ spring:
       websockets:
         enabled: true
 
+auth:
+  url: http://localhost:10000
+
 feign:
   client:
     config:

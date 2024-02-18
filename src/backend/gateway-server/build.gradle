@@ -45,6 +45,8 @@ dependencies {
 
 	// OpenFeign
 	implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+	implementation("io.github.openfeign:feign-reactive-wrappers")
+	implementation 'io.github.openfeign:feign-gson'
 
 	// lombok
 	compileOnly 'org.projectlombok:lombok'
