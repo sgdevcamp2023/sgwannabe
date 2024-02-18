@@ -9,7 +9,7 @@ rabbitmq:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: "jdbc:mysql://localhost:29000/alarm"
+    url: jdbc:mysql://localhost:28100/alarm
     username: root
     password: admin
 
@@ -17,7 +17,7 @@ spring:
     host: localhost
     username: admin
     password: admin
-    port: '28300'
+    port: 28300
     listener:
       simple:
         default-requeue-rejected: 'false'
@@ -25,13 +25,18 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
     properties:
       dialect: org.hibernate.dialect.MySQLDialect
       hibernate:
         format_sql: true
         show_sql: true
         use_sql_comments: true
+
+  kafka:
+    bootstrap-servers: localhost:40000,localhost:40001,localhost:40002
+    consumer:
+      group-id: alarm-group
 
 logging:
   pattern:

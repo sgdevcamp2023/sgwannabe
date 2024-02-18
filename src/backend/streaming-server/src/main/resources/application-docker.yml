@@ -15,15 +15,6 @@ ffmpeg:
     mpeg: ./libs/ffmpeg-6.1/ffmpeg
     probe: ./libs/ffmpeg-6.1/ffprobe
 
-eureka:
-  instance:
-    hostname: localhost
-  client:
-    fetch-registry: true
-    register-with-eureka: true
-    service-url:
-      defaultZone: http://discovery-app:34100/eureka
-
 passport:
   algorithm: HmacSHA256
   key: SECRET_KEY
