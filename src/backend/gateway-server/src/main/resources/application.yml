@@ -57,10 +57,17 @@ spring:
           filters:
             - RewritePath=/chatting/(?<segment>/?.*), /v1/api/${segment}
 
+        - id: CHATTING-SERVICE-SOCKJS
+          uri: lb://CHATTING-SERVER
+          predicates:
+            - Path=/chatting/ws-chat/info/**
+          filters:
+            - RewritePath=/chatting/(?<segment>/?.*), /${segment}
+
         - id: CHATTING-SERVICE-STOMP
           uri: lb:ws://CHATTING-SERVER
           predicates:
-            - Path=/chatting/**
+            - Path=/chatting/ws-chat/**
           filters:
             - RewritePath=/chatting/(?<segment>/?.*), /${segment}
 
