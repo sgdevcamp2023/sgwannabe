@@ -39,6 +39,8 @@ public enum ErrorCode {
     DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "5003", "이메일이 중복됩니다."),
     SEND_MAIL_ERROR(HttpStatus.BAD_REQUEST, "5004", "메일 전송 중 에러가 발생했습니다."),
     NOT_VALID_CODE(HttpStatus.BAD_REQUEST, "5005", "유효한 코드가 아닙니다."),
+    INVALID_TOKEN(HttpStatus.BAD_REQUEST, "5005", "유효한 토큰이 아닙니다."),
+
 
 // 6,000 ~ 6,999 : PlayList / Feed
 
