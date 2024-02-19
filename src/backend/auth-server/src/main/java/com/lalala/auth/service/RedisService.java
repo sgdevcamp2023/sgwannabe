@@ -18,7 +18,6 @@ public class RedisService {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    private final AuthRepository authRepository;
 
     // key: id, value: refreshToken
     public String getRedisTemplateValue(String key) {
