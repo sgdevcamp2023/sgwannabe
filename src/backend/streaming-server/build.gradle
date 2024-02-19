@@ -25,7 +25,8 @@ repositories {
 }
 
 dependencies {
-	implementation project(":common-module")
+	implementation project(":common-module:common")
+	implementation project(":common-module:common-mvc")
 
 	// Spring
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
@@ -33,6 +34,9 @@ dependencies {
 
 	// Websocket
 	implementation("org.springframework.boot:spring-boot-starter-websocket")
+
+	// Netty
+	//	implementation 'io.netty:netty-all:4.1.68.Final'
 
 	// Spring Session Redis
 	implementation("org.springframework.session:spring-session-data-redis")
@@ -55,9 +59,6 @@ dependencies {
 
 	// kotlin-logging
 	implementation 'io.github.oshai:kotlin-logging-jvm:5.1.0'
-
-	// Eureka
-	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.1.0'
 
 	// OpenFeign
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.0'

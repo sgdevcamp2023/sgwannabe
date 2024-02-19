@@ -1,0 +1,7 @@
+dependencies {
+    implementation "com.fasterxml.jackson.core:jackson-core"
+    implementation "com.fasterxml.jackson.core:jackson-databind"
+
+    // Kafka
+    implementation "org.springframework.kafka:spring-kafka"
+}

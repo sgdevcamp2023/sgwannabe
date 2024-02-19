@@ -4,23 +4,22 @@ import java.util.Arrays;
 
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
 import com.lalala.gateway.external.feign.FeignAuthClient;
-import com.lalala.response.BaseResponse;
 
 @Component
 public class AuthorizationFilter extends AbstractGatewayFilterFactory<AuthorizationFilter.Config> {
 
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
-    private final FeignAuthClient feignAuthClient;
 
-    public AuthorizationFilter(@Lazy FeignAuthClient feignAuthClient) {
+    private final FeignAuthClient authClient;
+
+    public AuthorizationFilter(FeignAuthClient authClient) {
         super(Config.class);
-        this.feignAuthClient = feignAuthClient;
+        this.authClient = authClient;
     }
 
     public static class Config {}
@@ -36,14 +35,25 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<Authorizat
 
             if (isRequestContainsAuthorization(exchange)) {
                 String jwtToken = extractJWT(exchange);
-                BaseResponse<String> response = feignAuthClient.generatePassport(jwtToken);
-                String passport = response.getData();
 
-                ServerHttpRequest request =
-                        exchange.getRequest().mutate().header(AUTHORIZATION_HEADER_NAME, passport).build();
+                return authClient
+                        .generatePassport(jwtToken)
+                        .flatMap(
+                                response -> {
+                                    String passport = response.getData();
 
-                return chain.filter(exchange.mutate().request(request).build());
+                                    ServerHttpRequest request =
+                                            exchange
+                                                    .getRequest()
+                                                    .mutate()
+                                                    .header(AUTHORIZATION_HEADER_NAME, passport)
+                                                    .build();
+
+                                    return chain.filter(exchange.mutate().request(request).build());
+                                })
+                        .switchIfEmpty(chain.filter(exchange));
             }
+
             return chain.filter(exchange);
         };
     }

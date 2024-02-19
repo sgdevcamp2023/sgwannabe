@@ -1,1 +1,8 @@
 rootProject.name = 'common-module'
+include 'common'
+include 'common-mvc'
+include 'common-reactive'
+
+include ':common-module:common'
+include ':common-module:common-mvc'
+include ':common-module:common-reactive'

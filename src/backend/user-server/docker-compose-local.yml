@@ -1,0 +1,70 @@
+version: "3.9"
+services:
+  user-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 12000:12000
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://user-mysql:3306/lalala?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_DATASOURCE_DRIVER-CLASS-NAME: com.mysql.cj.jdbc.Driver
+
+      SPRING_JPA_PROPERTIES_DIALECT: org.hibernate.dialect.MySQLDialect
+
+      SPRING_MAIL_HOST: smtp.gmail.com
+      SPRING_MAIL_USERNAME: smilegate.wannabe@gmail.com
+      SPRING_MAIL_PASSWORD: hxir xfcg rzec atni
+
+      SPRING_DATA_REDIS_HOST: user-redis
+      SPRING_DATA_REDIS_PORT: 6379
+
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
+
+      EUREKA_INSTANCE_HOSTNAME: user-app
+      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:34100/eureka
+
+      PASSPORT_ALGORITHM: HmacSHA256
+      PASSPORT_KEY: SECRET_KEY
+    depends_on:
+      - user-mysql
+    networks:
+      - lalala-network
+
+  user-mysql:
+    image: mysql:8.2.0
+    restart: always
+    ports:
+      - 12100:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: user
+      TZ: Asia/Seoul
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./.docker/mysql/:/var/lib/mysql
+      - ./infra/:/docker-entrypoint-initdb.d
+    networks:
+      - default
+      - lalala-network
+
+  user-redis:
+    image: redis:7.0
+    ports:
+      - 12200:6379
+
+  user-adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 13900:8080
+
+networks:
+  lalala-network:
+    driver: bridge
+    external: true

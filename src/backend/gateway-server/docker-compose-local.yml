@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  gateway-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      eureka.instance.hostname: localhost
+      eureka.client.service-url.defaultZone: http://discovery-app:34100/eureka
+    restart: always
+    ports:
+      - 34000:34000
+    networks:
+      - lalala-network
+
+networks:
+  lalala-network:
+    driver: bridge
+    external: true
