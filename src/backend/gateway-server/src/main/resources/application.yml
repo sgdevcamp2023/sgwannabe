@@ -101,6 +101,7 @@ spring:
             - RewritePath=/user/?(?<segment>.*), /v1/api/$\{segment}
 
       default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
         - name: AuthorizationFilter
           args:
             baseMessage: Gateway Authorization Filter
