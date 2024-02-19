@@ -25,9 +25,9 @@ function ChattingHeader({ stompClient }: ChattingProps) {
             </div>
           </div>
           <div className="flex flex-row items-center">
-            <button className="px-4 py-1 rounded-md bg-primary font-700 text-textBlack">
+            {/* <button className="px-4 py-1 rounded-md bg-primary font-700 text-textBlack">
               팔로잉
-            </button>
+            </button> */}
             <div className="mx-4 text-white">
               {state.playlistOwner.nickName}
             </div>
