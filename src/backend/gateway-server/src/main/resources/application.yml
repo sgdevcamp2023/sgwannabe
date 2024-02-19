@@ -28,6 +28,15 @@ spring:
               - POST
               - DELETE
               - OPTIONS
+
+      default-filters:
+        - name: AuthorizationFilter
+          args:
+            baseMessage: Gateway Authorization Filter
+            preLogger: true
+            postLogger: true
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+
       routes:
         - id: ALARM-SERVICE
           uri: lb://ALARM-SERVER
@@ -105,14 +114,6 @@ spring:
             - Path=/user/**
           filters:
             - RewritePath=/user/?(?<segment>.*), /v1/api/$\{segment}
-
-      default-filters:
-        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
-        - name: AuthorizationFilter
-          args:
-            baseMessage: Gateway Authorization Filter
-            preLogger: true
-            postLogger: true
 
       websockets:
         enabled: true

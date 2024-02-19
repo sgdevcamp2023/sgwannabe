@@ -2,6 +2,7 @@ package com.lalala.gateway.filter;
 
 import java.util.Arrays;
 
+import java.util.List;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -28,7 +29,6 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<Authorizat
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
             String uri = exchange.getRequest().getURI().getPath();
-
             if (isWhiteList(uri)) {
                 return chain.filter(exchange);
             }
@@ -70,7 +70,8 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<Authorizat
     }
 
     private boolean isRequestContainsAuthorization(ServerWebExchange exchange) {
-        return exchange.getRequest().getHeaders().get(AUTHORIZATION_HEADER_NAME).size() == 1;
+        List<String> authorization = exchange.getRequest().getHeaders().get(AUTHORIZATION_HEADER_NAME);
+        return authorization != null && !authorization.isEmpty();
     }
 
     private boolean isWhiteList(String target) {
