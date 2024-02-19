@@ -1,6 +1,7 @@
 package chattingserver.service;
 
 import chattingserver.domain.chat.ChatMessage;
+import chattingserver.domain.room.Music;
 import chattingserver.domain.room.Room;
 import chattingserver.domain.room.User;
 import chattingserver.dto.ChatMessageDto;
@@ -16,14 +17,15 @@ import com.lalala.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -80,12 +82,7 @@ public class ChatMessageService {
     public Page<ChatMessageResponseDto> chatMessagePagination(String roomId, int page) {
         Page<ChatMessage> messagePage = chatMessageRepository.findByRoomIdWithPagingAndFiltering(roomId, page, SIZE);
         log.info("특정 채팅방 메시지 페이지네이션 조회 성공 roomId={}", roomId);
-        return messagePage.map(new Function<ChatMessage, ChatMessageResponseDto>() {
-            @Override
-            public ChatMessageResponseDto apply(ChatMessage message) {
-                return entityToResponseDtoConverter.convertToResponseMessage(message);
-            }
-        });
+        return messagePage.map(entityToResponseDtoConverter::convertToResponseMessage);
     }
 
     public void deleteChat(String id) {
@@ -122,7 +119,11 @@ public class ChatMessageService {
 
             roomRepository.addUserToRoom(room.getId(), joinedUser);
 
-            return entityToResponseDtoConverter.convertMessage(message);
+            ChatMessageDto chatMessageDto1 = entityToResponseDtoConverter.convertMessage(message);
+            chatMessageDto1.setCurrentMusicId(getCurrentMusicId(room.getId()));
+
+            log.info(chatMessageDto1.toString());
+            return chatMessageDto1;
         } catch (Exception e) {
             log.error("트랜잭션 오류: {}", e.getMessage());
             // TODO 트랜잭션 롤백 또는 예외 처리 로직 추가
@@ -170,4 +171,36 @@ public class ChatMessageService {
         return messages.stream().map(entityToResponseDtoConverter::convertToResponseMessage).collect(Collectors.toList());
     }
 
+    public Long getCurrentMusicId(String roomId) {
+        Optional<Room> optionalRoom = roomRepository.findById(roomId);
+        if (optionalRoom.isEmpty()) {
+            throw new BusinessException("존재하지 않는 채팅방입니다.", ErrorCode.UNKNOWN_ERROR);
+        }
+
+        Room room = optionalRoom.get();
+
+        Duration elapsedTime = Duration.between(room.getCreatedAt(), LocalDateTime.now());
+
+        Duration totalPlaylistTime = room.getPlaylistDuration();
+
+        log.info("room={}", room);
+        log.info("elapsedTime={}", elapsedTime.toString());
+        log.info("totalPlaylistTime: playlist={}, playlistTime={}", room.getPlaylist().toString(), totalPlaylistTime);
+
+        long currentPlaylistTimeInSeconds = elapsedTime.abs().getSeconds() % totalPlaylistTime.getSeconds();
+
+        log.info("currentPlaylistTimeInSeconds={}", currentPlaylistTimeInSeconds);
+
+        Duration playlistTime = Duration.ZERO;
+        List<Music> playlist = room.getPlaylist().getMusics();
+        for (Music music : playlist) {
+            playlistTime = playlistTime.plus(music.getPlayTimeDuration());
+            if (playlistTime.getSeconds() >= currentPlaylistTimeInSeconds) {
+                log.info("music.getId()={}", music.getId());
+                return music.getId();
+            }
+        }
+
+        throw new BusinessException("해당하는 음원이 없습니다.", ErrorCode.UNKNOWN_ERROR);
+    }
 }

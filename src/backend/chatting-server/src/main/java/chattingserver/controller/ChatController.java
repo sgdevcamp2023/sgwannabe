@@ -7,7 +7,6 @@ import chattingserver.dto.response.CommonAPIMessage;
 import chattingserver.dto.response.ReEnterResponseDto;
 import chattingserver.service.ChatMessageService;
 import chattingserver.service.RoomService;
-//import chattingserver.util.constant.ErrorCode;
 import com.lalala.exception.BusinessException;
 import com.lalala.exception.ErrorCode;
 import com.lalala.response.BaseResponse;
@@ -27,6 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -46,8 +46,6 @@ public class ChatController {
     @Operation(summary = "웹소켓 메시지 전송")
     public void sendSocketMessage(@Valid @RequestBody ChatMessageDto chatMessageDto) {
         if (!roomService.isExistingRoom(chatMessageDto.getRoomId())) {
-//            log.error("메시지 전송 에러 : 존재하지 않는 방입니다. roomId={}", chatMessageDto.getRoomId());
-//            throw new CustomAPIException(ErrorCode.ROOM_NOT_FOUND_ERROR, "채팅방 id=" + chatMessageDto.getRoomId());
             throw new BusinessException("존재하지 않는 채팅방입니다. 채팅방 id=" + chatMessageDto.getRoomId(), ErrorCode.UNKNOWN_ERROR);
         }
         ChatMessageDto savedMessage = chatMessageService.saveChatMessage(chatMessageDto);
@@ -80,6 +78,7 @@ public class ChatController {
         ReEnterResponseDto responseDto = ReEnterResponseDto.builder()
                 .beforeMessages(chatMessageService.getMessagesBefore(roomId, readMsgId))
                 .newMessages(chatMessageService.getNewMessages(roomId, readMsgId))
+                .currentMusicId(chatMessageService.getCurrentMusicId(roomId))
                 .build();
 
         return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "채팅방 재입장 성공, 새 메시지 조회 성공", responseDto));

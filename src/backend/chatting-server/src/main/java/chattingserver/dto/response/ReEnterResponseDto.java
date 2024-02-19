@@ -12,4 +12,5 @@ import java.util.List;
 public class ReEnterResponseDto {
     private List<ChatMessageResponseDto> beforeMessages;
     private List<ChatMessageResponseDto> newMessages;
+    private Long currentMusicId;
 }
