@@ -40,6 +40,7 @@ public enum ErrorCode {
     DUPLICATE_EMAIL(400, "5003", "이메일이 중복됩니다."),
     SEND_MAIL_ERROR(400, "5004", "메일 전송 중 에러가 발생했습니다."),
     NOT_VALID_CODE(400, "5005", "유효한 코드가 아닙니다."),
+    JWT_TOKEN_EXPIRED(400, "5006", "JWT 토큰이 만료됐습니다."),
 
 // 6,000 ~ 6,999 : PlayList / Feed
 
