@@ -195,9 +195,7 @@ public class ChatMessageService {
         Duration playlistTime = Duration.ZERO;
         List<Music> playlist = room.getPlaylist().getMusics();
         for (Music music : playlist) {
-            Duration musicDuration = Duration.ofMinutes(Long.parseLong(music.getPlaytime().split(":")[0]))
-                    .plus(Duration.ofSeconds(Long.parseLong(music.getPlaytime().split(":")[1])));
-            playlistTime = playlistTime.plus(musicDuration);
+            playlistTime = playlistTime.plus(music.getPlayTimeDuration());
             if (playlistTime.getSeconds() >= currentPlaylistTimeInSeconds) {
                 log.info("music.getId()={}", music.getId());
                 return music.getId();
