@@ -3,11 +3,23 @@ import logo from "../assets/lalala_logo.png";
 import LoginInput from "../components/Login/LoginInput";
 import { useState } from "react";
 import userApi from "../api/userApi";
+import { useRecoilState } from "recoil";
+import { userInfo } from "../state";
 
 function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [user, setUser] = useRecoilState(userInfo);
+
+  const getUser = async () => {
+    try {
+      const response = await userApi.getUserInfo();
+      console.log(response);
+    } catch (error) {
+      console.error("로그인 에러", error);
+    }
+  };
 
   const postLogin = async () => {
     try {
@@ -15,7 +27,17 @@ function LoginPage() {
         email: email,
         password: password,
       });
-      console.log(response);
+      if (response.status === 200) {
+        setUser({
+          id: response.data.id,
+          nickName: response.data.nickName,
+        });
+        const { access_token, refresh_token } = response.data.data;
+        localStorage.setItem("access", access_token);
+        localStorage.setItem("refresh", refresh_token);
+        getUser();
+        navigate("/");
+      }
     } catch (error) {
       console.error("로그인 에러", error);
     }

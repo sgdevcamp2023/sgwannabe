@@ -40,9 +40,9 @@ function ChattingListPage() {
 
     const getJoinedChatList = async () => {
       try {
-        const chatListData = await chatApi.getChatList({ uid: 3 });
+        const chatListData = await chatApi.getJoinedChatList({ uid: 3 });
         setJoinedChatList(chatListData.data);
-        console.log(joinedChatList);
+        console.log("joined", joinedChatList);
       } catch (error) {
         console.error("채팅 목록 에러 발생:", error);
       }
@@ -54,7 +54,7 @@ function ChattingListPage() {
   return (
     <div className="w-full">
       <Header />
-      <div className="grid-rows-4 gap-3 mb-5">
+      <div className="grid grid-cols-4 gap-3 mb-5">
         {joinedChatList &&
           joinedChatList.map((room, index) => (
             <JoinedChattingRoom

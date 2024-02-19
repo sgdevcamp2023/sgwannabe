@@ -7,6 +7,7 @@ import ChattingHeader from "../components/Chat/ChattingHeader";
 import { useNavigate } from "react-router-dom";
 import { useParamsHook } from "../hooks/useParamsHook";
 import { useRecoilState } from "recoil";
+import chatApi from "../api/chatApi";
 
 export interface Message {
   content: string;
@@ -61,6 +62,21 @@ function ChattingPage() {
       return [parsedMessage, ...prevMessages];
     });
   };
+
+  useEffect(() => {
+    const leaveRoom = async () => {
+      try {
+        const response = await chatApi.putLeaveRoom({
+          roomId: roomId,
+          uid: 3,
+        });
+        console.log(response);
+      } catch (error) {
+        console.error("채팅방나가기 에러", error);
+      }
+    };
+    leaveRoom();
+  }, [location.pathname]);
 
   const fetchChatHistory = async (client: StompJs.Client) => {
     try {
