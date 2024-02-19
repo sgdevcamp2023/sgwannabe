@@ -36,6 +36,7 @@ SERVER_ORDER=(
 
 for SERVER in ${SERVER_ORDER[@]}; do
     git checkout $SERVER
+    git pull
     git rebase develop
     git push -f
 done
