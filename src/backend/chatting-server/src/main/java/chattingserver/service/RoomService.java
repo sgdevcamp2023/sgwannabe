@@ -62,6 +62,7 @@ public class RoomService {
                     .roomName(room.getRoomName())
                     .thumbnailImage(room.getThumbnailImage())
                     .users(room.getUsers())
+                    .userCount(room.getUsers().size())
                     .playlistOwner(entityToResponseDtoConverter.convertUser(room.getPlaylistOwner()))
                     .lastMessage(lastMessage)
                     .build());
