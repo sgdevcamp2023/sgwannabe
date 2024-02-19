@@ -1,0 +1,60 @@
+server:
+  port: 8080
+
+rabbitmq:
+  retry:
+    delay-in-ms: 1000
+    count: 3
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:28100/alarm
+    username: root
+    password: admin
+
+  rabbitmq:
+    host: localhost
+    username: admin
+    password: admin
+    port: 28300
+    listener:
+      simple:
+        default-requeue-rejected: 'false'
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      dialect: org.hibernate.dialect.MySQLDialect
+      hibernate:
+        format_sql: true
+        show_sql: true
+        use_sql_comments: true
+
+  kafka:
+    bootstrap-servers: localhost:40000,localhost:40001,localhost:40002
+    consumer:
+      group-id: alarm-group
+
+logging:
+  pattern:
+    level: "%5p [%X{traceId:-},%X{spanId:-}]"
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+    propagation:
+      consume: [b3, w3c]
+      produce: [b3, w3c]
+  zipkin:
+    tracing:
+      endpoint: "http://localhost:43000/api/v2/spans"

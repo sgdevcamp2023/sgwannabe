@@ -8,7 +8,7 @@
 ### 로컬 실행
 ```bash
 $ ./gradlew build
-$ docker-compose -f docker-compose-local-only-db.yml down && docker-compose -f docker-compose-local-only-db.yml up -d 
+$ docker-compose -f docker-compose.yml down && docker-compose -f docker-compose.yml up -d 
 $ java -jar chart-api/build/libs/XXX.jar
 ```
 

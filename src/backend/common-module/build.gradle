@@ -1,52 +1,14 @@
 plugins {
     id 'java'
-
-    id("org.springframework.boot") version "3.2.2"
-    id("io.spring.dependency-management") version "1.1.4"
+    id 'org.springframework.boot' version '3.2.2'
+    id 'io.spring.dependency-management' version '1.1.4'
 
     // Lint
-    id 'com.diffplug.spotless' version '6.25.0'
+    id "com.diffplug.spotless" version "6.25.0" apply false
 }
-
-group 'com.lalala'
-version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
-}
-
-dependencies {
-    // Web
-    implementation "org.springframework.boot:spring-boot-starter-web"
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-    // AOP
-    implementation "org.springframework.boot:spring-boot-starter-aop"
-
-    // Kafka
-    implementation "org.springframework.kafka:spring-kafka"
-
-    // Lombok
-    compileOnly "org.projectlombok:lombok"
-    annotationProcessor "org.projectlombok:lombok"
-
-    // Actuator
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
-    // Open Tracing
-    implementation 'io.micrometer:micrometer-tracing-bridge-brave'
-    implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
-
-    // Logback for LogStash
-    implementation 'net.logstash.logback:logstash-logback-encoder:6.3'
-}
-
-test {
-    useJUnitPlatform()
-}
-
-clean {
-    delete 'src/generated'
 }
 
 bootJar {
@@ -57,28 +19,89 @@ jar {
     enabled = true
 }
 
-spotless {
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'com.diffplug.spotless'
+
+    group = 'com.lalala'
+    version = '0.0.1-SNAPSHOT'
+
     java {
-        googleJavaFormat()			// 구글 자바 포맷 적용
-
-        removeUnusedImports()       // 사용하지 않는 import 제거
-        trimTrailingWhitespace() 	// 공백 제거
-        endWithNewline() 			// 끝부분 New Line 처리
-
-        // Indentation
-        indentWithTabs(2)
-        indentWithSpaces(4)
-
-        // import 순서 정의
-        importOrder(
-                "java",
-                "javax",
-                "lombok",
-                "org.springframework",
-                "",
-                "\\#",
-                "org.junit",
-                "\\#org.junit",
-        )
+        sourceCompatibility = '17'
     }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    bootJar {
+        enabled = false
+    }
+
+    jar {
+        enabled = true
+    }
+
+    dependencies {
+        // AOP
+        implementation "org.springframework.boot:spring-boot-starter-aop"
+
+        // Lombok
+        compileOnly "org.projectlombok:lombok"
+        annotationProcessor "org.projectlombok:lombok"
+    }
+
+    spotless {
+        java {
+            googleJavaFormat()			// 구글 자바 포맷 적용
+
+            removeUnusedImports()       // 사용하지 않는 import 제거
+            trimTrailingWhitespace() 	// 공백 제거
+            endWithNewline() 			// 끝부분 New Line 처리
+
+            // Indentation
+            indentWithTabs(2)
+            indentWithSpaces(4)
+
+            // import 순서 정의
+            importOrder(
+                    "java",
+                    "javax",
+                    "lombok",
+                    "org.springframework",
+                    "",
+                    "\\#",
+                    "org.junit",
+                    "\\#org.junit",
+            )
+        }
+    }
+}
+
+project(':common-module:common-mvc') {
+    dependencies {
+        implementation project(':common-module:common')
+    }
+}
+
+project(':common-module:common-reactive') {
+    dependencies {
+        implementation project(':common-module:common')
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+clean {
+    delete 'src/generated'
 }

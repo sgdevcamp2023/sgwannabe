@@ -1,0 +1,44 @@
+version: "3.9"
+services:
+  auth-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 10000:10000
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://user-mysql:3306/lalala?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_DATASOURCE_DRIVER-CLASS-NAME: com.mysql.cj.jdbc.Driver
+
+      SPRING_JPA_PROPERTIES_DIALECT: org.hibernate.dialect.MySQLDialect
+
+      SPRING_DATA_REDIS_HOST: auth-redis
+      SPRING_DATA_REDIS_PORT: 6379
+
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
+
+      EUREKA_INSTANCE_HOSTNAME: auth-app
+      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:34100/eureka
+
+      PASSPORT_ALGORITHM: HmacSHA256
+      PASSPORT_KEY: SECRET_KEY
+
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://infra-zipkin:9411/api/v2/spans
+    depends_on:
+      - auth-redis
+    networks:
+      - default
+      - lalala-network
+
+  auth-redis:
+    image: redis:7.0
+    ports:
+      - 10100:6379
+
+networks:
+  lalala-network:
+    driver: bridge
+    external: true

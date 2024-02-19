@@ -3,8 +3,10 @@ package com.lalala.chart.controller
 import com.lalala.chart.controller.dto.ChartResponse
 import com.lalala.chart.controller.dto.CreateChartRequest
 import com.lalala.chart.service.ChartService
+import com.lalala.response.BaseResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -23,15 +25,29 @@ class ChartController(
     @Operation(summary = "차트 조회", description = "차트 조회 API")
     fun getChart(
         @RequestParam(required = false) timeStamp: Int?,
-    ): Mono<ChartResponse> =
+    ): Mono<BaseResponse<ChartResponse>> =
         chartService.getChart(timeStamp)
             .map { ChartResponse.of(it) }
+            .map {
+                BaseResponse.from(
+                    HttpStatus.OK.value(),
+                    "차트를 조회했습니다.",
+                    it
+                )
+            }
 
     @PostMapping
     @Operation(summary = "차트 생성", description = "차트 생성 API")
     fun createChart(
         @RequestBody request: CreateChartRequest,
-    ): Mono<ChartResponse> =
+    ): Mono<BaseResponse<ChartResponse>> =
         chartService.createChart(request.timeStamp, request.records)
             .map { ChartResponse.of(it) }
+            .map {
+                BaseResponse.from(
+                    HttpStatus.OK.value(),
+                    "차트를 생성했습니다.",
+                    it
+                )
+            }
 }

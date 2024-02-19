@@ -117,4 +117,25 @@ public class MusicService {
 
         return MusicDetailDTO.from(music, artist, album);
     }
+
+    public List<MusicDTO> getMusicfromIds(List<Long> ids) {
+        List<MusicEntity> musics = repository.findAllById(ids);
+
+        List<Long> artistIds = musics.stream().map(MusicEntity::getArtistId).toList();
+        Map<Long, ArtistEntity> artistMap =
+                artistRepository.findAllById(artistIds).stream()
+                        .collect(Collectors.toMap(ArtistEntity::getId, Function.identity()));
+
+        List<Long> albumIds = musics.stream().map(MusicEntity::getAlbumId).toList();
+        Map<Long, AlbumEntity> albumMap =
+                albumRepository.findAllById(albumIds).stream()
+                        .collect(Collectors.toMap(AlbumEntity::getId, Function.identity()));
+
+        return musics.stream()
+                .map(
+                        music ->
+                                MusicDTO.from(
+                                        music, albumMap.get(music.getAlbumId()), artistMap.get(music.getArtistId())))
+                .toList();
+    }
 }

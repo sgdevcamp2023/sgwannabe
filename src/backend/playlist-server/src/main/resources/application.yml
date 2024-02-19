@@ -4,22 +4,22 @@ spring:
 
   data:
     mongodb:
-      host: mongodb
-      port: 27017
-      database: playlistdb
-      username: root
-      password: 1234
+      host: localhost
+      port: 16100
+      database: playlist
+      username: admin
+      password: QOdmQodmsapomd41dM
       authentication-database: admin
 
     redis:
-      port: 6379
-      host: redis
+      host: localhost
+      port: 16200
 
   kafka:
     bootstrap-servers: localhost:40000,localhost:40001,localhost:40002
 
 server:
-  port: 16002
+  port: 16000
 
 eureka:
   instance:

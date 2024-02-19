@@ -12,7 +12,7 @@
 
 <script>
     var audioPlayer = document.getElementById('audioPlayer');
-    var socket = new WebSocket('ws://localhost:22000/streaming');
+    var socket = new WebSocket('ws://localhost:22000/v1/ws/streaming');
 
     socket.binaryType = 'arraybuffer';
     var stream = false;
@@ -21,7 +21,7 @@
     var sourceNode;
 
     socket.onopen = function (event) {
-        socket.send("1/1");
+        socket.send("1/4");
     }
 
     var time = 0;
@@ -30,7 +30,7 @@
 
         if (!stream) {
             console.log(event.data);
-            socket.send("2/1/0");
+            socket.send("2/4/0");
             stream = true;
         } else {
             if (!sourceNode) {

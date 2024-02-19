@@ -1,0 +1,60 @@
+version: '3.9'
+services:
+  music-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 24000:24000
+    environment:
+      UPLOADER_URL: http://music-uploader-server:3000
+
+      SPRING_DATASOURCE_URL: jdbc:mysql://music-mysql:3306/music?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: admin
+
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
+      SPRING_KAFKA_CONSUMER_GROUP-ID: music-group
+
+      EUREKA_INSTANCE_HOSTNAME: music-app
+      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:34100/eureka
+
+      PASSPORT_ALGORITHM: HmacSHA256
+      PASSPORT_KEY: SECRET_KEY
+
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://infra-zipkin:9411/api/v2/spans
+    depends_on:
+      - music-mysql
+    networks:
+      - default
+      - lalala-network
+
+  music-mysql:
+    image: mysql:8.2.0
+    container_name: music-db
+    restart: always
+    ports:
+      - 24100:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: music
+      TZ: Asia/Seoul
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./.docker/mysql/:/var/lib/mysql
+      - ./infra/:/docker-entrypoint-initdb.d
+
+  music-adminer:
+    image: adminer
+    container_name: music-adminer
+    restart: always
+    ports:
+      - 24900:8080
+
+networks:
+  lalala-network:
+    driver: bridge
+    external: true

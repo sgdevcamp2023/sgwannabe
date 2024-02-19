@@ -6,7 +6,7 @@ services:
     ports:
       - 28000:28000
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://alarm-mysql:3306/user?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
+      SPRING_DATASOURCE_URL: jdbc:mysql://alarm-mysql:3306/alarm?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: admin
       SPRING_DATASOURCE_DRIVER-CLASS-NAME: com.mysql.cj.jdbc.Driver
@@ -46,7 +46,7 @@ services:
       - 28100:3306
     environment:
       MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: user
+      MYSQL_DATABASE: alarm
       TZ: Asia/Seoul
     command:
       - --character-set-server=utf8mb4
