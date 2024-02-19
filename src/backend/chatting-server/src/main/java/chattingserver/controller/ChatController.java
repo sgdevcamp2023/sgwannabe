@@ -81,14 +81,14 @@ public class ChatController {
                 .currentMusicId(chatMessageService.getCurrentMusicId(roomId))
                 .build();
 
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "채팅방 재입장 성공, 새 메시지 조회 성공", responseDto));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "채팅방 재입장 성공, 새 메시지 조회 성공", responseDto));
     }
 
     @Operation(summary = "특정 채팅방 히스토리 조회", description = "내림차순으로 특정 채팅방의 전체 메세지를 조회합니다.")
     @GetMapping("/history/{roomId}")
     public ResponseEntity<BaseResponse<List<ChatMessageResponseDto>>> allMessagesAtRoom(@PathVariable String roomId) {
         List<ChatMessageResponseDto> allMessagesAtRoom = chatMessageService.getAllMessagesAtRoom(roomId);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "채팅방 히스토리 조회 성공", allMessagesAtRoom));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "채팅방 히스토리 조회 성공", allMessagesAtRoom));
     }
 
     @Operation(summary = "채팅 메시지 Pagination", description = "내림차순으로 해당 채팅방 메시지 Pagination, 사이즈 N = 20 고정")
@@ -97,7 +97,7 @@ public class ChatController {
             @RequestParam String roomId,
             @Parameter(description = "첫 페이지는 0부터 시작") @RequestParam int page) {
         Page<ChatMessageResponseDto> responseDtos = chatMessageService.chatMessagePagination(roomId, page);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "채팅메시지 페이지네이션 성공", responseDtos));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "채팅메시지 페이지네이션 성공", responseDtos));
     }
 
     @MessageMapping("/join")

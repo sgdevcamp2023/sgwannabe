@@ -5,11 +5,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 
 import com.lalala.aop.AuthenticationContext;
-import com.lalala.aop.PassportAspect;
-import com.lalala.config.CommonModuleConfig;
+import com.lalala.mvc.aop.PassportAspect;
+import com.lalala.mvc.config.CommonMvcModuleConfig;
+
 
 @Import({
-		CommonModuleConfig.class,
+		CommonMvcModuleConfig.class,
 		AuthenticationContext.class,
 		PassportAspect.class,
 })
