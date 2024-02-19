@@ -185,7 +185,7 @@ public class ChatMessageService {
 
         log.info("room={}", room);
         log.info("elapsedTime={}", elapsedTime.toString());
-        log.info("totalPlaylistTime: playlist={}, playlistTime={}", room.getPlaylist().toString(), totalPlaylistTime.toString());
+        log.info("totalPlaylistTime: playlist={}, playlistTime={}", room.getPlaylist().toString(), totalPlaylistTime);
 
         long currentPlaylistTimeInSeconds = elapsedTime.abs().getSeconds() % totalPlaylistTime.getSeconds();
 
