@@ -1,5 +1,9 @@
 package com.sgwannabe.playlistserver.playlist.service;
 
+import com.lalala.response.BaseResponse;
+import com.sgwannabe.playlistserver.external.feign.FeignMusicClient;
+import com.sgwannabe.playlistserver.external.feign.dto.MusicDTO;
+import com.sgwannabe.playlistserver.external.feign.dto.MusicRetrieveRequestDTO;
 import com.sgwannabe.playlistserver.music.domain.Music;
 import com.sgwannabe.playlistserver.music.dto.MusicOrderChangeRequestDto;
 import com.sgwannabe.playlistserver.music.dto.MusicRequestDto;
@@ -7,7 +11,6 @@ import com.sgwannabe.playlistserver.playlist.domain.Playlist;
 import com.sgwannabe.playlistserver.playlist.dto.PlaylistRequestDto;
 import com.sgwannabe.playlistserver.playlist.dto.PlaylistResponseDto;
 import com.sgwannabe.playlistserver.playlist.util.PlaylistToDtoConverter;
-import com.sgwannabe.playlistserver.playlist.exception.NotFoundException;
 import com.sgwannabe.playlistserver.playlist.repository.PlaylistRepository;
 import com.sgwannabe.playlistserver.playlist.util.KeyGenerator;
 import lombok.RequiredArgsConstructor;
@@ -30,14 +33,33 @@ public class PlaylistService {
     private final PlaylistToDtoConverter converter;
     private final TransactionalService transactionalService;
 
+    private final FeignMusicClient musicClient;
+
 
     public PlaylistResponseDto createPlaylist(PlaylistRequestDto playlistRequestDto) {
+
+        BaseResponse<List<MusicDTO>> response = musicClient.getMusicFromIds(
+                new MusicRetrieveRequestDTO(playlistRequestDto.getMusics())
+        );
+
+        List<Music> musics = response.getData().stream().map(musicDTO ->
+                Music.builder()
+                    .id(musicDTO.getId())
+                    .title(musicDTO.getTitle())
+                    .artistId(musicDTO.getArtist().getId())
+                    .artist(musicDTO.getArtist().getName())
+                    .albumId(musicDTO.getAlbum().getId())
+                    .album(musicDTO.getAlbum().getTitle())
+                    .thumbnail(musicDTO.getAlbum().getCoverUrl())
+                    .playtime(getPlayTime(musicDTO.getPlayTime()))
+                    .build()
+        ).toList();
 
         Playlist playlist = Playlist.builder()
                 .uid(playlistRequestDto.getUid())
                 .userName(playlistRequestDto.getUserName())
                 .name(playlistRequestDto.getName())
-                .musics(playlistRequestDto.getMusics())
+                .musics(musics)
                 .thumbnail(playlistRequestDto.getThumbnail())
                 .build();
 
@@ -49,6 +71,12 @@ public class PlaylistService {
         log.info("savedPlaylist={}", saved);
         transactionalService.updateCacheAsync(saved);
         return converter.convert(saved);
+    }
+
+    private String getPlayTime(Short playTime) {
+        int min = playTime / 60;
+        int sec = playTime % 60;
+        return String.format("%02d:%02d", min, sec);
     }
 
     public PlaylistResponseDto getPlaylistById(String id) {
