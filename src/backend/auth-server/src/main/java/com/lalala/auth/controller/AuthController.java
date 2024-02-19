@@ -48,7 +48,6 @@ public class AuthController {
 
     @PostMapping("/token-refresh")
     public ResponseEntity<UserAndTokenResponse> accessTokenRefresh(@RequestBody TokenRefreshRequest request) {
-        log.info(request.accessToken());
         return authService.accessTokenRefresh(request);
     }
 }
