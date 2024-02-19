@@ -42,7 +42,8 @@ public enum ErrorCode {
     NOT_VALID_CODE(400, "5005", "유효한 코드가 아닙니다."),
     JWT_TOKEN_EXPIRED(400, "5006", "JWT 토큰이 만료됐습니다."),
 
-// 6,000 ~ 6,999 : PlayList / Feed
+    // 6,000 ~ 6,999 : PlayList / Feed
+    PLAYLIST_NOT_FOUND(400, "6000", "해당하는 플레이리스트가 없습니다."),
 
 // 7,000 ~ 7,999 : Search
 
