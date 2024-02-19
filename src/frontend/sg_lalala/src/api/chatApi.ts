@@ -21,6 +21,29 @@ const chatApi = {
       throw error;
     }
   },
+  postExitRoom: async ({ roomId, uid }: { roomId: string; uid: number }) => {
+    try {
+      const response = await apiHook.chat.post(`v1/api/rooms/exit/${roomId}`, {
+        uid: uid,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("에러 발생:", error);
+      throw error;
+    }
+  },
+  putLeaveRoom: async ({ roomId, uid }: { roomId: string; uid: number }) => {
+    try {
+      const response = await apiHook.chat.post(`v1/api/rooms/leave`, {
+        roomId: roomId,
+        uid: uid,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("에러 발생:", error);
+      throw error;
+    }
+  },
 };
 
 export default chatApi;

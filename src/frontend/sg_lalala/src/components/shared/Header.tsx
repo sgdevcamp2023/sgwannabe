@@ -3,9 +3,12 @@ import { IoSearch } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 import { colors } from "../../styles";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { userInfo } from "../../state";
 
 function Header() {
   const navigate = useNavigate();
+  const user = useRecoilValue(userInfo);
   return (
     <div className="flex flex-row items-center justify-between mt-5 mb-5">
       <div className="flex flex-row items-center">
@@ -22,13 +25,17 @@ function Header() {
           <IoSearch color={colors.primary} size={20} />
         </div>
       </div>
-      <div
-        className="flex flex-row items-center cursor-pointer"
-        onClick={() => navigate("/login")}
-      >
-        <FaUserCircle size="30" color={colors.gray} />
-        <div className="ml-3 text-textGray">로그인</div>
-      </div>
+      {user.id === 0 ? (
+        <div
+          className="flex flex-row items-center cursor-pointer"
+          onClick={() => navigate("/login")}
+        >
+          <FaUserCircle size="30" color={colors.gray} />
+          <div className="ml-3 text-textGray">로그인</div>
+        </div>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 }
