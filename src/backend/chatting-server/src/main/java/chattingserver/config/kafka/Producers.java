@@ -8,17 +8,27 @@ import chattingserver.dto.response.UserListResponseDto;
 import chattingserver.service.ChatMessageService;
 import chattingserver.service.RoomService;
 import chattingserver.util.constant.MessageType;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Component;
+import org.springframework.kafka.support.SendResult;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class Producers {
-    @Value("${spring.kafka.topic.chat-name}")
+    @Value("${kafka.topic.chat-name}")
     private String topicChatName;
 
     private final KafkaTemplate<String, ChatMessageDto> chatKafkaTemplate;
 
-    @Value("${spring.kafka.topic.room-name}")
+    @Value("${kafka.topic.room-name}")
     private String topicRoomName;
 
     private final KafkaTemplate<String, IndexingRequestMessageDto> roomKafkaTemplate;
@@ -63,4 +73,5 @@ public class Producers {
             }
         });
     }
+
 }

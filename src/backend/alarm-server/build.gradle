@@ -17,6 +17,10 @@ jar {
 }
 
 subprojects {
+	if (project.name.startsWith("common")) {
+		return
+	}
+
 	apply plugin: 'java'
 	apply plugin: 'org.springframework.boot'
 	apply plugin: 'io.spring.dependency-management'
@@ -39,6 +43,9 @@ subprojects {
 	}
 
 	dependencies {
+		implementation project(":common-module:common")
+		implementation project(":common-module:common-mvc")
+
 		// spring mvc
 		implementation 'org.springframework.boot:spring-boot-starter-web'
 		testImplementation 'org.springframework.boot:spring-boot-starter-test'

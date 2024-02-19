@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  discovery-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 34100:34100
+    networks:
+      - lalala-network
+
+networks:
+  lalala-network:
+    driver: bridge
+    external: true

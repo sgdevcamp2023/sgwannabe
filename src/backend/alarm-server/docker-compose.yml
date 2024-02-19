@@ -1,46 +1,5 @@
 version: "3.9"
 services:
-  alarm-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: always
-    ports:
-      - 28000:28000
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://alarm-mysql:3306/user?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: admin
-      SPRING_DATASOURCE_DRIVER-CLASS-NAME: com.mysql.cj.jdbc.Driver
-
-      SPRING_JPA_PROPERTIES_DIALECT: org.hibernate.dialect.MySQLDialect
-
-      SPRING_MAIL_HOST: smtp.gmail.com
-      SPRING_MAIL_USERNAME: smilegate.wannabe@gmail.com
-      SPRING_MAIL_PASSWORD: b3^weK*zh47gZxm5
-
-      SPRING_DATA_REDIS_HOST: alarm-redis
-      SPRING_DATA_REDIS_PORT: 6379
-
-      SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
-
-      EUREKA_INSTANCE_HOSTNAME: localhost
-      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:34100/eureka
-
-      PASSPORT_ALGORITHM: HmacSHA256
-      PASSPORT_KEY: SECRET_KEY
-
-      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://infra-zipkin:9411/api/v2/spans
-
-      SPRING_RABBITMQ_HOST: alarm-rabbitmq
-      SPRING_RABBITMQ_PORT: 5672
-    depends_on:
-      - alarm-mysql
-      - alarm-redis
-      - alarm-rabbitmq
-    networks:
-      - lalala-network
-
   alarm-mysql:
     image: mysql:8.2.0
     restart: always
@@ -48,7 +7,7 @@ services:
       - 28100:3306
     environment:
       MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: user
+      MYSQL_DATABASE: alarm
       TZ: Asia/Seoul
     command:
       - --character-set-server=utf8mb4

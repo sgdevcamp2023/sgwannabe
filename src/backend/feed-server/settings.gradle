@@ -1,4 +1,13 @@
 rootProject.name = 'feed'
 
-include(":common-module")
-findProject(":common-module")?.projectDir = file("../common-module")
+include ':common-module'
+project(':common-module').projectDir = file('../common-module')
+
+include ':common-module:common'
+project(':common-module:common').projectDir = file('../common-module/common')
+
+include ':common-module:common-mvc'
+project(':common-module:common-mvc').projectDir = file('../common-module/common-mvc')
+
+include ':common-module:common-reactive'
+project(':common-module:common-reactive').projectDir = file('../common-module/common-reactive')

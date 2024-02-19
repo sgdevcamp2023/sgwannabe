@@ -1,5 +1,8 @@
 package com.lalala.auth.config.jwt;
 
+import com.lalala.exception.BusinessException;
+import com.lalala.exception.ErrorCode;
+import io.jsonwebtoken.ExpiredJwtException;
 import java.time.Duration;
 import java.util.Date;
 import java.util.UUID;
@@ -113,11 +116,15 @@ public class JwtUtils {
     }
 
     public String getIdFromToken(String token) {
-        return Jwts.parser()
-                .verifyWith(key())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
+        try {
+            return Jwts.parser()
+                    .verifyWith(key())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .getSubject();
+        } catch (ExpiredJwtException exception) {
+            throw new BusinessException(ErrorCode.JWT_TOKEN_EXPIRED);
+        }
     }
 }

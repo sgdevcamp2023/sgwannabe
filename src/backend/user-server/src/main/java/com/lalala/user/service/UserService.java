@@ -41,7 +41,7 @@ public class UserService {
 
         emailService.sendSignUpMail(email, authCode);
 
-        return BaseResponse.from(HttpStatus.OK, "메일 전송에 성공했습니다.", true);
+        return BaseResponse.from(HttpStatus.OK.value(), "메일 전송에 성공했습니다.", true);
     }
 
     @Transactional
@@ -61,7 +61,7 @@ public class UserService {
 
         userRepository.save(user);
 
-        return BaseResponse.from(HttpStatus.OK, "회원가입에 성공했습니다.", user);
+        return BaseResponse.from(HttpStatus.OK.value(), "회원가입에 성공했습니다.", user);
     }
 
     public void validateEmailDuplicate(String email) {
@@ -83,7 +83,7 @@ public class UserService {
 
         redisService.deleteRedisTemplateValue(email);
 
-        return BaseResponse.from(HttpStatus.OK, "인증코드가 일치합니다", true);
+        return BaseResponse.from(HttpStatus.OK.value(), "인증코드가 일치합니다", true);
     }
 
     @Transactional
@@ -98,7 +98,7 @@ public class UserService {
 
         userRepository.save(user);
 
-        return BaseResponse.from(HttpStatus.OK, "비밀번호 변경에 성공했습니다.", true);
+        return BaseResponse.from(HttpStatus.OK.value(), "비밀번호 변경에 성공했습니다.", true);
     }
 
     @Transactional
@@ -112,7 +112,7 @@ public class UserService {
 
         userRepository.save(user);
 
-        return BaseResponse.from(HttpStatus.OK, "프로필 이미지 변경에 성공했습니다.", true);
+        return BaseResponse.from(HttpStatus.OK.value(), "프로필 이미지 변경에 성공했습니다.", true);
     }
 
     public BaseResponse<UserInfoResponse> userInfo(UserInfo userInfo) {
@@ -127,6 +127,6 @@ public class UserService {
                 .nickname(user.getNickname())
                 .build();
 
-        return BaseResponse.from(HttpStatus.OK, "회원가입에 성공했습니다.", userInfoResponse);
+        return BaseResponse.from(HttpStatus.OK.value(), "회원정보 조회에 성공했습니다.", userInfoResponse);
     }
 }

@@ -1,5 +1,11 @@
 package com.sgwannabe.playlistserver.playlist.service;
 
+import com.lalala.exception.BusinessException;
+import com.lalala.exception.ErrorCode;
+import com.lalala.response.BaseResponse;
+import com.sgwannabe.playlistserver.external.feign.FeignMusicClient;
+import com.sgwannabe.playlistserver.external.feign.dto.MusicDTO;
+import com.sgwannabe.playlistserver.external.feign.dto.MusicRetrieveRequestDTO;
 import com.sgwannabe.playlistserver.music.domain.Music;
 import com.sgwannabe.playlistserver.music.dto.MusicOrderChangeRequestDto;
 import com.sgwannabe.playlistserver.music.dto.MusicRequestDto;
@@ -7,7 +13,6 @@ import com.sgwannabe.playlistserver.playlist.domain.Playlist;
 import com.sgwannabe.playlistserver.playlist.dto.PlaylistRequestDto;
 import com.sgwannabe.playlistserver.playlist.dto.PlaylistResponseDto;
 import com.sgwannabe.playlistserver.playlist.util.PlaylistToDtoConverter;
-import com.sgwannabe.playlistserver.playlist.exception.NotFoundException;
 import com.sgwannabe.playlistserver.playlist.repository.PlaylistRepository;
 import com.sgwannabe.playlistserver.playlist.util.KeyGenerator;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,14 +34,33 @@ public class PlaylistService {
     private final PlaylistToDtoConverter converter;
     private final TransactionalService transactionalService;
 
+    private final FeignMusicClient musicClient;
+
 
     public PlaylistResponseDto createPlaylist(PlaylistRequestDto playlistRequestDto) {
+
+        BaseResponse<List<MusicDTO>> response = musicClient.getMusicFromIds(
+                new MusicRetrieveRequestDTO(playlistRequestDto.getMusics())
+        );
+
+        List<Music> musics = response.getData().stream().map(musicDTO ->
+                Music.builder()
+                    .id(musicDTO.getId())
+                    .title(musicDTO.getTitle())
+                    .artistId(musicDTO.getArtist().getId())
+                    .artist(musicDTO.getArtist().getName())
+                    .albumId(musicDTO.getAlbum().getId())
+                    .album(musicDTO.getAlbum().getTitle())
+                    .thumbnail(musicDTO.getAlbum().getCoverUrl())
+                    .playtime(getPlayTime(musicDTO.getPlayTime()))
+                    .build()
+        ).toList();
 
         Playlist playlist = Playlist.builder()
                 .uid(playlistRequestDto.getUid())
                 .userName(playlistRequestDto.getUserName())
                 .name(playlistRequestDto.getName())
-                .musics(playlistRequestDto.getMusics())
+                .musics(musics)
                 .thumbnail(playlistRequestDto.getThumbnail())
                 .build();
 
@@ -51,6 +74,12 @@ public class PlaylistService {
         return converter.convert(saved);
     }
 
+    private String getPlayTime(Short playTime) {
+        int min = playTime / 60;
+        int sec = playTime % 60;
+        return String.format("%02d:%02d", min, sec);
+    }
+
     public PlaylistResponseDto getPlaylistById(String id) {
         String key = KeyGenerator.playlistKeyGenerate(id);
         Playlist cachedPlaylist = redisTemplate.opsForValue().get(key);
@@ -58,16 +87,10 @@ public class PlaylistService {
             return converter.convert(cachedPlaylist);
         }
 
-        Optional<Playlist> playlistOptional = playlistRepository.findById(id);
-        if (playlistOptional.isPresent()) {
-            Playlist playlist = playlistOptional.get();
-            transactionalService.updateCacheAsync(playlist);
-            return converter.convert(playlist);
-        } else {
-            log.info("플레이리스트를 찾을 수 없습니다. id: {}", id);
-
-            throw new NotFoundException("해당하는 플레이리스트가 없습니다 id: " + id);
-        }
+        Playlist playlist = playlistRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PLAYLIST_NOT_FOUND));
+        transactionalService.updateCacheAsync(playlist);
+        return converter.convert(playlist);
     }
 
     public List<PlaylistResponseDto> getPlaylistsByUserId(Long userId) {
@@ -79,36 +102,25 @@ public class PlaylistService {
 
     @Transactional
     public PlaylistResponseDto updatePlayListById(String id, PlaylistRequestDto playlistRequestDto) {
-        Optional<Playlist> existingPlaylistOptional = playlistRepository.findById(id);
-        if (existingPlaylistOptional.isPresent()) {
-            Playlist existingPlaylist = existingPlaylistOptional.get();
+        Playlist playlist = playlistRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PLAYLIST_NOT_FOUND));
 
-            existingPlaylist.updateName(playlistRequestDto.getName());
+        playlist.updateName(playlistRequestDto.getName());
 
-            Playlist saved = playlistRepository.save(existingPlaylist);
-            transactionalService.updateCacheAsync(saved);
+        Playlist saved = playlistRepository.save(playlist);
+        transactionalService.updateCacheAsync(saved);
 
-            return converter.convert(existingPlaylist);
-        } else {
-            throw new NotFoundException("해당하는 플레이리스트가 없습니다 id: " + id);
-        }
+        return converter.convert(playlist);
     }
 
     @Transactional
     public void deletePlaylistById(String id) {
-        Optional<Playlist> existingPlaylistOptional = playlistRepository.findById(id);
-        if (existingPlaylistOptional.isPresent()) {
-            Playlist existingPlaylist = existingPlaylistOptional.get();
+        Playlist playlist = playlistRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PLAYLIST_NOT_FOUND));
 
-            playlistRepository.deleteById(id);
-            deleteCache(existingPlaylist);
-
-        } else {
-            throw new NotFoundException("해당하는 플레이리스트가 없습니다 id: " + id);
-        }
+        playlistRepository.deleteById(id);
+        deleteCache(playlist);
     }
-
-
 
     private void updateCache(Playlist playlist) {
         String key = KeyGenerator.playlistKeyGenerate(playlist.getId());
@@ -122,65 +134,53 @@ public class PlaylistService {
 
     @Transactional
     public PlaylistResponseDto addMusic(String playlistId, MusicRequestDto musicRequestDto) {
-        Optional<Playlist> existingPlaylistOptional = playlistRepository.findById(playlistId);
-        if (existingPlaylistOptional.isPresent()) {
-            Playlist existingPlaylist = existingPlaylistOptional.get();
+        Playlist playlist = playlistRepository.findById(playlistId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PLAYLIST_NOT_FOUND));
 
-            Music music = Music.builder()
-                    .title(musicRequestDto.getTitle())
-                    .artistId(musicRequestDto.getArtistId())
-                    .artist(musicRequestDto.getArtist())
-                    .albumId(musicRequestDto.getAlbumId())
-                    .album(musicRequestDto.getAlbum())
-                    .thumbnail(musicRequestDto.getThumbnail())
-                    .playtime(musicRequestDto.getPlaytime())
-                    .build();
+        Music music = Music.builder()
+                .title(musicRequestDto.getTitle())
+                .artistId(musicRequestDto.getArtistId())
+                .artist(musicRequestDto.getArtist())
+                .albumId(musicRequestDto.getAlbumId())
+                .album(musicRequestDto.getAlbum())
+                .thumbnail(musicRequestDto.getThumbnail())
+                .playtime(musicRequestDto.getPlaytime())
+                .build();
 
-            existingPlaylist.addMusic(music);
-            existingPlaylist.updateTotalMusicCount();
+        playlist.addMusic(music);
+        playlist.updateTotalMusicCount();
 
-            playlistRepository.save(existingPlaylist);
-            updateCache(existingPlaylist);
+        playlistRepository.save(playlist);
+        updateCache(playlist);
 
-            return converter.convert(existingPlaylist);
-        } else {
-            throw new NotFoundException("해당하는 플레이리스트가 없습니다 id: " + playlistId);
-        }
+        return converter.convert(playlist);
     }
 
     @Transactional
     public PlaylistResponseDto removeMusic(String playlistId, Long musicId) {
-        Optional<Playlist> existingPlaylistOptional = playlistRepository.findById(playlistId);
-        if (existingPlaylistOptional.isPresent()) {
-            Playlist existingPlaylist = existingPlaylistOptional.get();
+        Playlist playlist = playlistRepository.findById(playlistId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PLAYLIST_NOT_FOUND));
 
-            existingPlaylist.removeMusic(musicId);
-            existingPlaylist.updateTotalMusicCount();
+        playlist.removeMusic(musicId);
+        playlist.updateTotalMusicCount();
 
-            playlistRepository.save(existingPlaylist);
-            updateCache(existingPlaylist);
+        playlistRepository.save(playlist);
+        updateCache(playlist);
 
-            return converter.convert(existingPlaylist);
-        } else {
-            throw new NotFoundException("해당하는 플레이리스트가 없습니다 id: " + playlistId);
-        }
+        return converter.convert(playlist);
     }
 
     @Transactional
     public PlaylistResponseDto changeMusicOrder(String playlistId, MusicOrderChangeRequestDto musicOrderChangeRequestDto) {
-        Optional<Playlist> existingPlaylistOptional = playlistRepository.findById(playlistId);
-        if (existingPlaylistOptional.isPresent()) {
-            Playlist existingPlaylist = existingPlaylistOptional.get();
+        Playlist playlist = playlistRepository.findById(playlistId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PLAYLIST_NOT_FOUND));
 
-            existingPlaylist.changeMusicOrder(musicOrderChangeRequestDto.getFromIndex(), musicOrderChangeRequestDto.getToIndex());
+        playlist.changeMusicOrder(musicOrderChangeRequestDto.getFromIndex(), musicOrderChangeRequestDto.getToIndex());
 
-            playlistRepository.save(existingPlaylist);
-            updateCache(existingPlaylist);
+        playlistRepository.save(playlist);
+        updateCache(playlist);
 
-            return converter.convert(existingPlaylist);
-        } else {
-            throw new NotFoundException("해당하는 플레이리스트가 없습니다 id: " + playlistId);
-        }
+        return converter.convert(playlist);
     }
 
 }

@@ -1,5 +1,7 @@
 server:
   port: 34000
+  netty:
+    worker-count: 2
 
 spring:
   application:
@@ -10,6 +12,10 @@ spring:
 
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true
+
       globalcors:
         cors-configurations:
           '[/**]':
@@ -47,16 +53,23 @@ spring:
         - id: CHATTING-SERVICE-API
           uri: lb://CHATTING-SERVER
           predicates:
-            - Path=/chatting/v1/api/
+            - Path=/chatting/chat/**, /chatting/rooms/**
           filters:
-            - RewritePath=/chatting/v1/api/(?<segment>/?.*), /v1/api/$\{segment}
+            - RewritePath=/chatting/(?<segment>/?.*), /v1/api/${segment}
+
+        - id: CHATTING-SERVICE-SOCKJS
+          uri: lb://CHATTING-SERVER
+          predicates:
+            - Path=/chatting/ws-chat/info/**
+          filters:
+            - RewritePath=/chatting/(?<segment>/?.*), /${segment}
 
         - id: CHATTING-SERVICE-STOMP
           uri: lb:ws://CHATTING-SERVER
           predicates:
-            - Path=/chatting/**
+            - Path=/chatting/ws-chat/**
           filters:
-            - RewritePath=/chatting/(?<segment>/?.*), /$\{segment}
+            - RewritePath=/chatting/(?<segment>/?.*), /${segment}
 
         - id: FEED
           uri: lb://FEED-SERVER
@@ -86,13 +99,6 @@ spring:
           filters:
             - RewritePath=/search/?(?<segment>.*), /v1/api/$\{segment}
 
-        - id: STREAMING
-          uri: lb:ws://STREAMING-SERVER
-          predicates:
-            - Path=/streaming/**
-          filters:
-            - RewritePath=/streaming/?(?<segment>.*), /v1/ws/streaming/$\{segment}
-
         - id: USER
           uri: lb://USER-SERVER
           predicates:
@@ -106,6 +112,12 @@ spring:
             baseMessage: Gateway Authorization Filter
             preLogger: true
             postLogger: true
+
+      websockets:
+        enabled: true
+
+auth:
+  url: http://localhost:10000
 
 feign:
   client:

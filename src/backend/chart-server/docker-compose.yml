@@ -1,33 +1,12 @@
 version: "3.9"
 
 services:
-  chart-app:
-    build: .
-    ports:
-      - 26000:8200
-    depends_on:
-      - chart-mongo
-    environment:
-      SPRING_DATA_MONGODB_URI: mongodb://chipmunk:JMTpdsu8YkLEXBW4RA@chart-mongo:27017/chart
-
-      SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
-
-      EUREKA_INSTANCE_HOSTNAME: localhost
-      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:34100/eureka
-
-      PASSPORT_ALGORITHM: HmacSHA256
-      PASSPORT_KEY: SECRET_KEY
-
-      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://infra-zipkin:9411/api/v2/spans
-    networks:
-      - lalala-network
-
   chart-mongo:
     image: mongo:7.0.5
     container_name: chart-mongo
     restart: always
     ports:
-      - 26100:27017
+      - 27017:27017
     environment:
       MONGO_INITDB_ROOT_USERNAME: chipmunk
       MONGO_INITDB_ROOT_PASSWORD: JMTpdsu8YkLEXBW4RA
@@ -40,7 +19,7 @@ services:
     image: mongo-express:1.0.2
     restart: always
     ports:
-      - 27900:8081
+      - 27000:8081
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: chipmunk
       ME_CONFIG_MONGODB_ADMINPASSWORD: JMTpdsu8YkLEXBW4RA
@@ -51,8 +30,3 @@ services:
 volumes:
   chart-mongodbdata:
     driver: local
-
-networks:
-  lalala-network:
-    driver: bridge
-    external: true

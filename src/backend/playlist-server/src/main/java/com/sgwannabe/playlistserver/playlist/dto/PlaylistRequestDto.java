@@ -19,5 +19,5 @@ public class PlaylistRequestDto {
     @NotBlank(message = "thumbnail은 공백일 수 없습니다.")
     private String thumbnail;
 //    @NotBlank
-    private List<Music> musics;
+    private List<Long> musics;
 }

@@ -1,10 +1,9 @@
 package chattingserver.dto;
 
-import java.util.List;
-
+import chattingserver.dto.response.RoomResponseDto;
 import lombok.*;
 
-import chattingserver.dto.response.RoomResponseDto;
+import java.util.List;
 
 @Builder
 @Getter
@@ -14,4 +13,5 @@ import chattingserver.dto.response.RoomResponseDto;
 public class RoomMessageDto {
     private List<Long> receivers;
     private RoomResponseDto roomResponseDto;
+
 }

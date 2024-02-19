@@ -26,6 +26,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	// apple chip 에서 발생하는 dns 조회 오류 해결
+	def isMacOS = System.getProperty('os.name').startsWith('Mac OS X')
+	def architecture = System.getProperty('os.arch').toLowerCase()
+	if (isMacOS && architecture == 'aarch64') {
+		implementation('io.netty:netty-resolver-dns-native-macos:4.1.90.Final:osx-aarch_64')
+	}
+
 	// Eureka
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
 

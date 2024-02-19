@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  fileserver-app:
+    image: smilegatewannabe/storage
+    ports:
+      - "30000:30000"
+    restart: unless-stopped
+    environment:
+      - PORT=30000
+      - ENV=develop
+    networks:
+      - lalala-network
+    volumes:
+      - ./resources:/resources
+
+networks:
+  lalala-network:
+    driver: bridge
+    external: true

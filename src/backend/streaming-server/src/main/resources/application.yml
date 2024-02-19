@@ -1,7 +1,13 @@
 server:
   port: 22000
+#  servlet:
+#    container: none
+#  websocket:
+#    server:
+#      path: /v1/ws
+#  netty:
+#    worker-count: 2
 
-spring:
   application:
     name: streaming-server
 
@@ -17,15 +23,6 @@ ffmpeg:
   location:
     mpeg: ./libs/ffmpeg-6.1/ffmpeg
     probe: ./libs/ffmpeg-6.1/ffprobe
-
-eureka:
-  instance:
-    hostname: localhost
-  client:
-    fetch-registry: true
-    register-with-eureka: true
-    service-url:
-      defaultZone: http://localhost:34100/eureka
 
 passport:
   algorithm: HmacSHA256

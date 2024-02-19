@@ -7,9 +7,9 @@ services:
       - "22000:22000"
     environment:
       - client.endpoint.music=http://music-app:24000
-      - client.endpoint.storage=http://music-uploader-app:30000
+      - client.endpoint.storage=http://fileserver-app:30000
       - spring.kafka.bootstrap-servers=Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
-      - eureka.client.service-url.defaultzone=http://discovery-app:34100/eureka
+      - eureka.instance.hostname=streaming-app
       - passport.algorithm=SHA-256
       - passport.key=SECRET_KEY
     restart: always

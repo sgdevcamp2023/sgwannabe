@@ -1,0 +1,64 @@
+version: "3.9"
+services:
+  playlist-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      SPRING_DATA_MONGODB_HOST: playlist-mongo
+      SPRING_DATA_MONGODB_PORT: 27017
+
+      SPRING_DATA_REDIS_HOST: playlist-redis
+      SPRING_DATA_REDIS_PORT: 6379
+
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
+
+      EUREKA_INSTANCE_HOSTNAME: playlist-app
+      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:34100/eureka
+
+      PASSPORT_ALGORITHM: HmacSHA256
+      PASSPORT_KEY: SECRET_KEY
+    ports:
+      - 16000:16000
+    depends_on:
+      - playlist-mongo
+      - playlist-redis
+    networks:
+      - default
+      - lalala-network
+
+  playlist-mongo:
+    image: mongo:7.0.5
+    restart: always
+    ports:
+      - 16100:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: QOdmQodmsapomd41dM
+      MONGO_INITDB_DATABASE: playlist
+    volumes:
+      - ./database/mongoDB/data:/data/db
+      - ./database/mongoDB/initdb.d:/docker-entrypoint-initdb.d:ro
+
+  playlist-redis:
+    image: redis:7.0
+    ports:
+      - 16200:6379
+
+  playlist-mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 17900:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: QOdmQodmsapomd41dM
+      ME_CONFIG_MONGODB_SERVER: playlist-mongo
+      ME_CONFIG_BASICAUTH_USERNAME: playlist-admin
+      ME_CONFIG_BASICAUTH_PASSWORD: g2+u*8XG%^xKT=-SzDMfbZ
+
+networks:
+  lalala-network:
+    driver: bridge
+    external: true

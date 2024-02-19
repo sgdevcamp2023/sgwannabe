@@ -13,26 +13,20 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
-import chattingserver.dto.ChatMessageDto;
-import chattingserver.dto.RoomMessageDto;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.StringSerializer;
+import java.util.HashMap;
+import java.util.Map;
 
 @EnableKafka
 @Configuration
 public class KafkaProducerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
-
     @Value("${spring.kafka.producer.room-producer.key-serializer}")
     private String roomKeySerializer;
-
     @Value("${spring.kafka.producer.room-producer.value-serializer}")
     private String roomValueSerializer;
-
     @Value("${spring.kafka.producer.chat-producer.key-serializer}")
     private String chatKeySerializer;
-
     @Value("${spring.kafka.producer.chat-producer.value-serializer}")
     private String chatValueSerializer;
 
