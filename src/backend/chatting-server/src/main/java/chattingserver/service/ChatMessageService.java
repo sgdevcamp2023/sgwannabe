@@ -122,6 +122,7 @@ public class ChatMessageService {
             ChatMessageDto chatMessageDto1 = entityToResponseDtoConverter.convertMessage(message);
             chatMessageDto1.setCurrentMusicId(getCurrentMusicId(room.getId()));
 
+            log.info(chatMessageDto1.toString());
             return chatMessageDto1;
         } catch (Exception e) {
             log.error("트랜잭션 오류: {}", e.getMessage());
@@ -176,13 +177,20 @@ public class ChatMessageService {
             throw new BusinessException("존재하지 않는 채팅방입니다.", ErrorCode.UNKNOWN_ERROR);
         }
         Room room = optionalRoom.get();
+
         LocalDateTime roomCreatedAt = room.getCreatedAt();
 
-        Duration elapsedTime = Duration.between(roomCreatedAt, LocalTime.now());
+        Duration elapsedTime = Duration.between(roomCreatedAt, LocalDateTime.now());
 
         Duration totalPlaylistTime = room.getPlaylist().getTotalPlaylistTime();
 
+        log.info("room={}", room.toString());
+        log.info("elapsedTime={}", elapsedTime.toString());
+        log.info("totalPlaylistTime: playlist={}, playlistTime={}", room.getPlaylist().toString(), totalPlaylistTime.toString());
+
         long currentPlaylistTimeInSeconds = elapsedTime.abs().getSeconds() % totalPlaylistTime.getSeconds();
+
+        log.info("currentPlaylistTimeInSeconds={}", currentPlaylistTimeInSeconds);
 
         Duration playlistTime = Duration.ZERO;
         List<Music> playlist = room.getPlaylist().getMusics();
@@ -191,6 +199,7 @@ public class ChatMessageService {
                     .plus(Duration.ofSeconds(Long.parseLong(music.getPlaytime().split(":")[1])));
             playlistTime = playlistTime.plus(musicDuration);
             if (playlistTime.getSeconds() >= currentPlaylistTimeInSeconds) {
+                log.info("music.getId()={}", music.getId());
                 return music.getId();
             }
         }
