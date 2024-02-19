@@ -28,4 +28,5 @@ public class ChatMessageDto {
     @NotBlank
     private String content;
     private LocalDateTime createdAt;
+    private Long currentMusicId;
 }

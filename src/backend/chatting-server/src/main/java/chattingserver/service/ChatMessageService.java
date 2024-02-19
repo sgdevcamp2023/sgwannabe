@@ -119,7 +119,10 @@ public class ChatMessageService {
 
             roomRepository.addUserToRoom(room.getId(), joinedUser);
 
-            return entityToResponseDtoConverter.convertMessage(message);
+            ChatMessageDto chatMessageDto1 = entityToResponseDtoConverter.convertMessage(message);
+            chatMessageDto1.setCurrentMusicId(getCurrentMusicId(room.getId()));
+
+            return chatMessageDto1;
         } catch (Exception e) {
             log.error("트랜잭션 오류: {}", e.getMessage());
             // TODO 트랜잭션 롤백 또는 예외 처리 로직 추가
