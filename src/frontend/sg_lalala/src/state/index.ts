@@ -4,16 +4,25 @@ import { playStateType } from "../types/backgroundMusic";
 import {
   PlaylistArrayType,
   PlaylistMusicType,
+  UserInfoType,
   stompClientType,
 } from "../types";
 
-const defaultStompClient: stompClientType = {
-  stompClient: new StompJs.Client(),
-};
+// const defaultStompClient: stompClientType = {
+//   stompClient: new StompJs.Client(),
+// };
 
-export const stompClientState = atom<stompClientType>({
-  key: "stompClient",
-  default: defaultStompClient,
+// export const stompClientState = atom<stompClientType>({
+//   key: "stompClient",
+//   default: defaultStompClient,
+// });
+
+export const userInfo = atom<UserInfoType>({
+  key: "userInfo",
+  default: {
+    id: 0,
+    nickName: "",
+  },
 });
 
 export const playState = atom<playStateType>({

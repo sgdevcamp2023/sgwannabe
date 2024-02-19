@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from "axios";
+// import { getNewRefreshToken } from "./refresh";
 
 const baseURL = "http://localhost";
 
@@ -8,7 +9,7 @@ interface ServiceEndpoints {
 
 const CreateServiceApi = (service: string): AxiosInstance => {
   const portMap: ServiceEndpoints = {
-    login: 34000,
+    user: 34000,
     chat: 18000,
     // stream:0,
   };
@@ -19,14 +20,12 @@ const CreateServiceApi = (service: string): AxiosInstance => {
     baseURL: serviceEndpoint,
   });
 
-  // Interceptor를 사용하여 accessToken을 요청에 추가
-  // const { authToken } = useAuthStore();
-  // const accessToken = localStorage.getItem('accessToken');
-
   api.interceptors.request.use((config) => {
-    config.headers.Authorization = "Bearer accessToken";
+    const accessToken = localStorage.getItem("access");
+    config.headers.Authorization = `${accessToken}`;
     return config;
   });
+
   return api;
 };
 
@@ -35,7 +34,7 @@ interface ClientAPI {
 }
 
 const apiHook: ClientAPI = {
-  login: CreateServiceApi("login"),
+  user: CreateServiceApi("user"),
   chat: CreateServiceApi("chat"),
   // notification: CreateServiceApi("stream"),
 };
