@@ -3,8 +3,6 @@ tasks.getByName("bootJar") {
 }
 
 dependencies {
-    implementation(project(":common-module"))
-
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
 
