@@ -106,6 +106,7 @@ public class RoomService {
         Room room = Room.builder()
                 .roomName(roomCreateRequestDto.getPlaylist().getName())
                 .playlist(roomCreateRequestDto.getPlaylist())
+                .playlistDuration(roomCreateRequestDto.getPlaylist().getTotalPlaylistTime())
                 .thumbnailImage(roomCreateRequestDto.getThumbnailImage())
                 .playlistOwner(owner)
                 .users(users)

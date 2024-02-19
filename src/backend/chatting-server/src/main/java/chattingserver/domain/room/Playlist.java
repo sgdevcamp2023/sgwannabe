@@ -32,11 +32,12 @@ public class Playlist {
                 .build();
     }
 
+
     public Duration getTotalPlaylistTime() {
-        return this.musics.stream()
-                .map(music -> Duration.ofMinutes(Long.parseLong(music.getPlaytime().split(":")[0]))
-                        .plus(Duration.ofSeconds(Long.parseLong(music.getPlaytime().split(":")[1]))))
+        return this.getMusics().stream()
+                .map(Music::getPlayTimeDuration)
                 .reduce(Duration.ZERO, Duration::plus);
     }
+
 
 }

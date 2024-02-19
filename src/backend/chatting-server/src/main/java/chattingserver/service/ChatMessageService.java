@@ -176,15 +176,14 @@ public class ChatMessageService {
         if (optionalRoom.isEmpty()) {
             throw new BusinessException("존재하지 않는 채팅방입니다.", ErrorCode.UNKNOWN_ERROR);
         }
+
         Room room = optionalRoom.get();
 
-        LocalDateTime roomCreatedAt = room.getCreatedAt();
+        Duration elapsedTime = Duration.between(room.getCreatedAt(), LocalDateTime.now());
 
-        Duration elapsedTime = Duration.between(roomCreatedAt, LocalDateTime.now());
+        Duration totalPlaylistTime = room.getPlaylistDuration();
 
-        Duration totalPlaylistTime = room.getPlaylist().getTotalPlaylistTime();
-
-        log.info("room={}", room.toString());
+        log.info("room={}", room);
         log.info("elapsedTime={}", elapsedTime.toString());
         log.info("totalPlaylistTime: playlist={}, playlistTime={}", room.getPlaylist().toString(), totalPlaylistTime.toString());
 
