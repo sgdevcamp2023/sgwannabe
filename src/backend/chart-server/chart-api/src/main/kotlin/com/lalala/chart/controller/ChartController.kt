@@ -32,7 +32,7 @@ class ChartController(
                 BaseResponse.from(
                     HttpStatus.OK.value(),
                     "차트를 조회했습니다.",
-                    it
+                    it,
                 )
             }
 
@@ -47,7 +47,7 @@ class ChartController(
                 BaseResponse.from(
                     HttpStatus.OK.value(),
                     "차트를 생성했습니다.",
-                    it
+                    it,
                 )
             }
 }

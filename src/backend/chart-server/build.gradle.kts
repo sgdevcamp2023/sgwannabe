@@ -36,7 +36,7 @@ allprojects {
 }
 
 subprojects {
-	if (project.name == "common-module") {
+	if (project.name.startsWith("common")) {
 		return@subprojects
 	}
 
