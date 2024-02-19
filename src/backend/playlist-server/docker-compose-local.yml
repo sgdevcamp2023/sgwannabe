@@ -1,12 +1,16 @@
 version: "3.9"
 services:
   playlist-app:
-    image: smilegatewannabe/playlist
+    build:
+      context: .
+      dockerfile: Dockerfile
     restart: always
     environment:
-      SPRING_NEO4J_URI: bolt://feed-neo4j:14200
-      SPRING_NEO4J_AUTHENTICATION_USERNAME: neo4j
-      SPRING_NEO4J_AUTHENTICATION_PASSWORD: password
+      SPRING_DATA_MONGODB_HOST: playlist-mongo
+      SPRING_DATA_MONGODB_PORT: 27017
+
+      SPRING_DATA_REDIS_HOST: playlist-redis
+      SPRING_DATA_REDIS_PORT: 6379
 
       SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
 
@@ -21,6 +25,7 @@ services:
       - playlist-mongo
       - playlist-redis
     networks:
+      - default
       - lalala-network
 
   playlist-mongo:
