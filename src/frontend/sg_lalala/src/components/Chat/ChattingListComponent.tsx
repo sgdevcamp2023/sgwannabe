@@ -16,6 +16,7 @@ function ChattingListComponent({
       onClick={() =>
         navigate(`/chat/${id}`, {
           state: {
+            roomId: id,
             playlist: playlist,
             userCount: userCount,
             playlistOwner: playlistOwner,
