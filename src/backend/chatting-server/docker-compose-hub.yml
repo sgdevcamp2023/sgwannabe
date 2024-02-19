@@ -2,7 +2,9 @@ version: '3.9'
 
 services:
   chatting-app:
-    image: smilegatewannabe/chatting
+    build:
+      context: .
+      dockerfile: Dockerfile
     restart: always
     ports:
       - 18000:18000

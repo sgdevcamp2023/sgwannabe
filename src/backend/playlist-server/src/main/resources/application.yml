@@ -1,3 +1,6 @@
+server:
+  port: 16000
+
 spring:
   application:
     name: playlist-server
@@ -17,9 +20,6 @@ spring:
 
   kafka:
     bootstrap-servers: localhost:40000,localhost:40001,localhost:40002
-
-server:
-  port: 16000
 
 eureka:
   instance:
