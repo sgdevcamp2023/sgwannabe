@@ -57,7 +57,7 @@ public class RoomController {
 
         searchService.sendIndexingRequestToSearchServer(roomResponseDto);
 
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.CREATED, "채팅방 생성 성공", roomResponseDto));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.CREATED.value(), "채팅방 생성 성공", roomResponseDto));
     }
 
     @Operation(summary = "채팅방 영구적으로 나가기", description = "그룹 채팅방에서 유저 삭제", responses = {
@@ -69,7 +69,7 @@ public class RoomController {
             HashMap<String, String> roomId1 = new HashMap<>();
             roomId1.put("roomId", roomId);
 
-            return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "채팅방 영구 퇴장 성공", roomId1));
+            return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "채팅방 영구 퇴장 성공", roomId1));
         }
         log.error("exitRoom 채팅방 나가기 실패 roomId: {}, userId: {}", roomId, uid);
         return null; // TODO common err 처리
@@ -80,7 +80,7 @@ public class RoomController {
     @GetMapping("/{roomId}")
     public ResponseEntity<BaseResponse<RoomResponseDto>> chatRoomInfo(@PathVariable(value = "roomId") String roomId) {
         RoomResponseDto roomInfo = roomService.getRoomInfo(roomId);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "채팅방 정보 조회 성공", roomInfo));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "채팅방 정보 조회 성공", roomInfo));
     }
 
     @Operation(summary = "모든 채팅방 정보 조회 API", description = "모든 채팅방 정보 조회", responses = {
@@ -88,7 +88,7 @@ public class RoomController {
     @GetMapping("/")
     public ResponseEntity<BaseResponse<List<RoomResponseDto>>> getAllChatRoomInfos() {
         List<RoomResponseDto> allRoomInfos = roomService.getAllRoomInfos();
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "모든 채팅방 정보 조회 성공", allRoomInfos));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "모든 채팅방 정보 조회 성공", allRoomInfos));
     }
 
     @Operation(summary = "참여중인 채팅방 리스트 조회", description = "특정 유저가 참여중인 채팅방 리스트 조회", responses = {
@@ -96,7 +96,7 @@ public class RoomController {
     @GetMapping("/joined")
     public ResponseEntity<BaseResponse<List<JoinedRoomResponseDto>>> myChatRooms(@RequestParam(required = true) Long uid) {
         List<JoinedRoomResponseDto> joinedRoomResponseDtos = roomService.findJoinedRoomsByUid(uid);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "참여중인 채팅방 리스트 조회 성공", joinedRoomResponseDtos));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "참여중인 채팅방 리스트 조회 성공", joinedRoomResponseDtos));
     }
 
     @Operation(summary = "참여 가능한 채팅방 리스트 조회", description = "특정 유저가 참여할 수 있는 채팅방 리스트 조회", responses = {
@@ -104,14 +104,14 @@ public class RoomController {
     @GetMapping("/unjoined")
     public ResponseEntity<BaseResponse<List<RoomResponseDto>>> unjoinedChatRooms(@RequestParam(required = true) Long uid) {
         List<RoomResponseDto> unjoinedRooms = roomService.findUnjoinedRooms(uid);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "참여 가능한 채팅방 리스트 조회 성공", unjoinedRooms));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "참여 가능한 채팅방 리스트 조회 성공", unjoinedRooms));
     }
 
     @Operation(summary = "채팅방 잠시 나가기, 마지막 읽은 메시지 id 저장", description = "잠시 나가기 (완전히 나가기 아님)")
     @PutMapping("/leave")
     public ResponseEntity<BaseResponse<CommonAPIMessage>> updateLastReadMsgId(@RequestBody ReadMessageUpdateRequestDto readMessageUpdateRequestDto) {
         CommonAPIMessage commonAPIMessage = roomService.updateLastReadMsgId(readMessageUpdateRequestDto);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK, "채팅방 잠시 나가기, 마지막 읽은 메시지 id 저장 성공", commonAPIMessage));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "채팅방 잠시 나가기, 마지막 읽은 메시지 id 저장 성공", commonAPIMessage));
     }
 
 }
