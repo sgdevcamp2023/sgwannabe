@@ -1,5 +1,6 @@
 package com.lalala.music.controller;
 
+import com.lalala.music.dto.MusicRetrieveRequestDTO;
 import com.lalala.response.BaseResponse;
 import java.util.List;
 
@@ -71,5 +72,11 @@ public class MusicController {
     public ResponseEntity<BaseResponse<MusicDetailDTO>> deleteMusic(@PathVariable("id") Long id) {
         MusicDetailDTO music = service.deleteMusic(id);
         return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "음원을 업로드했습니다.", music));
+    }
+
+    @PostMapping("/retrieve")
+    public BaseResponse<List<MusicDTO>> getMusicFromIds(@RequestBody MusicRetrieveRequestDTO request) {
+        List<MusicDTO> musics = service.getMusicfromIds(request.getIds());
+        return BaseResponse.from(HttpStatus.OK.value(), "음원을 조회했습니다.", musics);
     }
 }
