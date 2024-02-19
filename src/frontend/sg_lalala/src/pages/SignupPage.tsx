@@ -1,6 +1,5 @@
 import SignUpInput from "../components/SignUp/SignUpInput";
 import logo from "../assets/lalala_logo.png";
-import LoginButton from "../components/Login/LoginButton";
 import LoginInput from "../components/Login/LoginInput";
 import { useState } from "react";
 import Timer from "../utils/Timer";
@@ -29,8 +28,8 @@ function SignupPage() {
   return (
     <div className="flex flex-col items-center w-[400px]">
       <img src={logo} className="w-3/12 m-14" />
-      <LoginInput type="text" placeholder="아이디" value={""} />
-      <LoginInput type="password" placeholder="이메일" value={""} />
+      {/* <LoginInput type="text" placeholder="아이디" value={""} />
+      <LoginInput type="password" placeholder="이메일" value={""} /> */}
       <button
         onClick={() => setIsEmailClicked(true)}
         className="p-1 my-1 text-black border-2 rounded-full border-primary"
@@ -51,8 +50,8 @@ function SignupPage() {
           <Timer />
         </div>
       )}
-      <LoginInput type="password" placeholder="비밀번호" value={""} />
-      <LoginInput type="password" placeholder="비밀번호 확인" value={""} />
+      {/* <LoginInput type="password" placeholder="비밀번호" value={""} />
+      <LoginInput type="password" placeholder="비밀번호 확인" value={""} /> */}
       <button className="w-full p-3 mt-5 rounded-full bg-primary/50">
         회원가입
       </button>

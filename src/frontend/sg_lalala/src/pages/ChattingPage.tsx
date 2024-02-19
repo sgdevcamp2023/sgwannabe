@@ -6,6 +6,7 @@ import ChattingComponent from "../components/Chat/ChattingComponent";
 import ChattingHeader from "../components/Chat/ChattingHeader";
 import { useNavigate } from "react-router-dom";
 import { useParamsHook } from "../hooks/useParamsHook";
+import { useRecoilState } from "recoil";
 
 export interface Message {
   content: string;

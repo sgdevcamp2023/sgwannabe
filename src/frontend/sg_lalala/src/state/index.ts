@@ -1,6 +1,20 @@
 import { atom } from "recoil";
+import * as StompJs from "@stomp/stompjs";
 import { playStateType } from "../types/backgroundMusic";
-import { PlaylistArrayType, PlaylistMusicType } from "../types";
+import {
+  PlaylistArrayType,
+  PlaylistMusicType,
+  stompClientType,
+} from "../types";
+
+const defaultStompClient: stompClientType = {
+  stompClient: new StompJs.Client(),
+};
+
+export const stompClientState = atom<stompClientType>({
+  key: "stompClient",
+  default: defaultStompClient,
+});
 
 export const playState = atom<playStateType>({
   key: "playState",

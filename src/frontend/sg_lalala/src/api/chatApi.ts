@@ -12,6 +12,15 @@ const chatApi = {
       throw error;
     }
   },
+  getJoinedChatList: async ({ uid }: { uid: number }) => {
+    try {
+      const response = await apiHook.chat.get(`v1/api/rooms/joined?uid=${uid}`);
+      return response.data;
+    } catch (error) {
+      console.error("에러 발생:", error);
+      throw error;
+    }
+  },
 };
 
 export default chatApi;
