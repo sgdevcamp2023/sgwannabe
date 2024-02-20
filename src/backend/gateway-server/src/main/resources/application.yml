@@ -19,7 +19,7 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: [ "http://localhost:3000" ]
+            allowedOrigins: 'http://localhost:3000'
             allow-credentials: true
             allowedHeaders: '*'
             allowedMethods:
@@ -36,7 +36,6 @@ spring:
             preLogger: true
             postLogger: true
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
-
       routes:
         - id: ALARM-SERVICE
           uri: lb://ALARM-SERVER
