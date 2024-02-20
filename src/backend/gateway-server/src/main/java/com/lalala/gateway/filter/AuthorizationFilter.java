@@ -29,6 +29,11 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<Authorizat
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
             String uri = exchange.getRequest().getURI().getPath();
+
+            if (isTokenPassRouting(uri)) {
+                return chain.filter(exchange);
+            }
+
             if (isWhiteList(uri)) {
                 return chain.filter(exchange);
             }
@@ -77,5 +82,10 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<Authorizat
     private boolean isWhiteList(String target) {
         return Arrays.stream(WhiteListURI.values())
                 .anyMatch(whiteListURI -> whiteListURI.uri.equals(target));
+    }
+
+    private boolean isTokenPassRouting(String target) {
+        return Arrays.stream(JWTTokenPassURI.values())
+                .anyMatch(tokenPassURI -> tokenPassURI.uri.startsWith(target));
     }
 }
