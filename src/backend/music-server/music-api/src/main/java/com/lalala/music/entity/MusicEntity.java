@@ -36,6 +36,9 @@ public class MusicEntity extends BaseTimeEntity {
     @Column(name = "artist_id", nullable = false)
     Long artistId;
 
+    @Column(name = "like_count", nullable = false, columnDefinition = "UNSIGNED INT default 0")
+    Integer likeCount;
+
     @Embedded MusicFile file = new MusicFile();
 
     public MusicEntity(String title, Short playTime, String lyrics) {
@@ -60,5 +63,13 @@ public class MusicEntity extends BaseTimeEntity {
 
     public void updateArtist(Long artistId) {
         this.artistId = artistId;
+    }
+
+    public void increaseLikeCount() {
+        this.likeCount += 1;
+    }
+
+    public void decreaseLikeCount() {
+        this.likeCount -= 1;
     }
 }
