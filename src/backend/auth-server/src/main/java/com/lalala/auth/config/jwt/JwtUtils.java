@@ -55,9 +55,14 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(secretKey));
     }
 
-    /** 클라이언트 http cookie 관리 */
-    public ResponseCookie generateAccessJwtCookie(User user) {
-        String jwt = generateAccessTokenFromId(String.valueOf(user.getId()));
+    /**
+     * 클라이언트 http cookie 관리
+     */
+    public String generateAccessJwt(User user) {
+        return generateAccessTokenFromId(String.valueOf(user.getId()));
+    }
+
+    public ResponseCookie generateAccessJwtCookie(String jwt) {
         return generateCookie(jwtAccessCookie, jwt, "/");
     }
 
