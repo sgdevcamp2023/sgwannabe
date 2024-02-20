@@ -2,9 +2,7 @@ version: "3.9"
 
 services:
   fileserver-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: smilegatewannabe/storage
     ports:
       - "30000:30000"
     restart: unless-stopped
