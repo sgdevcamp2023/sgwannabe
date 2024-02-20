@@ -15,7 +15,8 @@ import com.lalala.music.entity.MusicEntity;
 public class MusicDTO {
     private final Long id;
     private final String title;
-    private final short playTime;
+    private final Short playTime;
+    private final Integer likeCount;
     private final AlbumDTO album;
     private final FileDTO file;
     private final ArtistDTO artist;
@@ -27,6 +28,7 @@ public class MusicDTO {
                 music.getId(),
                 music.getTitle(),
                 music.getPlayTime(),
+                music.getLikeCount(),
                 AlbumDTO.from(album, artist),
                 FileDTO.from(music.getFile()),
                 ArtistDTO.from(artist),

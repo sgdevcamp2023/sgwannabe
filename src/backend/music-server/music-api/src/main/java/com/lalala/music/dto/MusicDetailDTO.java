@@ -16,6 +16,7 @@ public class MusicDetailDTO {
     private final Long id;
     private final String title;
     private final Short playTime;
+    private final Integer likeCount;
     private final String lyrics;
     private final AlbumDTO album;
     private final FileDTO file;
@@ -28,6 +29,7 @@ public class MusicDetailDTO {
                 music.getId(),
                 music.getTitle(),
                 music.getPlayTime(),
+                music.getLikeCount(),
                 music.getLyrics(),
                 AlbumDTO.from(album, artist),
                 FileDTO.from(music.getFile()),
