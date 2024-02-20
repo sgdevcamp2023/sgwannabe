@@ -6,5 +6,6 @@ cd "$script_dir"
 
 cd ..
 
+docker-compose pull
 docker-compose down
 docker-compose up -d

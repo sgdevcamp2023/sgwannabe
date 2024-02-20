@@ -6,5 +6,6 @@ cd "$script_dir"
 
 cd ..
 
+docker-compose -f docker-compose-hub.yml pull
 docker-compose -f docker-compose-hub.yml down
 docker-compose -f docker-compose-hub.yml up -d --build
