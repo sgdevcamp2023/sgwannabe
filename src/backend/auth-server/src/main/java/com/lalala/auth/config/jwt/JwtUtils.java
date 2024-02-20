@@ -110,11 +110,11 @@ public class JwtUtils {
     }
 
     public ResponseCookie getCleanAccessJwtCookie() {
-        return ResponseCookie.from(jwtAccessCookie, null).path("/v1").build();
+        return ResponseCookie.from(jwtAccessCookie, null).path("/").build();
     }
 
     public ResponseCookie getCleanRefreshJwtCookie() {
-        return ResponseCookie.from(jwtRefreshCookie, null).path("/v1/api").build();
+        return ResponseCookie.from(jwtRefreshCookie, null).path("/").build();
     }
 
     public String getIdFromToken(String token) {
