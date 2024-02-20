@@ -1,8 +1,10 @@
 package com.lalala.mvc.response;
 
+import com.lalala.response.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -27,6 +29,10 @@ public class BaseResponseBodyAdvice implements ResponseBodyAdvice<Object> {
             Class<? extends HttpMessageConverter<?>> selectedConverterType,
             ServerHttpRequest request,
             ServerHttpResponse response) {
-        return body;
+        if (body instanceof BaseResponse<?>) {
+            return body;
+        }
+
+        return BaseResponse.from(HttpStatus.OK.value(), "성공했습니다.", body);
     }
 }
