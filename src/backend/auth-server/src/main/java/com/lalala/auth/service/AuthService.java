@@ -46,7 +46,9 @@ public class AuthService {
             throw new BusinessException(ErrorCode.LOGIN_FAILED);
         }
 
-        ResponseCookie jwtAccessCookie = jwtUtils.generateAccessJwtCookie(user);
+        String jwtAccess = jwtUtils.generateAccessJwt(user);
+        ResponseCookie jwtAccessCookie = jwtUtils.generateAccessJwtCookie(jwtAccess);
+
 
         String refreshToken = jwtUtils.generateRefreshToken(String.valueOf(user.getId()));
 
@@ -62,7 +64,7 @@ public class AuthService {
                         UserAndTokenResponse.builder()
                                 .id(user.getId())
                                 .nickname(user.getNickname())
-                                .access_token(jwtAccessCookie.toString())
+                                .access_token(jwtAccess)
                                 .refresh_token(refreshToken)
                                 .build());
     }
@@ -116,7 +118,8 @@ public class AuthService {
         }
 
 
-        ResponseCookie jwtAccessCookie = jwtUtils.generateAccessJwtCookie(user);
+        String jwtAccess = jwtUtils.generateAccessJwt(user);
+        ResponseCookie jwtAccessCookie = jwtUtils.generateAccessJwtCookie(jwtAccess);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, jwtAccessCookie.toString())
@@ -124,7 +127,7 @@ public class AuthService {
                         UserAndTokenResponse.builder()
                                 .id(user.getId())
                                 .nickname(user.getNickname())
-                                .access_token(jwtAccessCookie.toString())
+                                .access_token(jwtAccess)
                                 .refresh_token(request.refreshToken())
                                 .build());
     }
