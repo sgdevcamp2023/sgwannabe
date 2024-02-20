@@ -1,6 +1,7 @@
 package com.lalala.mvc.response;
 
 import java.util.TreeMap;
+
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.core.MethodParameter;
@@ -33,8 +34,8 @@ public class BaseResponseBodyAdvice implements ResponseBodyAdvice<Object> {
             ServerHttpRequest request,
             ServerHttpResponse response) {
         // Swagger 예외 처리
-        if (body.getClass() == TreeMap.class ||
-                selectedConverterType == ByteArrayHttpMessageConverter.class) {
+        if (body.getClass() == TreeMap.class
+                || selectedConverterType == ByteArrayHttpMessageConverter.class) {
             return body;
         }
 
