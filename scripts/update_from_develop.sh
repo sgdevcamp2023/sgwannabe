@@ -4,6 +4,7 @@
 
 git checkout develop
 git pull
+git pull origin develop
 
 SERVER_ORDER=(
     "discovery/develop"
@@ -37,6 +38,7 @@ SERVER_ORDER=(
 for SERVER in ${SERVER_ORDER[@]}; do
     git checkout $SERVER
     git pull
+    git pull origin $SERVER
     git rebase develop
     git push -f
 done
