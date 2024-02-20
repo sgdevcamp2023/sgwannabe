@@ -38,9 +38,7 @@ public class PassportExtractor {
             }
 
             return objectMapper.readValue(
-                    new String(
-                            Base64.getDecoder().decode(authorization),
-                            StandardCharsets.UTF_8),
+                    new String(Base64.getDecoder().decode(authorization), StandardCharsets.UTF_8),
                     Passport.class);
         } catch (JsonProcessingException e) {
             throw new BusinessException(ErrorCode.INVALID_PASSPORT);
