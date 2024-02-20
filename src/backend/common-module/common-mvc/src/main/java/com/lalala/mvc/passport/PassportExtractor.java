@@ -22,14 +22,24 @@ public class PassportExtractor {
 
     private static final String USER_INFO = "userInfo";
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
+    private static final String BEARER = "Bearer";
     private final ObjectMapper objectMapper;
     private final PassportValidator passportValidator;
 
     public Passport getPassportFromRequestHeader(HttpServletRequest httpServletRequest) {
         try {
+            String authorization = httpServletRequest.getHeader(AUTHORIZATION_HEADER_NAME);
+            if (authorization == null) {
+                throw new BusinessException(ErrorCode.INVALID_PASSPORT);
+            }
+
+            if (authorization.startsWith(BEARER + " ")) {
+                authorization = authorization.split(" ")[1];
+            }
+
             return objectMapper.readValue(
                     new String(
-                            Base64.getDecoder().decode(httpServletRequest.getHeader(AUTHORIZATION_HEADER_NAME)),
+                            Base64.getDecoder().decode(authorization),
                             StandardCharsets.UTF_8),
                     Passport.class);
         } catch (JsonProcessingException e) {
