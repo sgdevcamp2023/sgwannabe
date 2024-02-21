@@ -32,7 +32,7 @@ public class AuthController {
         return authService.signIn(request);
     }
 
-    @PostMapping("signout")
+    @PostMapping("/signout")
     public ResponseEntity<Boolean> signOutUser(HttpServletRequest request) {
         return authService.signOut(request);
     }
