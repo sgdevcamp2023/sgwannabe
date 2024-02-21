@@ -57,4 +57,8 @@ public class AlbumEntity extends BaseTimeEntity {
         this.type = type;
         this.releasedAt = releasedAt;
     }
+
+    public String getCoverUrl() {
+        return coverUrl.replace("fileserver-app", "localhost");
+    }
 }
