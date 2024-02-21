@@ -58,12 +58,13 @@ public class RoomService {
                     .build();
 
             myRoomsDto.add(JoinedRoomResponseDto.builder()
-                    .roomId(roomId)
+                    .id(roomId)
                     .roomName(room.getRoomName())
-                    .thumbnailImage(room.getThumbnailImage())
-                    .users(room.getUsers())
                     .userCount(room.getUsers().size())
+                    .users(room.getUsers())
                     .playlistOwner(entityToResponseDtoConverter.convertUser(room.getPlaylistOwner()))
+                    .playlist(room.getPlaylist())
+                    .thumbnailImage(room.getThumbnailImage())
                     .lastMessage(lastMessage)
                     .build());
         }
