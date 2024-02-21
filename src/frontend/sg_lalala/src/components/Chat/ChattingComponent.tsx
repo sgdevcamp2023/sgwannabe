@@ -2,6 +2,8 @@ import { useState } from "react";
 import * as StompJs from "@stomp/stompjs";
 import MessageComponent from "./MessageComponent";
 import { Message } from "../../pages/ChattingPage";
+import { useRecoilValue } from "recoil";
+import { userInfo } from "../../state";
 
 interface ChattingProps {
   messages?: Message[];
@@ -15,6 +17,7 @@ function ChattingComponent({
   roomId,
 }: ChattingProps) {
   const [sendingMessage, setSendingMessage] = useState<string>("");
+  const user = useRecoilValue(userInfo);
 
   const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSendingMessage(e.target.value);
@@ -28,10 +31,10 @@ function ChattingComponent({
           body: JSON.stringify({
             messageType: "MSG",
             roomId: roomId,
-            senderId: 1,
-            nickName: "유저1",
+            senderId: user.id,
+            nickName: user.nickName,
             content: sendingMessage,
-            senderProfileImage: "",
+            senderProfileImage: user.profile,
           }),
         });
         setSendingMessage("");

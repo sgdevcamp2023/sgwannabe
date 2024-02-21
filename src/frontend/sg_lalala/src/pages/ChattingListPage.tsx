@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import * as StompJs from "@stomp/stompjs";
 import ChattingListComponent from "../components/Chat/ChattingListComponent";
 import Header from "../components/shared/Header";
 import chatApi from "../api/chatApi";
@@ -7,8 +8,14 @@ import JoinedChattingRoom from "../components/Chat/JoinedChattingRoom";
 export interface PlaylistInfo {
   id: string;
   name: string;
+  firstMusic: firstMusic;
+  playlistOwnerNickName: string;
 }
-
+export interface firstMusic {
+  artist: string;
+  id: number;
+  thumbnail: string;
+}
 export interface PlaylistOwner {
   nickName: string;
   profileImage: string;
@@ -16,23 +23,55 @@ export interface PlaylistOwner {
 }
 export interface ChatRoom {
   id: string;
+  roomId?: string;
+  musicCount?: number;
   playlist: PlaylistInfo;
   roomName: string;
   thumbnailImage: string;
   userCount: number;
   playlistOwner: PlaylistOwner;
+  chatSocket: StompJs.Client;
 }
 
 function ChattingListPage() {
   const [chatList, setChatList] = useState<ChatRoom[]>([]);
   const [joinedChatList, setJoinedChatList] = useState<ChatRoom[]>([]);
+  const [stomp, setStomp] = useState<StompJs.Client>();
+
+  const connect = async () => {
+    const client: StompJs.Client = new StompJs.Client({
+      brokerURL: "ws://localhost:18000/ws-chat",
+      debug: function (str) {
+        console.log(str);
+      },
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+    });
+
+    client.onStompError = function (frame) {
+      console.log("Broker reported error: " + frame.headers["message"]);
+      console.log("Additional details: " + frame.body);
+    };
+
+    client.onConnect = function (frame) {
+      console.log("Connected to WebSocket");
+      setStomp(client);
+    };
+
+    client.activate();
+  };
+
+  useEffect(() => {
+    connect();
+  }, []);
 
   useEffect(() => {
     const getChatList = async () => {
       try {
         const chatListData = await chatApi.getChatList({ uid: 3 });
         setChatList(chatListData.data);
-        // console.log(chatList);
+        console.log(chatListData.data);
       } catch (error) {
         console.error("채팅 목록 에러 발생:", error);
       }
@@ -42,7 +81,7 @@ function ChattingListPage() {
       try {
         const chatListData = await chatApi.getJoinedChatList({ uid: 3 });
         setJoinedChatList(chatListData.data);
-        console.log("joined", joinedChatList);
+        console.log("joined", chatListData.data);
       } catch (error) {
         console.error("채팅 목록 에러 발생:", error);
       }
@@ -65,6 +104,7 @@ function ChattingListPage() {
               thumbnailImage={room.thumbnailImage}
               userCount={room.userCount}
               playlistOwner={room.playlistOwner}
+              chatSocket={stomp!}
             />
           ))}
       </div>
@@ -78,6 +118,7 @@ function ChattingListPage() {
             thumbnailImage={room.thumbnailImage}
             userCount={room.userCount}
             playlistOwner={room.playlistOwner}
+            chatSocket={stomp!}
           />
         ))}
     </div>

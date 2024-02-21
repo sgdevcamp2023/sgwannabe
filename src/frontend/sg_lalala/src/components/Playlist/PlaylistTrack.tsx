@@ -4,7 +4,6 @@ import bin_icon from "../../assets/delete.png";
 import { PlaylistMusicType } from "../../types/playlist";
 import { useRecoilState } from "recoil";
 import { playingMusic } from "../../state";
-import { useRef } from "react";
 
 interface MusicProps {
   item: PlaylistMusicType;

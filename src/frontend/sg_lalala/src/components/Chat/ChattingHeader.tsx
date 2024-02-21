@@ -2,23 +2,21 @@ import { useLocation, useNavigate } from "react-router-dom";
 import * as StompJs from "@stomp/stompjs";
 import person_icon from "../../assets/person.png";
 import chatApi from "../../api/chatApi";
+import { useRecoilValue } from "recoil";
+import { userInfo } from "../../state";
 
-interface ChattingProps {
-  stompClient: StompJs.Client;
-}
-
-function ChattingHeader({ stompClient }: ChattingProps) {
+function ChattingHeader({ stompClient }: { stompClient: StompJs.Client }) {
   const navigate = useNavigate();
   const { state } = useLocation();
-  console.log(state);
+  const user = useRecoilValue(userInfo);
 
   const exitChatRoom = async () => {
     try {
       const response = await chatApi.postExitRoom({
         roomId: state.roomId,
-        uid: 2,
+        uid: user.id,
       });
-      console.log(response);
+      console.log("채팅방나가기", response);
     } catch (error) {
       console.error("채팅방나가기 에러", error);
     }
@@ -51,7 +49,7 @@ function ChattingHeader({ stompClient }: ChattingProps) {
                   ? person_icon
                   : state.playlistOwner.profileImage
               }
-              className="object-contain w-10 mr-3 bg-white border-2 rounded-full border-primary"
+              className="object-cover w-10 h-10 mr-3 bg-white border-2 rounded-full border-primary"
             />
           </div>
         </div>
@@ -60,7 +58,7 @@ function ChattingHeader({ stompClient }: ChattingProps) {
           <button
             className="px-4 py-1 rounded-md bg-primary text-textBlack font-700"
             onClick={() => {
-              stompClient.deactivate();
+              // stompClient.deactivate();
               exitChatRoom();
               navigate("/chat/list");
             }}

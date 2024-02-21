@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ChatRoom } from "../../pages/ChattingListPage";
+import { useRecoilValue } from "recoil";
+import { userInfo } from "../../state";
 
 function ChattingListComponent({
   id,
@@ -8,12 +10,24 @@ function ChattingListComponent({
   thumbnailImage,
   userCount,
   playlistOwner,
+  chatSocket,
 }: ChatRoom) {
   const navigate = useNavigate();
+  const user = useRecoilValue(userInfo);
+
   return (
     <div
       className="w-full p-5 mb-4 rounded-md cursor-pointer bg-primaryDark/20"
-      onClick={() =>
+      onClick={() => {
+        chatSocket.publish({
+          destination: "/chat/pub/join",
+          body: JSON.stringify({
+            roomId: id,
+            senderId: user.id,
+            nickName: user.nickName,
+            senderProfileImage: user.profile,
+          }),
+        });
         navigate(`/chat/${id}`, {
           state: {
             roomId: id,
@@ -21,8 +35,8 @@ function ChattingListComponent({
             userCount: userCount,
             playlistOwner: playlistOwner,
           },
-        })
-      }
+        });
+      }}
     >
       <div className="flex flex-row">
         <img className="mr-5 w-14" src={thumbnailImage} alt="Album Cover" />

@@ -1,7 +1,5 @@
 import apiHook from "./axios";
 
-const accessToken = localStorage.getItem("access");
-
 const userApi = {
   login: async ({ email, password }: { email: string; password: string }) => {
     try {

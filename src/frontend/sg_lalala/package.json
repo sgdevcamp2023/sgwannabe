@@ -23,6 +23,7 @@
     "react-router-dom": "^6.4",
     "react-scripts": "5.0.1",
     "recoil": "^0.7.7",
+    "socket.io-client": "^4.7.4",
     "sockjs-client": "^1.6.1",
     "stompjs": "^2.3.3",
     "tailwind-merge": "^2.2.1",

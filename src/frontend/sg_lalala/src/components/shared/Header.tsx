@@ -5,10 +5,12 @@ import { colors } from "../../styles";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { userInfo } from "../../state";
+import person_icon from "../../assets/person.png";
 
 function Header() {
   const navigate = useNavigate();
   const user = useRecoilValue(userInfo);
+
   return (
     <div className="flex flex-row items-center justify-between mt-5 mb-5">
       <div className="flex flex-row items-center">
@@ -34,7 +36,16 @@ function Header() {
           <div className="ml-3 text-textGray">로그인</div>
         </div>
       ) : (
-        <div></div>
+        <div
+          className="flex flex-row items-center cursor-pointer"
+          onClick={() => navigate("/profile")}
+        >
+          <img
+            className="w-8"
+            src={user.profile !== "" ? user.profile : person_icon}
+          />
+          <div className="ml-3 text-textGray">{user.nickName}</div>
+        </div>
       )}
     </div>
   );

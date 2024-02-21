@@ -1,5 +1,6 @@
-import * as StompJs from "@stomp/stompjs";
+import { Client } from "@stomp/stompjs";
 
-export type stompClientType = {
-  stompClient: StompJs.Client;
-};
+export interface StompClientType {
+  chatSocket: Client;
+  streamSocket: Client;
+}

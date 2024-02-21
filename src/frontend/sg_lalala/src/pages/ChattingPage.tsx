@@ -6,8 +6,9 @@ import ChattingComponent from "../components/Chat/ChattingComponent";
 import ChattingHeader from "../components/Chat/ChattingHeader";
 import { useNavigate } from "react-router-dom";
 import { useParamsHook } from "../hooks/useParamsHook";
-import { useRecoilState } from "recoil";
 import chatApi from "../api/chatApi";
+import { useRecoilValue } from "recoil";
+import { userInfo } from "../state";
 
 export interface Message {
   content: string;
@@ -28,6 +29,7 @@ function ChattingPage() {
   });
   const [stompClient, setStompClient] = useState<StompJs.Client>();
   const [messages, setMessages] = useState<Message[]>();
+  const user = useRecoilValue(userInfo);
 
   const connect = async () => {
     const client: StompJs.Client = new StompJs.Client({
@@ -57,7 +59,6 @@ function ChattingPage() {
 
   const handleReceiveMessge = (data: any) => {
     const parsedMessage = JSON.parse(data.body);
-    console.log(parsedMessage);
     setMessages((prevMessages = []) => {
       return [parsedMessage, ...prevMessages];
     });
@@ -68,9 +69,9 @@ function ChattingPage() {
       try {
         const response = await chatApi.putLeaveRoom({
           roomId: roomId,
-          uid: 3,
+          uid: user.id,
         });
-        console.log(response);
+        // console.log(response);
       } catch (error) {
         console.error("채팅방나가기 에러", error);
       }
@@ -88,7 +89,7 @@ function ChattingPage() {
       }
       const data = await response.json();
       setMessages(data.data);
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       console.error("Error fetching chat history:", error);
     } finally {

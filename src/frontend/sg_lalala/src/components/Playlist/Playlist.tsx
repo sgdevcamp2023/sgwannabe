@@ -49,7 +49,7 @@ function Playlist() {
           <th className="col-span-3">앨범명</th>
           <th className="col-span-2">재생시간</th>
         </tr>
-        <div className="overflow-y-scroll max-h-[75vh]">
+        <div className="overflow-y-scroll max-h-[80vh]">
           {list.map((item, idx) => (
             <div
               key={item.id}

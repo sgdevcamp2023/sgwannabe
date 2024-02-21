@@ -15,7 +15,11 @@ function LoginPage() {
   const getUser = async () => {
     try {
       const response = await userApi.getUserInfo();
-      console.log(response);
+      setUser({
+        id: response.data.data.id,
+        nickName: response.data.data.nickname,
+        profile: response.data.data.profile,
+      });
     } catch (error) {
       console.error("로그인 에러", error);
     }
@@ -28,10 +32,6 @@ function LoginPage() {
         password: password,
       });
       if (response.status === 200) {
-        setUser({
-          id: response.data.id,
-          nickName: response.data.nickName,
-        });
         const { access_token, refresh_token } = response.data.data;
         localStorage.setItem("access", access_token);
         localStorage.setItem("refresh", refresh_token);
