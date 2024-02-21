@@ -10,7 +10,8 @@ import lombok.RequiredArgsConstructor;
 public class MusicDTO {
     private final Long id;
     private final String title;
-    private final short playTime;
+    private final Short playTime;
+    private final Integer likeCount;
     private final AlbumDTO album;
     private final FileDTO file;
     private final ArtistDTO artist;

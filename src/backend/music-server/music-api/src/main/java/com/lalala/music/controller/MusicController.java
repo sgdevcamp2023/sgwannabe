@@ -58,7 +58,7 @@ public class MusicController {
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse<MusicDetailDTO>> readMusic(@PathVariable("id") Long id) {
         MusicDetailDTO music = service.getMusic(id);
-        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "음원을 업로드했습니다.", music));
+        return ResponseEntity.ok(BaseResponse.from(HttpStatus.OK.value(), "음원을 조회했습니다.", music));
     }
 
     @PutMapping("/{id}")
