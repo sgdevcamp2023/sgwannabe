@@ -91,11 +91,21 @@ public class ChatMessageService {
 
     @Transactional
     public ChatMessageDto join(ChatMessageDto chatMessageDto) {
+
+        List<Room> roomList = roomRepository.findJoinedRoomsByUid(chatMessageDto.getSenderId());
+        if (roomList.size() == 4) {
+            log.info("참여 가능한 채팅방 수 초과. 가장 오래된 채팅방에서 퇴장합니다.");
+            String exitedRoomId = roomList.get(3).getId();
+            roomRepository.exitRoom(exitedRoomId, chatMessageDto.getSenderId());
+            log.info("가장 오래된 방 나가기 성공 uid={}, roomId={}", chatMessageDto.getSenderId(), exitedRoomId);
+        }
+
         try {
             Optional<Room> optionalRoom = roomRepository.findById(chatMessageDto.getRoomId());
             if (optionalRoom.isEmpty()) {
                 throw new BusinessException("존재하지 않는 채팅방입니다. 채팅방 id=" + chatMessageDto.getRoomId(), ErrorCode.UNKNOWN_ERROR);
             }
+
 
             Room room = optionalRoom.get();
 
