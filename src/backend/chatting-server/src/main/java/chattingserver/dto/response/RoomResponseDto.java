@@ -18,6 +18,7 @@ public class RoomResponseDto {
     private long userCount;
     private List<UserListResponseDto> users;
     private UserListResponseDto playlistOwner;
+    private long musicCount;
     private Playlist playlist;
     private String thumbnailImage;
     private LocalDateTime createdAt;
