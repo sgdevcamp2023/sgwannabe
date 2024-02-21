@@ -18,6 +18,7 @@ public class EntityToResponseDtoConverter {
                 .roomName(room.getRoomName())
                 .userCount(room.getUsers().size())
                 .users(room.getUsers().stream().map(this::convertUser).collect(Collectors.toList()))
+                .musicCount(room.getPlaylist().getMusics().size())
                 .playlist(room.getPlaylist())
                 .thumbnailImage(room.getThumbnailImage()) // 플레이리스트에 곡 무조건 존재함을 신뢰
                 .build();
