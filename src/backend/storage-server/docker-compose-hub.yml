@@ -12,11 +12,7 @@ services:
     networks:
       - lalala-network
     volumes:
-      - static-data:/resources
-
-volumes:
-  static-data:
-    driver: local
+      - ./resources:/resources
 
 networks:
   lalala-network:
