@@ -123,6 +123,7 @@ public class UserService {
 
 
         UserInfoResponse userInfoResponse = UserInfoResponse.builder()
+                .id(user.getId())
                 .profile(user.getProfile())
                 .nickname(user.getNickname())
                 .build();
