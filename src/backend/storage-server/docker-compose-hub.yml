@@ -14,7 +14,7 @@ services:
     networks:
       - lalala-network
     volumes:
-      - static-data:/resources
+      - ./resources:/resources
 
 volumes:
   static-data:
