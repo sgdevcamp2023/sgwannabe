@@ -2,6 +2,8 @@ import { useLocation } from "react-router-dom";
 import * as StompJs from "@stomp/stompjs";
 import PlaylistSongComponent from "./PlaylistSongComponent";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { playingMusicId } from "../../state";
 
 export interface Song {
   title: string;
@@ -18,6 +20,7 @@ function PlaylistComponent() {
     null
   );
   const [time, setTime] = useState(0);
+  const songId = useRecoilValue(playingMusicId);
 
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:22000/v1/ws/streaming");
@@ -35,12 +38,12 @@ function PlaylistComponent() {
     if (!socket) return;
 
     socket.onopen = () => {
-      socket.send("1/1");
+      socket.send(`1/${songId}`);
     };
 
     socket.onmessage = async (event) => {
       if (!stream) {
-        socket.send("2/1/0");
+        socket.send(`2/${songId}/0`);
         setStream(true);
       } else {
         if (!audioContext) {
@@ -69,11 +72,11 @@ function PlaylistComponent() {
     socket.onerror = (error) => {
       console.log(error);
     };
-  }, [audioContext, socket, stream, time]);
+  }, [audioContext, songId, socket, stream, time]);
 
   const handleButtonClick = () => {
     if (socket) {
-      socket.send("1/4");
+      socket.send(`1/${songId}`);
     }
   };
 

@@ -30,6 +30,23 @@ const chatApi = {
       throw error;
     }
   },
+  getRejoin: async ({
+    roomId,
+    readMsgId,
+  }: {
+    roomId: string;
+    readMsgId: string | undefined;
+  }) => {
+    try {
+      const response = await apiHook.chat.get(
+        `v1/api/chat/rooms/joined/${roomId}?readMsgId=${readMsgId}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("에러 발생:", error);
+      throw error;
+    }
+  },
   postExitRoom: async ({ roomId, uid }: { roomId: string; uid: number }) => {
     try {
       const response = await apiHook.chat.post(`v1/api/rooms/exit/${roomId}`, {

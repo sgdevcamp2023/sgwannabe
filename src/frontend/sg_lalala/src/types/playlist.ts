@@ -15,3 +15,7 @@ export type PlaylistMusicType = {
   albumName: string;
   time: string;
 };
+
+export type MusicId = {
+  currentMusicId: number;
+};

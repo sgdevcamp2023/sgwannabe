@@ -3,10 +3,13 @@ import Playlist from "../components/Profile/Playlist";
 import person_icon from "../assets/person.png";
 import remove_icon from "../assets/remove.png";
 import { useRef, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { userInfo } from "../state";
 
 function ProfilePage() {
   const imgRef = useRef<HTMLInputElement>(null);
   const [imgFile, setImgFile] = useState<string>("");
+  const user = useRecoilValue(userInfo);
 
   const saveImgFile = () => {
     const file = imgRef.current?.files?.[0];
@@ -49,8 +52,8 @@ function ProfilePage() {
           </label>
         </div>
         <div className="ml-5">
-          <div className="text-xl text-black font-600">콘sy1te</div>
-          <div className="text-textGray">gmail@gmail.com</div>
+          <div className="text-xl text-black font-600">{user.nickName}</div>
+          <div className="text-textGray">{user.nickName}@gmail.com</div>
         </div>
       </div>
       <div className="flex flex-col mt-3">

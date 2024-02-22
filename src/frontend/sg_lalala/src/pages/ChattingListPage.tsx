@@ -11,6 +11,9 @@ export interface PlaylistInfo {
   firstMusic: firstMusic;
   playlistOwnerNickName: string;
 }
+export interface LastMessage {
+  messageId: string;
+}
 export interface firstMusic {
   artist: string;
   id: number;
@@ -26,6 +29,7 @@ export interface ChatRoom {
   roomId?: string;
   musicCount?: number;
   playlist: PlaylistInfo;
+  lastMessage?: LastMessage;
   roomName: string;
   thumbnailImage: string;
   userCount: number;
@@ -100,6 +104,7 @@ function ChattingListPage() {
               key={index}
               id={room.id}
               playlist={room.playlist}
+              lastMessage={room.lastMessage}
               roomName={room.roomName}
               thumbnailImage={room.thumbnailImage}
               userCount={room.userCount}
