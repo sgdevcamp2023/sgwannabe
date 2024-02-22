@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "CHATTING-SERVER")
+@FeignClient(name = "CHATTING-SERVER", url = "localhost:18000")
 public interface FeignChattingClient {
 
     @PostMapping("/v1/api/rooms/create")

@@ -16,6 +16,7 @@ public class EntityToResponseDtoConverter {
         return RoomResponseDto.builder()
                 .id(room.getId())
                 .roomName(room.getRoomName())
+                .playlistOwner(convertUser(room.getPlaylistOwner()))
                 .userCount(room.getUsers().size())
                 .users(room.getUsers().stream().map(this::convertUser).collect(Collectors.toList()))
                 .musicCount(room.getPlaylist().getMusics().size())

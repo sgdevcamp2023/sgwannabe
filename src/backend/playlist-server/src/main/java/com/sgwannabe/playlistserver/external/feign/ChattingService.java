@@ -19,6 +19,6 @@ public class ChattingService {
         } catch (FeignException e) {
             log.error("채팅서버 연결 불가");
         }
-        log.info("더미 채팅방 생성 성공");
+        log.info("더미 채팅방 생성 성공 room={}", roomCreateRequestDto);
     }
 }

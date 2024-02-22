@@ -2,6 +2,7 @@ package chattingserver.dto.request;
 
 import chattingserver.domain.room.Playlist;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -16,7 +17,7 @@ public class RoomCreateRequestDto {
     private Long uid;
     @NotBlank
     private String nickName;
-    @NotBlank
+    @NotNull
     private String userProfileImage;
     @NotBlank
     private Playlist playlist;
