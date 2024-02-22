@@ -10,6 +10,7 @@ function ChattingHeader({ stompClient }: { stompClient: StompJs.Client }) {
   const { state } = useLocation();
   const user = useRecoilValue(userInfo);
 
+  console.log(state);
   const exitChatRoom = async () => {
     try {
       const response = await chatApi.postExitRoom({

@@ -1,10 +1,13 @@
 package com.lalala.mvc.response;
 
+import java.util.TreeMap;
+
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -30,6 +33,12 @@ public class BaseResponseBodyAdvice implements ResponseBodyAdvice<Object> {
             Class<? extends HttpMessageConverter<?>> selectedConverterType,
             ServerHttpRequest request,
             ServerHttpResponse response) {
+        // Swagger 예외 처리
+        if (body.getClass() == TreeMap.class
+                || selectedConverterType == ByteArrayHttpMessageConverter.class) {
+            return body;
+        }
+
         if (body instanceof BaseResponse<?>) {
             return body;
         }

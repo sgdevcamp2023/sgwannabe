@@ -2,10 +2,11 @@ import { useLocation } from "react-router-dom";
 import * as StompJs from "@stomp/stompjs";
 import PlaylistSongComponent from "./PlaylistSongComponent";
 import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { playingMusicId } from "../../state";
 
 export interface Song {
+  id: number;
   title: string;
   artist: string;
   thumbnail: string;
@@ -19,8 +20,9 @@ function PlaylistComponent() {
   const [sourceNode, setSourceNode] = useState<AudioBufferSourceNode | null>(
     null
   );
-  const [time, setTime] = useState(0);
-  const songId = useRecoilValue(playingMusicId);
+  const [time, setTime] = useState<number>(0);
+  const [realTime, setRealTime] = useState<number>(0);
+  const [songId, setSongId] = useRecoilState(playingMusicId);
 
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:22000/v1/ws/streaming");
@@ -30,6 +32,12 @@ function PlaylistComponent() {
     return () => {
       if (ws) {
         ws.close();
+        audioContext?.close();
+        audioContext?.suspend();
+        setSourceNode(null);
+        setStream(false);
+        setTime(0);
+        console.log("ws close");
       }
     };
   }, []);
@@ -62,7 +70,7 @@ function PlaylistComponent() {
           node.start(time);
 
           setTime((prevTime) => prevTime + buffer.duration);
-          console.log(time);
+          console.log(time, audioContext.currentTime);
 
           setSourceNode(node);
         }
@@ -72,7 +80,7 @@ function PlaylistComponent() {
     socket.onerror = (error) => {
       console.log(error);
     };
-  }, [audioContext, songId, socket, stream, time]);
+  }, [audioContext, songId, socket, stream, time, audioContext?.currentTime]);
 
   const handleButtonClick = () => {
     if (socket) {
@@ -80,17 +88,28 @@ function PlaylistComponent() {
     }
   };
 
+  useEffect(() => {
+    if (audioContext) {
+      if (audioContext.currentTime !== 0 && audioContext?.currentTime >= time) {
+        console.log("노래가 끝났습니다.");
+        setSongId(songId + 1);
+      }
+    }
+  }, [audioContext?.currentTime, time]);
+
   return (
     <div className="flex flex-col items-center w-1/2 px-10 py-5">
-      <button onClick={handleButtonClick}>play</button>
+      <button className="text-black" onClick={handleButtonClick}>
+        play
+      </button>
       {state &&
         state.playlist.musics.map((music: Song, index: number) => (
           <PlaylistSongComponent
             key={index}
+            id={music.id}
             title={music.title}
             artist={music.artist}
             thumbnail={music.thumbnail}
-            // socket={socket}
           />
         ))}
     </div>

@@ -1,8 +1,7 @@
-package chattingserver.dto.request;
+package com.sgwannabe.playlistserver.external.feign.dto;
 
-import chattingserver.domain.room.Playlist;
+import com.sgwannabe.playlistserver.playlist.domain.Playlist;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -17,12 +16,10 @@ public class RoomCreateRequestDto {
     private Long uid;
     @NotBlank
     private String nickName;
-    @NotNull
+    @NotBlank
     private String userProfileImage;
     @NotBlank
-    private Playlist playlist;
+    private PlaylistRoomDummyDto playlist;
 
-    public String getThumbnailImage() {
-        return this.playlist.getFirstMusic().getThumbnail();
-    }
 }
+

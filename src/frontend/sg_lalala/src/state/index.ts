@@ -22,11 +22,9 @@ export const userInfo = atom<UserInfoType>({
   },
 });
 
-export const playingMusicId = atom<MusicId>({
+export const playingMusicId = atom<number>({
   key: "playingMusicId",
-  default: {
-    currentMusicId: 0,
-  },
+  default: 0,
 });
 
 export const playState = atom<playStateType>({

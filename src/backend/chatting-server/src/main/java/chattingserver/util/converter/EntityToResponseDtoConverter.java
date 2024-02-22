@@ -16,10 +16,12 @@ public class EntityToResponseDtoConverter {
         return RoomResponseDto.builder()
                 .id(room.getId())
                 .roomName(room.getRoomName())
+                .playlistOwner(convertUser(room.getPlaylistOwner()))
                 .userCount(room.getUsers().size())
                 .users(room.getUsers().stream().map(this::convertUser).collect(Collectors.toList()))
                 .musicCount(room.getPlaylist().getMusics().size())
                 .playlist(room.getPlaylist())
+                .createdAt(room.getCreatedAt())
                 .thumbnailImage(room.getThumbnailImage()) // 플레이리스트에 곡 무조건 존재함을 신뢰
                 .build();
     }
