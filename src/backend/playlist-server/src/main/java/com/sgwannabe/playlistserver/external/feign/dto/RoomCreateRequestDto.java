@@ -19,7 +19,7 @@ public class RoomCreateRequestDto {
     @NotBlank
     private String userProfileImage;
     @NotBlank
-    private PlaylistRoomDummyDto playlistRoomDummyDto;
+    private PlaylistRoomDummyDto playlist;
 
 }
 

@@ -55,6 +55,8 @@ public class RoomController {
                 .thumbnailImage(roomResponseDto.getThumbnailImage())
                 .build());
 
+        log.info("roomRespDto-Controller-roomResponseDto={}", roomResponseDto);
+
         searchService.sendIndexingRequestToSearchServer(roomResponseDto);
 
         return ResponseEntity.ok(BaseResponse.from(HttpStatus.CREATED.value(), "채팅방 생성 성공", roomResponseDto));

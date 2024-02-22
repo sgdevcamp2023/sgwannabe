@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "MUSIC-SERVER", url = "localhost:18000")
+@FeignClient(name = "MUSIC-SERVER")
 public interface FeignMusicClient {
 
     @PostMapping("/v1/api/musics/retrieve")

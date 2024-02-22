@@ -94,6 +94,7 @@ public class RoomService {
 
     public RoomResponseDto create(RoomCreateRequestDto roomCreateRequestDto) {
         // user build
+        log.info("roomCreateRequestDto={}", roomCreateRequestDto);
         User owner = User.builder()
                 .uid(roomCreateRequestDto.getUid())
                 .nickName(roomCreateRequestDto.getNickName())
@@ -112,6 +113,7 @@ public class RoomService {
                 .thumbnailImage(roomCreateRequestDto.getThumbnailImage())
                 .playlistOwner(owner)
                 .users(users)
+                .createdAt(LocalDateTime.now())
                 .build();
 
         log.info("생성된 방에 생성자 추가 성공 user={}", room.getUsers().toString());
