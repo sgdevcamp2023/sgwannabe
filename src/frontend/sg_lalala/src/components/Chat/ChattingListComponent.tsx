@@ -34,6 +34,7 @@ function ChattingListComponent({
             playlist: playlist,
             userCount: userCount,
             playlistOwner: playlistOwner,
+            join: "join",
           },
         });
       }}

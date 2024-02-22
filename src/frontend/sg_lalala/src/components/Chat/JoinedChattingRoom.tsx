@@ -42,6 +42,7 @@ function JoinedChattingRoom({
             userCount: userCount,
             playlistOwner: playlistOwner,
             roomId: id,
+            join: "rejoin",
           },
         });
       }}

@@ -4,7 +4,7 @@ import * as StompJs from "@stomp/stompjs";
 import PlaylistComponent from "../components/Chat/PlaylistComponent";
 import ChattingComponent from "../components/Chat/ChattingComponent";
 import ChattingHeader from "../components/Chat/ChattingHeader";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useParamsHook } from "../hooks/useParamsHook";
 import chatApi from "../api/chatApi";
 import { useRecoilValue } from "recoil";
@@ -30,6 +30,7 @@ function ChattingPage() {
   const [stompClient, setStompClient] = useState<StompJs.Client>();
   const [messages, setMessages] = useState<Message[]>();
   const user = useRecoilValue(userInfo);
+  const { state } = useLocation();
 
   const connect = async () => {
     const client: StompJs.Client = new StompJs.Client({
@@ -55,6 +56,18 @@ function ChattingPage() {
     };
 
     client.activate();
+
+    if (state.join === "join") {
+      client.publish({
+        destination: "/chat/pub/join",
+        body: JSON.stringify({
+          roomId: roomId,
+          senderId: user.id,
+          nickName: user.nickName,
+          senderProfileImage: user.profile,
+        }),
+      });
+    }
   };
 
   const handleReceiveMessge = (data: any) => {
