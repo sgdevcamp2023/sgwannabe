@@ -13,6 +13,14 @@ services:
       - ./database/mongoDB/data:/data/db
       - ./database/mongoDB/initdb.d:/docker-entrypoint-initdb.d:ro
 
+  playlist-mongo-seed:
+    image: mongo:7.0.5
+    links:
+      - playlist-mongo
+    volumes:
+      - ./infra:/mongo-seed
+    command: /mongo-seed/import.sh
+
   playlist-redis:
     image: redis:7.0
     ports:

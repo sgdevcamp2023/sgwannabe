@@ -3,15 +3,17 @@ package com.sgwannabe.playlistserver.external.feign;
 import com.lalala.response.BaseResponse;
 import com.sgwannabe.playlistserver.external.feign.dto.MusicDTO;
 import com.sgwannabe.playlistserver.external.feign.dto.MusicRetrieveRequestDTO;
-import java.util.List;
+import com.sgwannabe.playlistserver.external.feign.dto.RoomCreateRequestDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "MUSIC-SERVER", url = "localhost:18000")
-public interface FeignMusicClient {
+import java.util.List;
 
-    @PostMapping("/v1/api/musics/retrieve")
-    BaseResponse<List<MusicDTO>> getMusicFromIds(@RequestBody MusicRetrieveRequestDTO request);
+@FeignClient(name = "CHATTING-SERVER")
+public interface FeignChattingClient {
+
+    @PostMapping("/v1/api/rooms/create")
+    void createDummyRooms(@RequestBody RoomCreateRequestDto request);
 
 }

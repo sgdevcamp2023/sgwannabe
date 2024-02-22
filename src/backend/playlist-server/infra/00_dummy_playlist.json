@@ -1,0 +1,607 @@
+[
+  {
+    "_id": { "$oid": "65d6b0ef26713677d7062f50" },
+    "name": "널 생각하면 듣고 싶은 노래",
+    "musics": [
+      {
+        "_id": 70,
+        "title": "Time Of Our Lives",
+        "artistId": 47,
+        "artist": "MANIA, Cesar Santalo",
+        "albumId": 48,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "03:25"
+      },
+      {
+        "_id": 71,
+        "title": "Pick Up The Pieces",
+        "artistId": 48,
+        "artist": "Lost Sky x ANGELPLAYA x Chris Linton",
+        "albumId": 49,
+        "album": "Pick Up The Pieces",
+        "thumbnail": "http://localhost:30000/9ebf5698-4109-4ecb-89ed-080a10f853da.jpeg",
+        "playtime": "02:52"
+      },
+      {
+        "_id": 72,
+        "title": "Reason",
+        "artistId": 47,
+        "artist": "MANIA, Cesar Santalo",
+        "albumId": 48,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "03:01"
+      },
+      {
+        "_id": 73,
+        "title": "Unbreakable",
+        "artistId": 49,
+        "artist": "Koven",
+        "albumId": 50,
+        "album": "Unbreakable",
+        "thumbnail": "http://localhost:30000/97acbe0e-bf17-47ff-98b7-159c9c99fbaa.jpeg",
+        "playtime": "03:17"
+      },
+      {
+        "_id": 74,
+        "title": "Never Have I Felt This (VIP)",
+        "artistId": 50,
+        "artist": "KHEMIS, Coopex, ZANA",
+        "albumId": 51,
+        "album": "Never Have I Felt This (VIP)",
+        "thumbnail": "http://localhost:30000/f638bde0-7caf-4e41-9c10-c453019c426d.jpeg",
+        "playtime": "03:12"
+      },
+      {
+        "_id": 75,
+        "title": "Tidal Wave",
+        "artistId": 51,
+        "artist": "Kage",
+        "albumId": 52,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "02:21"
+      },
+      {
+        "_id": 76,
+        "title": "Commotion",
+        "artistId": 52,
+        "artist": "Jonth",
+        "albumId": 53,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "04:14"
+      },
+      {
+        "_id": 77,
+        "title": "Cereb",
+        "artistId": 52,
+        "artist": "Jonth",
+        "albumId": 53,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "04:36"
+      },
+      {
+        "_id": 78,
+        "title": "WHAT",
+        "artistId": 53,
+        "artist": "JJL",
+        "albumId": 54,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "03:45"
+      },
+      {
+        "_id": 79,
+        "title": "Thought It Was U",
+        "artistId": 54,
+        "artist": "Itro",
+        "albumId": 55,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "03:06"
+      },
+      {
+        "_id": 80,
+        "title": "Never Let You Down",
+        "artistId": 55,
+        "artist": "James Mercy feat. PhiloSofie",
+        "albumId": 56,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "03:32"
+      }
+    ],
+    "thumbnail": "https://image.bugsm.co.kr/album/images/500/205647/20564721.jpg",
+    "userName": "민주",
+    "uid": 6,
+    "totalMusicCount": 11,
+    "_class": "com.sgwannabe.playlistserver.playlist.domain.Playlist"
+  },
+  {
+    "_id": { "$oid": "65d6ae6e26713677d7062f4e" },
+    "name": "PMP 리뷰를 듣고 힘든 너에게",
+    "musics": [
+      {
+        "_id": 1,
+        "title": "All I Need",
+        "artistId": 1,
+        "artist": "Ariadne",
+        "albumId": 1,
+        "album": "All I Need",
+        "thumbnail": "http://localhost:30000/971ee18a-9f87-4cd0-ab8f-81a20fa0fee4.jpg",
+        "playtime": "02:32"
+      },
+      {
+        "_id": 2,
+        "title": "Talk About",
+        "artistId": 2,
+        "artist": "21RoR",
+        "albumId": 2,
+        "album": "Talk About",
+        "thumbnail": "http://localhost:30000/fe2f7f22-37a8-4885-8977-a50d28791add.jpg",
+        "playtime": "02:15"
+      },
+      {
+        "_id": 3,
+        "title": "Waves",
+        "artistId": 3,
+        "artist": "AC13",
+        "albumId": 3,
+        "album": "Waves",
+        "thumbnail": "http://localhost:30000/4ff65b52-13ea-4131-96a0-71c76efd2885.jpeg",
+        "playtime": "04:28"
+      },
+      {
+        "_id": 12,
+        "title": "Alright",
+        "artistId": 13,
+        "artist": "LAADS",
+        "albumId": 12,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "03:15"
+      },
+      {
+        "_id": 14,
+        "title": "Driver Seat",
+        "artistId": 15,
+        "artist": "Venjent x Oktae ",
+        "albumId": 14,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "02:29"
+      },
+      {
+        "_id": 16,
+        "title": "Getaway",
+        "artistId": 17,
+        "artist": "Defx x P for Parker x Fame Sounds",
+        "albumId": 16,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "04:02"
+      },
+      {
+        "_id": 45,
+        "title": "Nunca [Arcade Release]",
+        "artistId": 30,
+        "artist": "WATEVA",
+        "albumId": 29,
+        "album": "Nunca",
+        "thumbnail": "http://localhost:30000/54081e8c-7433-4fcc-a5e9-dcc26a8f25da.jpeg",
+        "playtime": "02:31"
+      },
+      {
+        "_id": 85,
+        "title": "Heart My Heart",
+        "artistId": 58,
+        "artist": "Idle Days",
+        "albumId": 60,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "02:50"
+      },
+      {
+        "_id": 86,
+        "title": "Fighting Inside",
+        "artistId": 58,
+        "artist": "Idle Days",
+        "albumId": 60,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "02:32"
+      },
+      {
+        "_id": 87,
+        "title": "Baby Sweet",
+        "artistId": 58,
+        "artist": "Idle Days",
+        "albumId": 60,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "02:54"
+      },
+      {
+        "_id": 100,
+        "title": "Alone",
+        "artistId": 67,
+        "artist": "Blooom",
+        "albumId": 69,
+        "album": "Alone",
+        "thumbnail": "http://localhost:30000/6a46d356-c9ba-4d7c-bcea-70394fabb2ac.jpg",
+        "playtime": "03:51"
+      }
+    ],
+    "thumbnail": "https://image.bugsm.co.kr/album/images/500/202239/20223939.jpg",
+    "userName": "수아",
+    "uid": 5,
+    "totalMusicCount": 11,
+    "_class": "com.sgwannabe.playlistserver.playlist.domain.Playlist"
+  },
+  {
+    "_id": { "$oid": "65d6b1e626713677d7062f51" },
+    "name": "끝은 새로운 시작",
+    "musics": [
+      {
+        "_id": 12,
+        "title": "Alright",
+        "artistId": 13,
+        "artist": "LAADS",
+        "albumId": 12,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "03:15"
+      },
+      {
+        "_id": 15,
+        "title": "Venjent x Oktae - Calling For You",
+        "artistId": 16,
+        "artist": "Daniel Levi",
+        "albumId": 15,
+        "album": "Calling For You",
+        "thumbnail": "http://localhost:30000/8ee3a9a8-32f9-4ee1-839b-e9d5c6a82577.jpg",
+        "playtime": "03:41"
+      },
+      {
+        "_id": 37,
+        "title": "feel it",
+        "artistId": 24,
+        "artist": "Wiguez & Vizzen",
+        "albumId": 23,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "02:14"
+      },
+      {
+        "_id": 45,
+        "title": "Nunca [Arcade Release]",
+        "artistId": 30,
+        "artist": "WATEVA",
+        "albumId": 29,
+        "album": "Nunca",
+        "thumbnail": "http://localhost:30000/54081e8c-7433-4fcc-a5e9-dcc26a8f25da.jpeg",
+        "playtime": "02:31"
+      },
+      {
+        "_id": 51,
+        "title": "For You",
+        "artistId": 33,
+        "artist": "speedboys",
+        "albumId": 32,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "02:18"
+      },
+      {
+        "_id": 60,
+        "title": "Sugar Plumbin'",
+        "artistId": 39,
+        "artist": "Raude",
+        "albumId": 39,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "02:08"
+      },
+      {
+        "_id": 62,
+        "title": "paradise",
+        "artistId": 40,
+        "artist": "Rameses B",
+        "albumId": 41,
+        "album": "paradise ",
+        "thumbnail": "http://localhost:30000/03dca986-7ede-4ecb-8b88-6102f2463600.png",
+        "playtime": "02:32"
+      },
+      {
+        "_id": 77,
+        "title": "Cereb",
+        "artistId": 52,
+        "artist": "Jonth",
+        "albumId": 53,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "04:36"
+      },
+      {
+        "_id": 90,
+        "title": "Hold On Me",
+        "artistId": 61,
+        "artist": "Egzod & Maestro Chives, Don Diablo",
+        "albumId": 63,
+        "album": "Hold On Me",
+        "thumbnail": "http://localhost:30000/6ada3ba2-62ad-4e73-a192-0d6351fa3518.jpeg",
+        "playtime": "03:29"
+      },
+      {
+        "_id": 91,
+        "title": "EVERYTIME I SEE YOUR FACE",
+        "artistId": 20,
+        "artist": "Zaug",
+        "albumId": 19,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "04:17"
+      },
+      {
+        "_id": 96,
+        "title": "Throne",
+        "artistId": 64,
+        "artist": "ROY KNOX ",
+        "albumId": 66,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "03:20"
+      }
+    ],
+    "thumbnail": "https://media.istockphoto.com/id/1082720986/ko/%EC%82%AC%EC%A7%84/%EA%B3%A0%EC%86%8D%EB%8F%84%EB%A1%9C-%EB%B0%8F-%EC%A0%84%EB%8B%B9-%EA%B0%95-%EC%83%88%EB%A1%9C%EC%9A%B4-%EB%8F%84%EC%8B%9C-%ED%95%AD-%EC%A3%BC-%EC%A4%91%EA%B5%AD%EC%97%90-%EC%9E%88%EB%8A%94-%ED%98%84%EB%8C%80-%EB%8F%84%EC%8B%9C-%EA%B1%B4%EC%B6%95.jpg?s=612x612&w=0&k=20&c=zgNs3NaV5KeQfQpSxbr1I7ZGJ7RrLuGVH4lfFSVPHjk=",
+    "userName": "소연",
+    "uid": 7,
+    "totalMusicCount": 11,
+    "_class": "com.sgwannabe.playlistserver.playlist.domain.Playlist"
+  },
+  {
+    "_id": { "$oid": "65d6aedf26713677d7062f4f" },
+    "name": "개발할 때 듣기 좋은 노래",
+    "musics": [
+      {
+        "_id": 1,
+        "title": "All I Need",
+        "artistId": 1,
+        "artist": "Ariadne",
+        "albumId": 1,
+        "album": "All I Need",
+        "thumbnail": "http://localhost:30000/971ee18a-9f87-4cd0-ab8f-81a20fa0fee4.jpg",
+        "playtime": "02:32"
+      },
+      {
+        "_id": 10,
+        "title": "FAVHELLA",
+        "artistId": 11,
+        "artist": "Ariadne feat. Karl Killing",
+        "albumId": 10,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "01:56"
+      },
+      {
+        "_id": 20,
+        "title": "Talk",
+        "artistId": 17,
+        "artist": "Defx x P for Parker x Fame Sounds",
+        "albumId": 16,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "03:29"
+      },
+      {
+        "_id": 30,
+        "title": "think about",
+        "artistId": 24,
+        "artist": "Wiguez & Vizzen",
+        "albumId": 23,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "02:22"
+      },
+      {
+        "_id": 40,
+        "title": "Shadow Of Ages",
+        "artistId": 26,
+        "artist": "Wiguez & Josh Levoid",
+        "albumId": 25,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "02:33"
+      },
+      {
+        "_id": 50,
+        "title": "Hide Your Heart",
+        "artistId": 32,
+        "artist": "T & Sugah",
+        "albumId": 31,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "02:44"
+      },
+      {
+        "_id": 51,
+        "title": "For You",
+        "artistId": 33,
+        "artist": "speedboys",
+        "albumId": 32,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "02:18"
+      },
+      {
+        "_id": 52,
+        "title": "Indecisive",
+        "artistId": 33,
+        "artist": "speedboys",
+        "albumId": 33,
+        "album": "Indecisive ",
+        "thumbnail": "http://localhost:30000/aab737f9-0220-4034-ba4d-90d691982741.png",
+        "playtime": "03:34"
+      },
+      {
+        "_id": 53,
+        "title": "techno on my mind",
+        "artistId": 34,
+        "artist": "Slowboy, RizoÌ & NÃ˜CTRIS",
+        "albumId": 34,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "02:57"
+      },
+      {
+        "_id": 54,
+        "title": "Sold Dreams",
+        "artistId": 35,
+        "artist": "Sketchez",
+        "albumId": 35,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "01:32"
+      },
+      {
+        "_id": 55,
+        "title": "Don't Understand",
+        "artistId": 36,
+        "artist": "Sam Day",
+        "albumId": 36,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "02:19"
+      }
+    ],
+    "thumbnail": "https://i.ytimg.com/vi/KdcRqTCrQ78/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGEMgPSh_MA8=&rs=AOn4CLDhs_XbWLELyk1S84TuBPs7rLmScA",
+    "userName": "선재",
+    "uid": 4,
+    "totalMusicCount": 11,
+    "_class": "com.sgwannabe.playlistserver.playlist.domain.Playlist"
+  },
+  {
+    "_id": { "$oid": "65d6d47526713677d7062f52" },
+    "name": "지겹다 오늘 드라이브 갈까?",
+    "musics": [
+      {
+        "_id": 5,
+        "title": "AKTIV",
+        "artistId": 6,
+        "artist": "Alaina Cross",
+        "albumId": 5,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "02:37"
+      },
+      {
+        "_id": 10,
+        "title": "FAVHELLA",
+        "artistId": 11,
+        "artist": "Ariadne feat. Karl Killing",
+        "albumId": 10,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "01:56"
+      },
+      {
+        "_id": 15,
+        "title": "Venjent x Oktae - Calling For You",
+        "artistId": 16,
+        "artist": "Daniel Levi",
+        "albumId": 15,
+        "album": "Calling For You",
+        "thumbnail": "http://localhost:30000/8ee3a9a8-32f9-4ee1-839b-e9d5c6a82577.jpg",
+        "playtime": "03:41"
+      },
+      {
+        "_id": 20,
+        "title": "Talk",
+        "artistId": 17,
+        "artist": "Defx x P for Parker x Fame Sounds",
+        "albumId": 16,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "03:29"
+      },
+      {
+        "_id": 25,
+        "title": "8 Rounds",
+        "artistId": 21,
+        "artist": "yanvince, just alex",
+        "albumId": 20,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "02:03"
+      },
+      {
+        "_id": 30,
+        "title": "think about",
+        "artistId": 24,
+        "artist": "Wiguez & Vizzen",
+        "albumId": 23,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "02:22"
+      },
+      {
+        "_id": 35,
+        "title": "i will be ok",
+        "artistId": 24,
+        "artist": "Wiguez & Vizzen",
+        "albumId": 23,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "02:33"
+      },
+      {
+        "_id": 40,
+        "title": "Shadow Of Ages",
+        "artistId": 26,
+        "artist": "Wiguez & Josh Levoid",
+        "albumId": 25,
+        "album": "Various Album",
+        "thumbnail": "",
+        "playtime": "02:33"
+      },
+      {
+        "_id": 45,
+        "title": "Nunca [Arcade Release]",
+        "artistId": 30,
+        "artist": "WATEVA",
+        "albumId": 29,
+        "album": "Nunca",
+        "thumbnail": "http://localhost:30000/54081e8c-7433-4fcc-a5e9-dcc26a8f25da.jpeg",
+        "playtime": "02:31"
+      },
+      {
+        "_id": 89,
+        "title": "Nocturnal",
+        "artistId": 60,
+        "artist": "Raul Ojamaa feat. Maris Pihlap",
+        "albumId": 62,
+        "album": "Nocturnal ",
+        "thumbnail": "http://localhost:30000/4a2f78cc-da82-4ccc-823b-8ab24e126298.jpeg",
+        "playtime": "03:05"
+      },
+      {
+        "_id": 90,
+        "title": "Hold On Me",
+        "artistId": 61,
+        "artist": "Egzod & Maestro Chives, Don Diablo",
+        "albumId": 63,
+        "album": "Hold On Me",
+        "thumbnail": "http://localhost:30000/6ada3ba2-62ad-4e73-a192-0d6351fa3518.jpeg",
+        "playtime": "03:29"
+      }
+    ],
+    "thumbnail": "https://www.forbes.com/wheels/wp-content/uploads/2020/09/family-vaca-1200.png",
+    "userName": "jjanggu",
+    "uid": 1,
+    "totalMusicCount": 11,
+    "_class": "com.sgwannabe.playlistserver.playlist.domain.Playlist"
+  }
+]

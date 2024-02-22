@@ -7,7 +7,7 @@ services:
       - 12100:3306
     environment:
       MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: user
+      MYSQL_DATABASE: lalala
       TZ: Asia/Seoul
     command:
       - --character-set-server=utf8mb4
