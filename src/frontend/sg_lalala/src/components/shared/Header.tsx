@@ -10,7 +10,6 @@ import person_icon from "../../assets/person.png";
 function Header() {
   const navigate = useNavigate();
   const user = useRecoilValue(userInfo);
-
   return (
     <div className="flex flex-row items-center justify-between mt-5 mb-5">
       <div className="flex flex-row items-center">
