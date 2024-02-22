@@ -36,7 +36,19 @@ spring:
   kafka:
     bootstrap-servers: localhost:40000,localhost:40001,localhost:40002
     consumer:
-      group-id: alarm-group
+      group-id: alarm-server
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:34100/eureka
 
 logging:
   pattern:

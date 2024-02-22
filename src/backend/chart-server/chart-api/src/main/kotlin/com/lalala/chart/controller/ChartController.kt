@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import reactor.core.publisher.Mono
 
 @RestController
 @RequestMapping("charts")
@@ -23,31 +22,27 @@ class ChartController(
 ) {
     @GetMapping
     @Operation(summary = "차트 조회", description = "차트 조회 API")
-    fun getChart(
+    suspend fun getChart(
         @RequestParam(required = false) timeStamp: Int?,
-    ): Mono<BaseResponse<ChartResponse>> =
-        chartService.getChart(timeStamp)
-            .map { ChartResponse.of(it) }
-            .map {
-                BaseResponse.from(
-                    HttpStatus.OK.value(),
-                    "차트를 조회했습니다.",
-                    it,
-                )
-            }
+    ): BaseResponse<ChartResponse> {
+        val chart = chartService.getChart(timeStamp)
+        return BaseResponse.from(
+            HttpStatus.OK.value(),
+            "차트를 조회했습니다.",
+            ChartResponse.of(chart),
+        )
+    }
 
     @PostMapping
     @Operation(summary = "차트 생성", description = "차트 생성 API")
-    fun createChart(
+    suspend fun createChart(
         @RequestBody request: CreateChartRequest,
-    ): Mono<BaseResponse<ChartResponse>> =
-        chartService.createChart(request.timeStamp, request.records)
-            .map { ChartResponse.of(it) }
-            .map {
-                BaseResponse.from(
-                    HttpStatus.OK.value(),
-                    "차트를 생성했습니다.",
-                    it,
-                )
-            }
+    ): BaseResponse<ChartResponse> {
+        val chart = chartService.createChart(request.timeStamp, request.records)
+        return BaseResponse.from(
+            HttpStatus.OK.value(),
+            "차트를 생성했습니다.",
+            ChartResponse.of(chart),
+        )
+    }
 }

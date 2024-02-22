@@ -17,7 +17,6 @@ import com.lalala.config.KafkaProducerConfig;
     CommonMvcModuleConfig.class,
     AuthenticationContext.class,
     PassportAspect.class,
-    KafkaConsumerConfig.class,
     KafkaProducerConfig.class,
     BaseResponseBodyAdvice.class,
     GlobalExceptionHandler.class,

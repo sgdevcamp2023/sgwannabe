@@ -1,7 +1,9 @@
 package com.lalala.music.service;
 
+import com.lalala.event.SearchMusicRequestEvent;
 import com.lalala.exception.BusinessException;
 import com.lalala.exception.ErrorCode;
+import com.lalala.music.external.kafka.KafkaProducer;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -50,6 +52,8 @@ public class MusicUploaderService {
     private final ArtistService artistService;
     private final AlbumService albumService;
 
+    private final KafkaProducer producer;
+
     @Transactional
     public MusicDetailDTO upload(MultipartFile file) {
         File downloadFile = extractorService.downloadToTemp(file);
@@ -74,7 +78,7 @@ public class MusicUploaderService {
                                 LocalDateTime.now(),
                                 artist.getId()));
 
-        return musicService.createMusic(
+        MusicDetailDTO music = musicService.createMusic(
                 new CreateMusicRequestDTO(
                         extractedMusic.getTitle(),
                         extractedMusic.getPlayTime().shortValue(),
@@ -82,6 +86,23 @@ public class MusicUploaderService {
                         album.getId(),
                         FileDTO.from(new MusicFile(musicResponse.getUrl(), FormatType.MP3)),
                         new ParticipantsRequestDTO(artist.getId())));
+
+        producer.execute(new SearchMusicRequestEvent(
+                music.getId(),
+                music.getTitle(),
+                music.getPlayTime(),
+                music.getParticipants().getArtist().getId(),
+                music.getParticipants().getArtist().getName(),
+                music.getParticipants().getArtist().getGenderType().name(),
+                music.getParticipants().getArtist().getType().name(),
+                music.getParticipants().getArtist().getAgency(),
+                music.getAlbum().getId(),
+                music.getAlbum().getTitle(),
+                music.getAlbum().getType().name(),
+                music.getAlbum().getReleasedAt()
+        ));
+
+        return music;
     }
 
     public UploadResponseDTO uploadImage(byte[] imageData, String extension) {

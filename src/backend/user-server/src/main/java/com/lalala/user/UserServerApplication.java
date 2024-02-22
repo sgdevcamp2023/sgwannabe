@@ -14,7 +14,7 @@ import com.lalala.aop.AuthenticationContext;
         CommonMvcModuleConfig.class,
         AuthenticationContext.class,
         PassportAspect.class,
-        BaseResponseBodyAdvice.class,
+//        BaseResponseBodyAdvice.class,
         GlobalExceptionHandler.class
 })
 @SpringBootApplication

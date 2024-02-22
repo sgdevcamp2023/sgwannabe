@@ -10,4 +10,7 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
     implementation  'com.mpatric:mp3agic:0.9.1'
+
+    // Kafka
+    implementation 'org.springframework.kafka:spring-kafka'
 }

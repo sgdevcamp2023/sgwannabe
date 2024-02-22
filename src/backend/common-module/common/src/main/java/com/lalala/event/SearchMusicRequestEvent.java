@@ -1,7 +1,20 @@
 package com.lalala.event;
 
+import java.time.LocalDateTime;
+
 public record SearchMusicRequestEvent(
-        Long id, String title, Short playTime, Long artistId, String artist, Long albumId, String album)
+        Long id,
+        String title,
+        Short playTime,
+        Long artistId,
+        String artist,
+        String artistGender,
+        String artistType,
+        String artistAgency,
+        Long albumId,
+        String album,
+        String albumType,
+        LocalDateTime albumReleasedAt)
         implements LalalaEvent {
     @Override
     public String getTopic() {

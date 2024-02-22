@@ -11,8 +11,12 @@ server:
   application:
     name: streaming-server
 
+spring:
   kafka:
     bootstrap-servers: localhost:40000,localhost:40001,localhost:40002
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 client:
   endpoint:

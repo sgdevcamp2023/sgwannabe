@@ -1,7 +1,10 @@
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
+}
 rootProject.name = "chart"
 
-include ("chart-api")
-
+include("chart-api")
+include("chart-batch")
 
 include(":common-module")
 findProject(":common-module")?.projectDir = file("../common-module")
@@ -14,3 +17,4 @@ findProject(":common-module:common-mvc")?.projectDir = file("../common-module/co
 
 include(":common-module:common-reactive")
 findProject(":common-module:common-reactive")?.projectDir = file("../common-module/common-reactive")
+include("chart-consumer")

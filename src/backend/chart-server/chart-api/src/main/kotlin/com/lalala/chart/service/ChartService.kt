@@ -9,8 +9,8 @@ import com.lalala.chart.entity.mongo.RankingRecord
 import com.lalala.chart.entity.mongo.Statistics
 import com.lalala.chart.exception.NotFoundException
 import com.lalala.chart.repository.ChartRepository
+import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.switchIfEmpty
 import java.util.UUID
 
@@ -18,22 +18,26 @@ import java.util.UUID
 class ChartService(
     private val chartRepository: ChartRepository,
 ) {
-    fun getChart(timeStamp: Int?): Mono<ChartEntity> =
+    suspend fun getChart(timeStamp: Int?): ChartEntity =
         when (timeStamp) {
             null -> getLatestChart()
             else -> getChartByTimeStamp(timeStamp)
         }
 
-    fun getLatestChart(): Mono<ChartEntity> = chartRepository.findTopByOrderByTimeStampDesc()
+    suspend fun getLatestChart(): ChartEntity =
+        chartRepository
+            .findTopByOrderByTimeStampDesc()
+            .awaitSingle()
 
-    fun getChartByTimeStamp(timeStamp: Int): Mono<ChartEntity> =
+    suspend fun getChartByTimeStamp(timeStamp: Int): ChartEntity =
         chartRepository.findByTimeStamp(timeStamp)
             .switchIfEmpty { throw NotFoundException("차트를 조회할 수 없습니다.") }
+            .awaitSingle()
 
-    fun createChart(
+    suspend fun createChart(
         timeStamp: Int,
         records: List<CreateRankingRecordRequest>,
-    ): Mono<ChartEntity> {
+    ): ChartEntity {
         val chart =
             ChartEntity(
                 timeStamp = timeStamp,
@@ -49,6 +53,8 @@ class ChartService(
                         )
                     },
             )
-        return chartRepository.insert(chart)
+        return chartRepository
+            .insert(chart)
+            .awaitSingle()
     }
 }

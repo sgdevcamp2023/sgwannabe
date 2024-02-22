@@ -33,6 +33,7 @@ services:
     image: rabbitmq:3.10-management
     ports:
       - "28300:5672"
+      - "28400:15672"
     environment:
       RABBITMQ_DEFAULT_USER: admin
       RABBITMQ_DEFAULT_PASS: admin

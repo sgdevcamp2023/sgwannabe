@@ -130,4 +130,19 @@ public class UserService {
 
         return BaseResponse.from(HttpStatus.OK.value(), "회원정보 조회에 성공했습니다.", userInfoResponse);
     }
+
+    public BaseResponse<UserInfoResponse> getUserById(Long id) {
+        User user =
+                userRepository
+                        .findById(id)
+                        .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        UserInfoResponse userInfoResponse = UserInfoResponse.builder()
+                .id(user.getId())
+                .profile(user.getProfile())
+                .nickname(user.getNickname())
+                .build();
+
+        return BaseResponse.from(HttpStatus.OK.value(), "회원정보 조회에 성공했습니다.", userInfoResponse);
+    }
 }

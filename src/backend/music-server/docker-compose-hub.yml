@@ -13,7 +13,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: admin
 
       SPRING_KAFKA_BOOTSTRAP-SERVERS: Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
-      SPRING_KAFKA_CONSUMER_GROUP-ID: music-group
+      SPRING_KAFKA_CONSUMER_GROUP-ID: music-server
 
       EUREKA_INSTANCE_HOSTNAME: music-app
       EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://discovery-app:34100/eureka

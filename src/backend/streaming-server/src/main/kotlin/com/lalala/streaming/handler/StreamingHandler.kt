@@ -1,10 +1,12 @@
 package com.lalala.streaming.handler
 
+import com.lalala.event.StreamingCompleteEvent
 import com.lalala.exception.BusinessException
 import com.lalala.exception.ErrorCode
 import com.lalala.response.BaseResponse
 import com.lalala.streaming.constant.StreamingConstant
 import com.lalala.streaming.dto.MusicDetailDTO
+import com.lalala.streaming.external.kafka.KafkaProducer
 import com.lalala.streaming.handler.Command.*
 import io.github.oshai.kotlinlogging.KotlinLogging
 import net.bramp.ffmpeg.FFmpeg
@@ -12,6 +14,7 @@ import net.bramp.ffmpeg.FFprobe
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.MediaType
+import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.body
 import org.springframework.web.socket.BinaryMessage
@@ -31,6 +34,7 @@ class StreamingHandler(
     private val musicClient: RestClient,
     @Qualifier("storageClient")
     private val storageClient: RestClient,
+    private val producer: KafkaProducer
 ) : TextWebSocketHandler() {
     // TODO: 다음 트랙 변화 이벤트 추가
 
@@ -76,7 +80,10 @@ class StreamingHandler(
                     startStream(session, musicId, startTime)
                 }
 
-                TRACK_CHANGED -> TODO()
+                TRACK_CHANGED -> {
+                    val completeMusicId = payload.split("/")[1]
+                    producer.execute(StreamingCompleteEvent(completeMusicId.toLong()))
+                }
             }
         } catch (err: Exception) {
             err.printStackTrace()

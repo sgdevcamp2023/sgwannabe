@@ -1,5 +1,6 @@
 package com.lalala.streaming.config.ws
 
+import com.lalala.streaming.external.kafka.KafkaProducer
 import com.lalala.streaming.handler.StreamingHandler
 import net.bramp.ffmpeg.FFmpeg
 import net.bramp.ffmpeg.FFprobe
@@ -14,14 +15,16 @@ import org.springframework.web.socket.config.annotation.*
 class WsConfig(
     private val ffMpeg: FFmpeg,
     private val ffProbe: FFprobe,
+    @Qualifier("musicClient")
     private val musicClient: RestClient,
     @Qualifier("storageClient")
     private val storageClient: RestClient,
+    private val producer: KafkaProducer
 ) : WebSocketConfigurer {
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
         registry
             .addHandler(streamingHandler(), "/v1/ws/streaming")
-            .setAllowedOrigins("http://localhost:3000")
+            .setAllowedOrigins("http://localhost:3000", "http://localhost:63342")
         registry
             .addHandler(streamingHandler(), "/v1/ws/streaming")
             .setAllowedOrigins("http://localhost:3000")
@@ -29,5 +32,11 @@ class WsConfig(
     }
 
     @Bean
-    fun streamingHandler() = StreamingHandler(ffMpeg, ffProbe, musicClient, storageClient)
+    fun streamingHandler() = StreamingHandler(
+        ffMpeg,
+        ffProbe,
+        musicClient,
+        storageClient,
+        producer
+    )
 }

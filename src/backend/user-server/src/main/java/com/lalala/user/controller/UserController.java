@@ -68,4 +68,9 @@ public class UserController {
     public BaseResponse<UserInfoResponse> userInfo() {
         return userService.userInfo(AuthenticationContext.getUserInfo());
     }
+
+    @GetMapping("/{id}")
+    public BaseResponse<UserInfoResponse> getUserById(@PathVariable("id") Long id) {
+        return userService.getUserById(id);
+    }
 }

@@ -1,5 +1,6 @@
 package com.lalala.streaming
 
+import com.lalala.config.KafkaProducerConfig
 import com.lalala.mvc.config.CommonMvcModuleConfig
 import lombok.extern.slf4j.Slf4j
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.Import
 
 @Import(
 	CommonMvcModuleConfig::class,
+	KafkaProducerConfig::class,
 )
 @Slf4j
 @SpringBootApplication

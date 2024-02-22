@@ -25,6 +25,7 @@
     }
 
     var time = 0;
+    var totaltime = 0;
 
     socket.onmessage = function (event) {
 
@@ -38,8 +39,10 @@
                     sourceNode = audioContext.createBufferSource();
                     sourceNode.buffer = buffer;
                     sourceNode.connect(audioContext.destination);
-                    sourceNode.start(time);
 
+                    var originTime = time;
+
+                    sourceNode.start(time);
                     time += sourceNode.buffer.duration;
                     console.log(time);
                 });
@@ -48,6 +51,16 @@
                     sourceNode = audioContext.createBufferSource();
                     sourceNode.buffer = buffer;
                     sourceNode.connect(audioContext.destination);
+
+                    var originTime = time;
+
+                    sourceNode.addEventListener('ended', () => {
+                        console.log(originTime, time);
+                        if (originTime + sourceNode.buffer.duration >= time) {
+                            console.log("end!");
+                        }
+                    });
+
                     sourceNode.start(time);
 
                     time += sourceNode.buffer.duration;
