@@ -1,0 +1,11 @@
+﻿Feature,HTTP Method,URI,Response Code,Feature Group,서버 반영 여부,담당자,비고
+웹소켓 연결,,,,client-chatting,Not started,,
+채팅 메시지 수신,STOMP SUBSCRIBE,/topic/chat-rooms/{roomId}/messages,,client-chatting,Not started,,
+채팅 메시지 송신,STOMP SEND,/app/chat-rooms/{roomId}/send-message,,client-chatting,Not started,,웹소켓 connect후 /chat/message
+채팅 메시지 조회,,,,client-chatting,Not started,,
+채팅방 생성,POST,/api/v2/chat-rooms,,client-chatroom,Not started,,
+채팅방 정보 조회,GET,/api/v2/chat-rooms/{roomId},,client-chatroom,Not started,,
+채팅방 수정,PATCH,/api/v2/chat-rooms/{roomId},,client-chatroom,Not started,,채팅방 state 관련
+채팅방 입장,POST,,,client-chatroom,Not started,,
+채팅방 퇴장,POST,,,client-chatroom,Not started,,
+채팅방 리스트 조회,,,,search-chatroom,Not started,,

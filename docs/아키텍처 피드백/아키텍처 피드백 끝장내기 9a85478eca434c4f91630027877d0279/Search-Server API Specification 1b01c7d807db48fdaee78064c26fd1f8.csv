@@ -1,0 +1,8 @@
+﻿Feature,HTTP Method,URI,Response Code,Feature Group,서버 반영 여부,비고
+통합 검색,GET,/api/v1/search,"200 OK, 400 Bad Request, 500 Internal Server Error",client-search,Not started,
+음원(곡)명 검색,GET,/api/v1/search/songs,"200 OK, 400 Bad Request, 500 Internal Server Error",client-search,Not started,
+아티스트명 검색,GET,/api/v1/search/artists,"200 OK, 400 Bad Request, 500 Internal Server Error",client-search,Not started,
+사용자명 검색,GET,/api/v1/search/users,"200 OK, 400 Bad Request, 500 Internal Server Error",client-search,Not started,
+플레이리스트명 검색,GET,/api/v1/search/playlists,"200 OK, 400 Bad Request, 500 Internal Server Error",client-search,Not started,
+채팅방명 검색,GET,/api/v1/search/chatrooms,"200 OK, 400 Bad Request, 500 Internal Server Error",client-search,Not started,
+채팅방명 검색,GET,http://localhost:____/api/v1/____,,chatting-search,Not started,
