@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@stomp/stompjs": "^7.0.0",
     "@tanstack/react-query": "^5.17.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -12,12 +13,20 @@
     "@types/react": "^18.2.46",
     "@types/react-dom": "^18.2.18",
     "@types/react-router-dom": "^5.3.3",
+    "axios": "^1.6.7",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "framer-motion": "^11.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.12.0",
     "react-router-dom": "^6.4",
     "react-scripts": "5.0.1",
     "recoil": "^0.7.7",
+    "socket.io-client": "^4.7.4",
+    "sockjs-client": "^1.6.1",
+    "stompjs": "^2.3.3",
+    "tailwind-merge": "^2.2.1",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
@@ -48,6 +57,8 @@
     ]
   },
   "devDependencies": {
+    "@types/sockjs-client": "^1.5.4",
+    "@types/stompjs": "^2.3.9",
     "tailwindcss": "^3.4.1"
   }
 }

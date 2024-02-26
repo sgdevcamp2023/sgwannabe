@@ -4,8 +4,8 @@ import Header from "../components/shared/Header";
 
 function MainChartPage() {
   return (
-    <div className="flex justify-center">
-      <div className="flex flex-col w-[1080px]">
+    <div className="flex justify-center w-full">
+      <div className="flex flex-col w-full">
         <Header />
         <FeedListComponent />
         <TopHundredComponent />

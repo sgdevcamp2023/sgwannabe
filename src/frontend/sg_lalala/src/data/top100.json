@@ -1,0 +1,47 @@
+{
+  "timeStamp": 1704754802,
+  "records": [
+    {
+      "id": "523134de-5bbd-4e53-991e-c27d36496a59",
+      "ranking": 1,
+      "albumId": 1,
+      "albumName": "MyAlbum",
+      "albumCoverUrl": "https://cdnimg.melon.co.kr/cm2/album/images/113/52/904/11352904_20231027101104_500.jpg/melon/resize/120/quality/80/optimiz",
+      "musicId": 1,
+      "musicTitle": "MusicTitle",
+      "artistId": 1,
+      "artistName": "Artist",
+      "likeCount": 1524,
+      "rankingDifference": 2,
+      "differenceType": "UP"
+    },
+    {
+      "id": "12dd5ea7-1a7a-47b6-a830-87cb0cc8b0a7",
+      "ranking": 2,
+      "albumId": 1,
+      "albumName": "MyAlbum",
+      "albumCoverUrl": "https://cdnimg.melon.co.kr/cm2/album/images/113/52/904/11352904_20231027101104_500.jpg/melon/resize/120/quality/80/optimiz",
+      "musicId": 1,
+      "musicTitle": "MusicTitle",
+      "artistId": 1,
+      "artistName": "Artist",
+      "likeCount": 1524,
+      "rankingDifference": 0,
+      "differenceType": "KEEP"
+    },
+    {
+      "id": "284ec0ce-bd6d-437a-9bb9-d5dc9618235e",
+      "ranking": 3,
+      "albumId": 1,
+      "albumName": "MyAlbum",
+      "albumCoverUrl": "https://cdnimg.melon.co.kr/cm2/album/images/113/52/904/11352904_20231027101104_500.jpg/melon/resize/120/quality/80/optimiz",
+      "musicId": 1,
+      "musicTitle": "MusicTitle",
+      "artistId": 1,
+      "artistName": "Artist",
+      "likeCount": 1524,
+      "rankingDifference": 2,
+      "differenceType": "DOWN"
+    }
+  ]
+}

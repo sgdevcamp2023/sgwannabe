@@ -1,52 +1,43 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Feed from "./Feed";
-
-interface IImageList {
-  images: { id: number; url: string }[];
-  index: number;
-}
+import chatApi from "../../api/chatApi";
+import { ChatRoom } from "../../pages/ChattingListPage";
 
 function FeedSlide() {
-  // const [current, setCurrent] = useState(imageList.index);
+  const [recommendRooms, setRecommendRooms] = useState<ChatRoom[]>();
 
-  // const moveStyle: { [key: number]: string } = {
-  //   0: "translate-x-0",
-  //   1: "translate-x-[-100vw]",
-  //   2: "translate-x-[-200vw]",
-  //   3: "translate-x-[-300vw]",
-  //   4: "translate-x-[-400vw]",
-  //   5: "translate-x-[-500vw]",
-  //   6: "translate-x-[-600vw]",
-  //   7: "translate-x-[-700vw]",
-  //   8: "translate-x-[-800vw]",
-  //   9: "translate-x-[-900vw]",
-  //   10: "translate-x-[-1000vw]",
-  // };
+  const getAllRooms = async () => {
+    try {
+      const response = await chatApi.getAllChatList();
+      const data = response.data.slice(0, 2);
+      console.log(response);
+      setRecommendRooms(data);
+    } catch (error) {
+      console.error("모든 채팅방 부르기 에러", error);
+    }
+  };
 
-  // const nextHandler = () => {
-  //   setCurrent(() => {
-  //     if (current === imageList.images.length - 1) {
-  //       return 0;
-  //     } else {
-  //       return current + 1;
-  //     }
-  //   });
-  // };
-
-  // const prevHandler = () => {
-  //   setCurrent(() => {
-  //     if (current === 0) {
-  //       return imageList.images.length - 1;
-  //     } else {
-  //       return current - 1;
-  //     }
-  //   });
-  // };
+  useEffect(() => {
+    getAllRooms();
+  }, []);
 
   return (
     <div className="flex flex-row justify-evenly">
-      <Feed />
-      <Feed />
+      {recommendRooms &&
+        recommendRooms?.map((room, index) => (
+          <Feed
+            key={index}
+            musicCount={room.musicCount}
+            roomName={room.playlist.name}
+            thumbnail={
+              room.playlist.firstMusic.thumbnail !== ""
+                ? room.playlist.firstMusic.thumbnail
+                : "https://image.bugsm.co.kr/album/images/500/40924/4092452.jpg"
+            }
+            artist={room.playlist.firstMusic.artist}
+            playlistOwner={room.playlist.playlistOwnerNickName}
+          />
+        ))}
     </div>
   );
 }
