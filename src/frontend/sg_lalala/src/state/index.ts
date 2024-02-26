@@ -1,17 +1,6 @@
 import { atom } from "recoil";
-import * as StompJs from "@stomp/stompjs";
 import { playStateType } from "../types/backgroundMusic";
-import {
-  MusicId,
-  PlaylistArrayType,
-  PlaylistMusicType,
-  UserInfoType,
-} from "../types";
-
-export const chatSocketState = atom<StompJs.Client>({
-  key: "chatSocketState",
-  default: new StompJs.Client(),
-});
+import { PlaylistArrayType, PlaylistMusicType, UserInfoType } from "../types";
 
 export const userInfo = atom<UserInfoType>({
   key: "userInfo",
@@ -24,7 +13,7 @@ export const userInfo = atom<UserInfoType>({
 
 export const playingMusicId = atom<number>({
   key: "playingMusicId",
-  default: 0,
+  default: 1,
 });
 
 export const playState = atom<playStateType>({

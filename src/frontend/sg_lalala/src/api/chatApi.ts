@@ -49,9 +49,9 @@ const chatApi = {
   },
   postExitRoom: async ({ roomId, uid }: { roomId: string; uid: number }) => {
     try {
-      const response = await apiHook.chat.post(`v1/api/rooms/exit/${roomId}`, {
-        uid: uid,
-      });
+      const response = await apiHook.chat.post(
+        `v1/api/rooms/exit/${roomId}?uid=${uid}`
+      );
       return response.data;
     } catch (error) {
       console.error("에러 발생:", error);

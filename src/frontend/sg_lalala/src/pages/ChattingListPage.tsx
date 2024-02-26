@@ -4,6 +4,8 @@ import ChattingListComponent from "../components/Chat/ChattingListComponent";
 import Header from "../components/shared/Header";
 import chatApi from "../api/chatApi";
 import JoinedChattingRoom from "../components/Chat/JoinedChattingRoom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { userInfo } from "../state";
 
 export interface PlaylistInfo {
   id: string;
@@ -41,6 +43,7 @@ function ChattingListPage() {
   const [chatList, setChatList] = useState<ChatRoom[]>([]);
   const [joinedChatList, setJoinedChatList] = useState<ChatRoom[]>([]);
   const [stomp, setStomp] = useState<StompJs.Client>();
+  const user = useRecoilValue(userInfo);
 
   const connect = async () => {
     const client: StompJs.Client = new StompJs.Client({
@@ -73,7 +76,7 @@ function ChattingListPage() {
   useEffect(() => {
     const getChatList = async () => {
       try {
-        const chatListData = await chatApi.getChatList({ uid: 3 });
+        const chatListData = await chatApi.getChatList({ uid: 1 });
         setChatList(chatListData.data);
         console.log(chatListData.data);
       } catch (error) {
@@ -83,7 +86,7 @@ function ChattingListPage() {
 
     const getJoinedChatList = async () => {
       try {
-        const chatListData = await chatApi.getJoinedChatList({ uid: 3 });
+        const chatListData = await chatApi.getJoinedChatList({ uid: 1 });
         setJoinedChatList(chatListData.data);
         console.log("joined", chatListData.data);
       } catch (error) {
@@ -106,7 +109,11 @@ function ChattingListPage() {
               playlist={room.playlist}
               lastMessage={room.lastMessage}
               roomName={room.roomName}
-              thumbnailImage={room.thumbnailImage}
+              thumbnailImage={
+                room.thumbnailImage !== ""
+                  ? room.thumbnailImage
+                  : "https://image.bugsm.co.kr/album/images/500/40924/4092452.jpg"
+              }
               userCount={room.userCount}
               playlistOwner={room.playlistOwner}
               chatSocket={stomp!}
@@ -120,7 +127,11 @@ function ChattingListPage() {
             id={room.id}
             playlist={room.playlist}
             roomName={room.roomName}
-            thumbnailImage={room.thumbnailImage}
+            thumbnailImage={
+              room.thumbnailImage !== ""
+                ? room.thumbnailImage
+                : "https://image.bugsm.co.kr/album/images/500/40924/4092452.jpg"
+            }
             userCount={room.userCount}
             playlistOwner={room.playlistOwner}
             chatSocket={stomp!}

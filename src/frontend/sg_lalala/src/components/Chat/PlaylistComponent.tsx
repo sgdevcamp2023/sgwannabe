@@ -92,26 +92,32 @@ function PlaylistComponent() {
     if (audioContext) {
       if (audioContext.currentTime !== 0 && audioContext?.currentTime >= time) {
         console.log("노래가 끝났습니다.");
-        setSongId(songId + 1);
+        // setSongId(songId + 1);
       }
     }
   }, [audioContext?.currentTime, time]);
 
   return (
-    <div className="flex flex-col items-center w-1/2 px-10 py-5">
-      <button className="text-black" onClick={handleButtonClick}>
-        play
-      </button>
-      {state &&
-        state.playlist.musics.map((music: Song, index: number) => (
-          <PlaylistSongComponent
-            key={index}
-            id={music.id}
-            title={music.title}
-            artist={music.artist}
-            thumbnail={music.thumbnail}
-          />
-        ))}
+    <div className="flex flex-col items-center w-1/2 pb-5">
+      <div className="w-full px-10 overflow-y-auto max-h-[88vh]">
+        <button className="text-black" onClick={handleButtonClick}>
+          play
+        </button>
+        {state &&
+          state.playlist.musics.map((music: Song, index: number) => (
+            <PlaylistSongComponent
+              key={index}
+              id={music.id}
+              title={music.title}
+              artist={music.artist}
+              thumbnail={
+                music.thumbnail !== ""
+                  ? music.thumbnail
+                  : "https://image.bugsm.co.kr/album/images/500/40924/4092452.jpg"
+              }
+            />
+          ))}
+      </div>
     </div>
   );
 }

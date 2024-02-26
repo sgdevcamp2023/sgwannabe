@@ -29,7 +29,11 @@ function FeedSlide() {
             key={index}
             musicCount={room.musicCount}
             roomName={room.playlist.name}
-            thumbnail={room.playlist.firstMusic.thumbnail}
+            thumbnail={
+              room.playlist.firstMusic.thumbnail !== ""
+                ? room.playlist.firstMusic.thumbnail
+                : "https://image.bugsm.co.kr/album/images/500/40924/4092452.jpg"
+            }
             artist={room.playlist.firstMusic.artist}
             playlistOwner={room.playlist.playlistOwnerNickName}
           />

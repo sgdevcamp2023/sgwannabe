@@ -19,15 +19,6 @@ function ChattingListComponent({
     <div
       className="w-full p-5 mb-4 rounded-md cursor-pointer bg-primaryDark/20"
       onClick={() => {
-        chatSocket.publish({
-          destination: "/chat/pub/join",
-          body: JSON.stringify({
-            roomId: id,
-            senderId: user.id,
-            nickName: user.nickName,
-            senderProfileImage: user.profile,
-          }),
-        });
         navigate(`/chat/${id}`, {
           state: {
             roomId: id,

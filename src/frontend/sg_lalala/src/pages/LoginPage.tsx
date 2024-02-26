@@ -31,6 +31,7 @@ function LoginPage() {
         email: email,
         password: password,
       });
+      console.log(response);
       if (response.status === 200) {
         const { access_token, refresh_token } = response.data.data;
         localStorage.setItem("access", access_token);

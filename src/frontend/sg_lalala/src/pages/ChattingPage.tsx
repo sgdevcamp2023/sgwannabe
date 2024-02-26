@@ -53,21 +53,20 @@ function ChattingPage() {
       setStompClient(client);
       fetchChatHistory(client);
       client.subscribe(`/chat/topic/room/${roomId}`, handleReceiveMessge);
+      if (state.join === "join") {
+        client.publish({
+          destination: "/chat/pub/join",
+          body: JSON.stringify({
+            roomId: roomId,
+            senderId: user.id,
+            nickName: user.nickName,
+            senderProfileImage: user.profile,
+          }),
+        });
+      }
     };
 
     client.activate();
-
-    if (state.join === "join") {
-      client.publish({
-        destination: "/chat/pub/join",
-        body: JSON.stringify({
-          roomId: roomId,
-          senderId: user.id,
-          nickName: user.nickName,
-          senderProfileImage: user.profile,
-        }),
-      });
-    }
   };
 
   const handleReceiveMessge = (data: any) => {
@@ -84,7 +83,7 @@ function ChattingPage() {
           roomId: roomId,
           uid: user.id,
         });
-        // console.log(response);
+        console.log(response);
       } catch (error) {
         console.error("채팅방나가기 에러", error);
       }

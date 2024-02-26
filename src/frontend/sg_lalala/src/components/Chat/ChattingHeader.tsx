@@ -15,7 +15,7 @@ function ChattingHeader({ stompClient }: { stompClient: StompJs.Client }) {
     try {
       const response = await chatApi.postExitRoom({
         roomId: state.roomId,
-        uid: user.id,
+        uid: 1,
       });
       console.log("채팅방나가기", response);
     } catch (error) {
@@ -30,7 +30,11 @@ function ChattingHeader({ stompClient }: { stompClient: StompJs.Client }) {
           <div className="flex flex-row items-center">
             <img
               className="mr-5 w-14"
-              src={state.playlist.firstMusic.thumbnail}
+              src={
+                state.playlist.firstMusic.thumbnail !== ""
+                  ? state.playlist.firstMusic.thumbnail
+                  : "https://image.bugsm.co.kr/album/images/500/40924/4092452.jpg"
+              }
               alt="Album Cover"
             />
             <div className="text-lg text-primary font-600">

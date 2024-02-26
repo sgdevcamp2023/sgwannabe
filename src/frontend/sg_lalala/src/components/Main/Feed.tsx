@@ -21,7 +21,7 @@ function Feed({
       className={`w-5/12 flex flex-col rounded-2xl bg-cover bg-center cursor-pointer`}
     >
       <div className="w-full h-full p-5 backdrop-blur-md">
-        <div className="w-8/12 ">
+        <div className="w-10/12 ">
           <div className="text-white text-xxl font-500">{roomName}</div>
           <div className="text-sm text-textGray">{playlistOwner}</div>
         </div>
