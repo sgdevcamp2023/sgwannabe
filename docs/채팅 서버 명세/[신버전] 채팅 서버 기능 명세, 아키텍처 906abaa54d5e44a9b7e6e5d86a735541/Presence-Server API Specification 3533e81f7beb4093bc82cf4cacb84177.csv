@@ -1,9 +1,0 @@
-﻿Feature,HTTP Method,URI,Response Code,Feature Group,서버 반영 여부,담당자,비고
-상태관리 서버 Kafka 설정,,,,client-state,Not started,성균관대학교정소연,
-접속상태 on인 유저 목록 조회,GET,/api/v1/presence/{roomId}/on,,client-state,Not started,성균관대학교정소연,"라이브 채팅 페이지에서 구현 예정(우선순위는 낮음)
-접속 상태 on인 유저 id 리스트 조회 && 접속 상태 off인 유저 id 리스트 조회 (/on-user + /off-user)
-원래 하나의 API에 두개의 서비스로 가려했는데 method 요청 방식도 달라서 분리 결정."
-"접속상태 off인 유저 목록 조회 ",,/api/v1/presence/{roomId}/off,,client-state,Not started,성균관대학교정소연,
-접속상태 on으로 변경 및 상태 전달,PATCH,/api/v1/presence/on,,client-state,Not started,성균관대학교정소연,
-접속상태 off로 변경 및 상태 전달,PATCH,/api/v1/presence/off,,client-state,Not started,성균관대학교정소연,
-,,,,,Not started,,
