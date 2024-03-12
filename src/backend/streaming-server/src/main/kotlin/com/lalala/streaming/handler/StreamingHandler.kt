@@ -37,6 +37,7 @@ import java.time.Duration
 import java.util.concurrent.Executor
 import java.util.concurrent.TimeUnit
 import kotlin.math.floor
+import kotlin.io.path.deleteIfExists
 
 inline fun <reified T> typeReference() = object : ParameterizedTypeReference<T>() {}
 
@@ -190,11 +191,12 @@ class StreamingHandler(
                                 }
                             }
 
-                            val splitFile = File(StreamingConstant.TEMP_FOLDER, "${session.id}-${state}.flac")
-                            splitFile.inputStream().buffered().use { stream ->
+                            val trimFilePath = Paths.get(StreamingConstant.TEMP_FOLDER, "${session.id}-${state}.flac")
+                            val trimMusicInputStream = Files.newInputStream(trimFilePath)
+                            trimMusicInputStream.buffered().use { stream ->
                                 sink.next(session.binaryMessage { it.wrap(stream.readBytes()) })
                             }
-                            splitFile.delete()
+                            trimFilePath.deleteIfExists()
 
                             if (state == remainingCount) {
                                 sink.complete()
