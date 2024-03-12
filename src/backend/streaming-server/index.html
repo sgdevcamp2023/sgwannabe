@@ -8,6 +8,7 @@
 
 <div id="audios">
     <button id="btnStart">시작</button>
+    <button id="btnStop">중지</button>
 </div>
 
 <script>
@@ -25,6 +26,7 @@
     }
 
     var time = 0;
+    var totaltime = 0;
 
     socket.onmessage = function (event) {
 
@@ -38,8 +40,10 @@
                     sourceNode = audioContext.createBufferSource();
                     sourceNode.buffer = buffer;
                     sourceNode.connect(audioContext.destination);
-                    sourceNode.start(time);
 
+                    var originTime = time;
+
+                    sourceNode.start(time);
                     time += sourceNode.buffer.duration;
                     console.log(time);
                 });
@@ -48,6 +52,16 @@
                     sourceNode = audioContext.createBufferSource();
                     sourceNode.buffer = buffer;
                     sourceNode.connect(audioContext.destination);
+
+                    var originTime = time;
+
+                    sourceNode.addEventListener('ended', () => {
+                        console.log(originTime, time);
+                        if (originTime + sourceNode.buffer.duration >= time) {
+                            console.log("end!");
+                        }
+                    });
+
                     sourceNode.start(time);
 
                     time += sourceNode.buffer.duration;
@@ -61,9 +75,15 @@
         console.error('WebSocket closed:', event);
     };
 
-    document.querySelector('button').addEventListener('click', function() {
+    document.querySelector('#btnStart').addEventListener('click', function() {
           audioContext.resume().then(() => {
             console.log('AudioContext resumed');
+        });
+    });
+
+    document.querySelector('#btnStop').addEventListener('click', function() {
+          audioContext.suspend().then(() => {
+            console.log('AudioContext suspended');
         });
     });
 </script>
