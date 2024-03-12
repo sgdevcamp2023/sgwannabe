@@ -25,4 +25,19 @@ internal class AsyncConfig {
         executor.initialize()
         return executor
     }
+
+    @Bean(name = ["preprocessingExecutor"])
+    fun preprocessingExecutor(): Executor {
+        val executor = ThreadPoolTaskExecutor()
+        executor.corePoolSize = 10
+        executor.maxPoolSize = 20
+        executor.queueCapacity = 40
+        executor.setThreadNamePrefix("PreProcessing-Thread")
+        executor.keepAliveSeconds = 30
+        executor.setAllowCoreThreadTimeOut(false)
+        executor.setPrestartAllCoreThreads(true)
+        executor.setRejectedExecutionHandler(CallerRunsPolicy())
+        executor.initialize()
+        return executor
+    }
 }
