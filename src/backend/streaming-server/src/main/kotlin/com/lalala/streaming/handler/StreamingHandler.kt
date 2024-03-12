@@ -33,11 +33,14 @@ import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
-import java.time.Duration
+import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executor
 import java.util.concurrent.TimeUnit
-import kotlin.math.floor
 import kotlin.io.path.deleteIfExists
+import kotlin.io.path.exists
+import kotlin.io.path.pathString
+import kotlin.math.floor
+
 
 inline fun <reified T> typeReference() = object : ParameterizedTypeReference<T>() {}
 
@@ -144,10 +147,9 @@ class StreamingHandler(
         return getMusic(session, musicId)
             .map { URI(it.file.fileUrl).path }
             .flatMap { downloadMusic(session, it) }
-            .then(File("${StreamingConstant.TEMP_FOLDER}/${session.id}.mp3").toMono())
+            .then(Paths.get("${StreamingConstant.TEMP_FOLDER}/${session.id}.mp3").toMono())
             .flatMapMany {
-                // 파일 서버에서 파일 다운로드
-                val result = ffProbe.probe(it.path)
+                val result = ffProbe.probe(it.pathString)
                 val format = result.getFormat()
                 val duration = format.duration
 
@@ -158,15 +160,17 @@ class StreamingHandler(
                 val processBuilder = ProcessBuilder()
                 processBuilder.directory(File(System.getProperty("user.dir")));
                 processBuilder.command(
-                    ffMpeg.path, "-y", "-i", it.path,
+                    ffMpeg.path, "-y", "-i", it.pathString,
                     "-ss", startTime, "-f", "segment", "-segment_time", "${StreamingConstant.TRIM_DURATION_SEC}",
                     "${StreamingConstant.TEMP_FOLDER}/${session.id}-%d.flac"
                 )
 
+                val latch = CountDownLatch(1)
                 val commandLineThread = Thread() {
                     try {
                         val process: Process = processBuilder.start()
                         process.waitFor(10, TimeUnit.SECONDS)
+                        latch.countDown()
                     } catch (e: IOException) {
                         e.printStackTrace()
                     } catch (e: InterruptedException) {
@@ -179,33 +183,35 @@ class StreamingHandler(
                 val remainingDuration = duration - startTime.toDouble()
                 val remainingCount = floor(remainingDuration / StreamingConstant.TRIM_DURATION_SEC).toInt()
 
-                return@flatMapMany Flux.interval(Duration.ofMillis(100)).flatMap {
-                    Flux.generate<WebSocketMessage?, Int?>(
-                        { 0 },
-                        { state, sink ->
-                            val nextFile = File(StreamingConstant.TEMP_FOLDER, "${session.id}-${state + 1}.flac")
-                            while (!nextFile.exists()) {
-                                if (!commandLineThread.isAlive && state == remainingCount) {
-                                    // 마지막은 다음 파일이 나오는 기준이 아닌, 스레드 종료 기준
-                                    break;
-                                }
-                            }
-
-                            val trimFilePath = Paths.get(StreamingConstant.TEMP_FOLDER, "${session.id}-${state}.flac")
-                            val trimMusicInputStream = Files.newInputStream(trimFilePath)
-                            trimMusicInputStream.buffered().use { stream ->
-                                sink.next(session.binaryMessage { it.wrap(stream.readBytes()) })
-                            }
-                            trimFilePath.deleteIfExists()
-
+                return@flatMapMany Flux.generate<WebSocketMessage?, Int?>(
+                    { 0 },
+                    { state, sink ->
+                        val nextPath = Paths.get(StreamingConstant.TEMP_FOLDER, "${session.id}-${state + 1}.flac")
+                        while (!nextPath.exists()) {
                             if (state == remainingCount) {
-                                sink.complete()
+                                // 마지막은 다음 파일이 나오는 기준이 아닌, 스레드 종료 기준
+                                latch.await()
+                                break;
                             }
-
-                            return@generate state + 1
                         }
-                    )
-                }
+
+                        val trimFilePath = Paths.get(StreamingConstant.TEMP_FOLDER, "${session.id}-${state}.flac")
+                        val trimMusicInputStream = Files.newInputStream(trimFilePath)
+                        trimMusicInputStream.buffered().use { stream ->
+                            sink.next(session.binaryMessage { it.wrap(stream.readBytes()) })
+                        }
+                        trimFilePath.deleteIfExists()
+
+                        if (state == remainingCount) {
+                            sink.complete()
+                        }
+
+                        return@generate state + 1
+                    }
+                )
+                    .doFinally {
+                        Paths.get(StreamingConstant.TEMP_FOLDER, "${session.id}.mp3").deleteIfExists()
+                    }
             }
     }
 
