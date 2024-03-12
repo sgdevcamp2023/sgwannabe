@@ -13,7 +13,7 @@ spring:
 
 client:
   endpoint:
-    music: http://localhost:24000
+    music: http://music-server
     storage: http://localhost:30000
 
 ffmpeg:
