@@ -57,6 +57,9 @@ dependencies {
 	// kotlin-logging
 	implementation 'io.github.oshai:kotlin-logging-jvm:5.1.0'
 
+	// Eureka
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.1.0'
+
 	// OpenFeign
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.0'
 
