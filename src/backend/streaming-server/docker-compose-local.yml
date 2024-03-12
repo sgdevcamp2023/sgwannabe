@@ -12,6 +12,7 @@ services:
       - client.endpoint.storage=http://fileserver-app:30000
       - spring.kafka.bootstrap-servers=Kafka00Service:9092,Kafka01Service:9092,Kafka02Service:9092
       - eureka.instance.hostname=streaming-app
+      - eureka.client.service-url.defaultzone=http://discovery-app:34100/eureka
       - passport.algorithm=SHA-256
       - passport.key=SECRET_KEY
     restart: always
