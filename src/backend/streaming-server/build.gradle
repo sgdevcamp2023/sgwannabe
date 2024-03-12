@@ -26,17 +26,11 @@ repositories {
 
 dependencies {
 	implementation project(":common-module:common")
-	implementation project(":common-module:common-mvc")
+	implementation project(":common-module:common-reactive")
 
 	// Spring
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-	// Websocket
-	implementation("org.springframework.boot:spring-boot-starter-websocket")
-
-	// Netty
-	//	implementation 'io.netty:netty-all:4.1.68.Final'
 
 	// Spring Session Redis
 	implementation("org.springframework.session:spring-session-data-redis")
