@@ -51,6 +51,9 @@ dependencies {
 	// ffmpeg ( audio processing )
 	implementation 'net.bramp.ffmpeg:ffmpeg:0.8.0'
 
+	// Kafka
+	implementation 'org.springframework.kafka:spring-kafka'
+
 	// kotlin-logging
 	implementation 'io.github.oshai:kotlin-logging-jvm:5.1.0'
 

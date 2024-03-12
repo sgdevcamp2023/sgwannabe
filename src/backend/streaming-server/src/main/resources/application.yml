@@ -8,11 +8,15 @@ server:
 #  netty:
 #    worker-count: 2
 
+spring:
   application:
     name: streaming-server
 
   kafka:
     bootstrap-servers: localhost:40000,localhost:40001,localhost:40002
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 client:
   endpoint:
