@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy
 @Configuration
 @EnableAsync
 internal class AsyncConfig {
-    @Bean(name = ["asyncProducerExecutor"])
+    @Bean
     fun asyncProducerExecutor(): Executor {
         val executor = ThreadPoolTaskExecutor()
         executor.corePoolSize = 10
@@ -26,7 +26,7 @@ internal class AsyncConfig {
         return executor
     }
 
-    @Bean(name = ["preprocessingExecutor"])
+    @Bean
     fun preprocessingExecutor(): Executor {
         val executor = ThreadPoolTaskExecutor()
         executor.corePoolSize = 10

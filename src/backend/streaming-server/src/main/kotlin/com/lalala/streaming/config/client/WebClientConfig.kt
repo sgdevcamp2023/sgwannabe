@@ -17,13 +17,13 @@ class WebClientConfig(
     @Value("\${client.endpoint.music}") val musicUrl: String,
     @Value("\${client.endpoint.storage}") val storageUrl: String
 ) {
-    @Bean(name = ["musicClient"])
+    @Bean
     @LoadBalanced
     fun musicClient() = WebClient.builder()
         .baseUrl(musicUrl)
         .exchangeStrategies(STRATEGIES)
 
-    @Bean(name = ["storageClient"])
+    @Bean
     fun storageClient() = WebClient.builder()
         .baseUrl(storageUrl)
         .exchangeStrategies(STRATEGIES)
