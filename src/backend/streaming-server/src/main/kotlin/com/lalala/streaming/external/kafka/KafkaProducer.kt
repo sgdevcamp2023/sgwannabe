@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 class KafkaProducer(
     private val template: KafkaTemplate<String, LalalaEvent>
 ) {
-    @Async
+    @Async("asyncProducerExecutor")
     fun execute(event: LalalaEvent) {
         template.send(event.topic, event)
     }
