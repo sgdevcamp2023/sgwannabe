@@ -1,28 +1,34 @@
 server:
   port: 22000
-#  servlet:
-#    container: none
-#  websocket:
-#    server:
-#      path: /v1/ws
-#  netty:
-#    worker-count: 2
 
+spring:
   application:
     name: streaming-server
 
   kafka:
     bootstrap-servers: localhost:40000,localhost:40001,localhost:40002
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 client:
   endpoint:
-    music: http://localhost:24000
+    music: http://music-server
     storage: http://localhost:30000
 
 ffmpeg:
   location:
     mpeg: ./libs/ffmpeg-6.1/ffmpeg
     probe: ./libs/ffmpeg-6.1/ffprobe
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:34100/eureka
 
 passport:
   algorithm: HmacSHA256
