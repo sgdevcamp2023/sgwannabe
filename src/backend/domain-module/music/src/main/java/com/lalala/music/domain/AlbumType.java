@@ -1,6 +1,7 @@
-package com.lalala.music.entity;
+package com.lalala.music.domain;
 
 public enum AlbumType {
     SINGLE,
     REGULAR,
 }
+

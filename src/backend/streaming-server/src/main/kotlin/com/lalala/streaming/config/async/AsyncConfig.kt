@@ -1,5 +1,6 @@
 package com.lalala.streaming.config.async
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.EnableAsync
@@ -10,14 +11,17 @@ import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy
 
 @Configuration
 @EnableAsync
-internal class AsyncConfig {
+internal class AsyncConfig() {
     @Bean
-    fun asyncProducerExecutor(): Executor {
+    fun asyncProducerExecutor(
+        @Value("\${spring.async.producer.core-pool-size}")
+        corePoolSize: Int
+    ): Executor {
         val executor = ThreadPoolTaskExecutor()
-        executor.corePoolSize = 10
-        executor.maxPoolSize = 20
-        executor.queueCapacity = 40
-        executor.setThreadNamePrefix("Producer-Thread")
+        executor.corePoolSize = corePoolSize
+        executor.maxPoolSize = corePoolSize * 2
+        executor.queueCapacity = corePoolSize * 4
+        executor.setThreadNamePrefix("Producer-Thread-")
         executor.keepAliveSeconds = 30
         executor.setAllowCoreThreadTimeOut(false)
         executor.setPrestartAllCoreThreads(true)
@@ -27,12 +31,15 @@ internal class AsyncConfig {
     }
 
     @Bean
-    fun preprocessingExecutor(): Executor {
+    fun preprocessingExecutor(
+        @Value("\${spring.async.preprocessing.core-pool-size}")
+        corePoolSize: Int
+    ): Executor {
         val executor = ThreadPoolTaskExecutor()
-        executor.corePoolSize = 10
-        executor.maxPoolSize = 20
-        executor.queueCapacity = 40
-        executor.setThreadNamePrefix("PreProcessing-Thread")
+        executor.corePoolSize = corePoolSize
+        executor.maxPoolSize = corePoolSize * 2
+        executor.queueCapacity = corePoolSize * 4
+        executor.setThreadNamePrefix("PreProcessing-Thread-")
         executor.keepAliveSeconds = 30
         executor.setAllowCoreThreadTimeOut(false)
         executor.setPrestartAllCoreThreads(true)

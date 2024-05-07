@@ -1,5 +1,9 @@
 package com.lalala.music.entity;
 
+import com.lalala.music.domain.*;
+
+import com.lalala.music.domain.ArtistType;
+import com.lalala.music.domain.GenderType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

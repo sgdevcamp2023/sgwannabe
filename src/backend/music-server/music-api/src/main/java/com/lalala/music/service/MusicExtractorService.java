@@ -1,7 +1,10 @@
 package com.lalala.music.service;
 
+import com.lalala.music.domain.*;
+
 import com.lalala.exception.BusinessException;
 import com.lalala.exception.ErrorCode;
+import com.lalala.music.domain.ExtractedMusic;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lalala.music.dto.ExtractedMusicDTO;
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.InvalidDataException;
@@ -54,7 +56,7 @@ public class MusicExtractorService {
         }
     }
 
-    public ExtractedMusicDTO extract(File file) {
+    public ExtractedMusic extract(File file) {
         log.info("MP3 Extracting - " + file.getName());
 
         try {
@@ -62,7 +64,7 @@ public class MusicExtractorService {
 
             if (mp3file.hasId3v1Tag()) {
                 ID3v1 id3v1Tag = mp3file.getId3v1Tag();
-                return new ExtractedMusicDTO(
+                return new ExtractedMusic(
                         id3v1Tag.getTitle(),
                         id3v1Tag.getArtist(),
                         id3v1Tag.getAlbum(),
@@ -103,7 +105,7 @@ public class MusicExtractorService {
                     albumImage = id3v2Tag.getAlbumImage();
                 }
 
-                return new ExtractedMusicDTO(
+                return new ExtractedMusic(
                         title,
                         artist,
                         album,

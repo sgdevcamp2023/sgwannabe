@@ -1,6 +1,8 @@
 package com.lalala.music.entity;
 
-import lombok.AccessLevel;
+import com.lalala.music.domain.*;
+
+import com.lalala.music.domain.FormatType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +15,7 @@ import jakarta.persistence.Enumerated;
 @Embeddable
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class MusicFile {
     @Column(name = "file_url", nullable = false, columnDefinition = "VARCHAR(255) default ''")
     String fileUrl;

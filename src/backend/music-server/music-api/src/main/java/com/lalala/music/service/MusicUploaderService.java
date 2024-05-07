@@ -1,7 +1,18 @@
 package com.lalala.music.service;
 
+import com.lalala.music.domain.*;
+
 import com.lalala.exception.BusinessException;
 import com.lalala.exception.ErrorCode;
+import com.lalala.music.domain.AlbumDetail;
+import com.lalala.music.domain.AlbumType;
+import com.lalala.music.domain.Artist;
+import com.lalala.music.domain.ArtistType;
+import com.lalala.music.domain.ExtractedMusic;
+import com.lalala.music.domain.FormatType;
+import com.lalala.music.domain.GenderType;
+import com.lalala.music.domain.MusicDetail;
+import com.lalala.music.mapper.MusicFileMapper;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -22,20 +33,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lalala.music.dto.AlbumDetailDTO;
-import com.lalala.music.dto.ArtistDTO;
 import com.lalala.music.dto.CreateAlbumRequestDTO;
 import com.lalala.music.dto.CreateArtistRequestDTO;
 import com.lalala.music.dto.CreateMusicRequestDTO;
-import com.lalala.music.dto.ExtractedMusicDTO;
-import com.lalala.music.dto.FileDTO;
-import com.lalala.music.dto.MusicDetailDTO;
 import com.lalala.music.dto.ParticipantsRequestDTO;
 import com.lalala.music.dto.UploadResponseDTO;
-import com.lalala.music.entity.AlbumType;
-import com.lalala.music.entity.ArtistType;
-import com.lalala.music.entity.FormatType;
-import com.lalala.music.entity.GenderType;
 import com.lalala.music.entity.MusicFile;
 
 @Service
@@ -51,21 +53,21 @@ public class MusicUploaderService {
     private final AlbumService albumService;
 
     @Transactional
-    public MusicDetailDTO upload(MultipartFile file) {
+    public MusicDetail upload(MultipartFile file) {
         File downloadFile = extractorService.downloadToTemp(file);
 
-        ExtractedMusicDTO extractedMusic = extractorService.extract(downloadFile);
+        ExtractedMusic extractedMusic = extractorService.extract(downloadFile);
 
         UploadResponseDTO imageResponse =
                 this.uploadImage(extractedMusic.getCoverData(), extractedMusic.getCoverExtension());
         UploadResponseDTO musicResponse = this.uploadMusic(file);
 
-        ArtistDTO artist =
+        Artist artist =
                 artistService.createArtist(
                         new CreateArtistRequestDTO(
                                 extractedMusic.getArtist(), GenderType.NONE, ArtistType.NONE, "NCS"));
 
-        AlbumDetailDTO album =
+        AlbumDetail album =
                 albumService.createAlbum(
                         new CreateAlbumRequestDTO(
                                 extractedMusic.getAlbum(),
@@ -80,7 +82,7 @@ public class MusicUploaderService {
                         extractedMusic.getPlayTime().shortValue(),
                         extractedMusic.getLyrics(),
                         album.getId(),
-                        FileDTO.from(new MusicFile(musicResponse.getUrl(), FormatType.MP3)),
+                        MusicFileMapper.from(new MusicFile(musicResponse.getUrl(), FormatType.MP3)),
                         new ParticipantsRequestDTO(artist.getId())));
     }
 

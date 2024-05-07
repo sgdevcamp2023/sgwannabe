@@ -11,3 +11,9 @@ project(':common-module:common-mvc').projectDir = file('../common-module/common-
 
 include ':common-module:common-reactive'
 project(':common-module:common-reactive').projectDir = file('../common-module/common-reactive')
+
+include ':domain-module'
+project(':domain-module').projectDir = file('../domain-module')
+
+include ':domain-module:music'
+project(':domain-module:music').projectDir = file('../domain-module/music')

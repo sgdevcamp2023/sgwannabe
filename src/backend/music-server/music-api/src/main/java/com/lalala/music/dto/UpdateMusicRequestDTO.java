@@ -1,5 +1,6 @@
 package com.lalala.music.dto;
 
+import com.lalala.music.domain.File;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +14,6 @@ public class UpdateMusicRequestDTO {
     private Short playTime;
     private String lyrics;
     private Long albumId;
-    private FileDTO file;
+    private File file;
     private ParticipantsRequestDTO participants;
 }

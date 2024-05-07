@@ -1,7 +1,12 @@
 package com.lalala.music.service;
 
-import java.util.List;
+import com.lalala.music.domain.*;
 
+import com.lalala.music.domain.Artist;
+import com.lalala.music.domain.ArtistDetail;
+import com.lalala.music.mapper.ArtistDetailMapper;
+import com.lalala.music.mapper.ArtistMapper;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
@@ -13,8 +18,6 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lalala.music.dto.ArtistDTO;
-import com.lalala.music.dto.ArtistDetailDTO;
 import com.lalala.music.dto.CreateArtistRequestDTO;
 import com.lalala.music.dto.UpdateArtistRequestDTO;
 import com.lalala.music.entity.ArtistEntity;
@@ -32,11 +35,11 @@ public class ArtistService {
     private final AlbumRepository albumRepository;
 
     @Transactional
-    public ArtistDTO createArtist(CreateArtistRequestDTO request) {
+    public Artist createArtist(CreateArtistRequestDTO request) {
         Optional<ArtistEntity> artist = repository.findByNameAndAgency(request.getName(), request.getAgency());
 
         if (artist.isPresent()) {
-            return ArtistDTO.from(artist.get());
+            return ArtistMapper.from(artist.get());
         }
 
         ArtistEntity newArtist = new ArtistEntity(
@@ -46,32 +49,32 @@ public class ArtistService {
                 request.getAgency()
         );
         newArtist = repository.save(newArtist);
-        return ArtistDTO.from(newArtist);
+        return ArtistMapper.from(newArtist);
     }
 
-    public List<ArtistDTO> getArtists(int page, int pageSize) {
+    public List<Artist> getArtists(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Direction.DESC, "id"));
-        Page<ArtistDTO> artists = repository.findAll(pageable).map(ArtistDTO::from);
+        Page<Artist> artists = repository.findAll(pageable).map(ArtistMapper::from);
         return artists.getContent();
     }
 
-    public ArtistDetailDTO getArtist(Long id) {
+    public ArtistDetail getArtist(Long id) {
         ArtistEntity artist = ArtistUtils.findById(id, repository);
 
-        return ArtistDetailDTO.from(artist);
+        return ArtistDetailMapper.from(artist);
     }
 
     @Transactional
-    public ArtistDTO updateArtist(Long id, UpdateArtistRequestDTO request) {
+    public Artist updateArtist(Long id, UpdateArtistRequestDTO request) {
         ArtistEntity artist = ArtistUtils.findById(id, repository);
         artist.update(request.getName(), request.getGender(), request.getType(), request.getAgency());
-        return ArtistDTO.from(artist);
+        return ArtistMapper.from(artist);
     }
 
     @Transactional
-    public ArtistDTO deleteArtist(Long id) {
+    public Artist deleteArtist(Long id) {
         ArtistEntity artist = ArtistUtils.findById(id, repository);
         repository.delete(artist);
-        return ArtistDTO.from(artist);
+        return ArtistMapper.from(artist);
     }
 }

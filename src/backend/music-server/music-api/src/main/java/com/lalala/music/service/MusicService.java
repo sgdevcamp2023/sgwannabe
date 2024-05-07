@@ -1,5 +1,11 @@
 package com.lalala.music.service;
 
+import com.lalala.music.domain.*;
+
+import com.lalala.music.domain.Music;
+import com.lalala.music.domain.MusicDetail;
+import com.lalala.music.mapper.MusicDetailMapper;
+import com.lalala.music.mapper.MusicMapper;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -15,8 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lalala.music.dto.CreateMusicRequestDTO;
-import com.lalala.music.dto.MusicDTO;
-import com.lalala.music.dto.MusicDetailDTO;
 import com.lalala.music.dto.UpdateMusicRequestDTO;
 import com.lalala.music.entity.AlbumEntity;
 import com.lalala.music.entity.ArtistEntity;
@@ -38,7 +42,7 @@ public class MusicService {
     private final AlbumRepository albumRepository;
 
     @Transactional
-    public MusicDetailDTO createMusic(CreateMusicRequestDTO request) {
+    public MusicDetail createMusic(CreateMusicRequestDTO request) {
         AlbumEntity album = AlbumUtils.findById(request.getAlbumId(), albumRepository);
         ArtistEntity artist =
                 ArtistUtils.findById(request.getParticipants().getArtistId(), artistRepository);
@@ -54,10 +58,10 @@ public class MusicService {
 
         repository.save(music);
 
-        return MusicDetailDTO.from(music, artist, album);
+        return MusicDetailMapper.from(music, artist, album);
     }
 
-    public List<MusicDTO> getMusics(int page, int pageSize) {
+    public List<Music> getMusics(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Direction.DESC, "id"));
         List<MusicEntity> musics = repository.findAll(pageable).getContent();
 
@@ -74,21 +78,21 @@ public class MusicService {
         return musics.stream()
                 .map(
                         music ->
-                                MusicDTO.from(
+                                MusicMapper.from(
                                         music, albumMap.get(music.getAlbumId()), artistMap.get(music.getArtistId())))
                 .toList();
     }
 
-    public MusicDetailDTO getMusic(long id) {
+    public MusicDetail getMusic(long id) {
         MusicEntity music = MusicUtils.findById(id, repository);
         AlbumEntity album = AlbumUtils.findById(music.getAlbumId(), albumRepository);
         ArtistEntity artist = ArtistUtils.findById(music.getArtistId(), artistRepository);
 
-        return MusicDetailDTO.from(music, artist, album);
+        return MusicDetailMapper.from(music, artist, album);
     }
 
     @Transactional
-    public MusicDetailDTO updateMusic(Long id, UpdateMusicRequestDTO request) {
+    public MusicDetail updateMusic(Long id, UpdateMusicRequestDTO request) {
         AlbumEntity album = AlbumUtils.findById(request.getAlbumId(), albumRepository);
         ArtistEntity artist =
                 ArtistUtils.findById(request.getParticipants().getArtistId(), artistRepository);
@@ -104,21 +108,21 @@ public class MusicService {
 
         repository.save(music);
 
-        return MusicDetailDTO.from(music, artist, album);
+        return MusicDetailMapper.from(music, artist, album);
     }
 
     @Transactional
-    public MusicDetailDTO deleteMusic(Long id) {
+    public MusicDetail deleteMusic(Long id) {
         MusicEntity music = MusicUtils.findById(id, repository);
         AlbumEntity album = AlbumUtils.findById(music.getAlbumId(), albumRepository);
         ArtistEntity artist = ArtistUtils.findById(music.getArtistId(), artistRepository);
 
         repository.delete(music);
 
-        return MusicDetailDTO.from(music, artist, album);
+        return MusicDetailMapper.from(music, artist, album);
     }
 
-    public List<MusicDTO> getMusicfromIds(List<Long> ids) {
+    public List<Music> getMusicfromIds(List<Long> ids) {
         List<MusicEntity> musics = repository.findAllById(ids);
 
         List<Long> artistIds = musics.stream().map(MusicEntity::getArtistId).toList();
@@ -134,7 +138,7 @@ public class MusicService {
         return musics.stream()
                 .map(
                         music ->
-                                MusicDTO.from(
+                                MusicMapper.from(
                                         music, albumMap.get(music.getAlbumId()), artistMap.get(music.getArtistId())))
                 .toList();
     }
