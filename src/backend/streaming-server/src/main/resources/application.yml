@@ -11,6 +11,12 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
+  async:
+    producer:
+      core-pool-size: 10
+    preprocessing:
+      core-pool-size: 10
+
 client:
   endpoint:
     music: http://music-server
@@ -48,3 +54,6 @@ management:
 logging:
   pattern:
     level: "%5p [%X{traceId:-},%X{spanId:-}]"
+
+music:
+  size-mb: 30
