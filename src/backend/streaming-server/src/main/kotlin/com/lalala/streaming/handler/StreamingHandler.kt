@@ -1,11 +1,12 @@
 package com.lalala.streaming.handler
 
+import com.lalala.music.domain.*;
+
 import com.lalala.event.StreamingCompleteEvent
 import com.lalala.exception.BusinessException
 import com.lalala.exception.ErrorCode
 import com.lalala.response.BaseResponse
 import com.lalala.streaming.constant.StreamingConstant
-import com.lalala.streaming.dto.MusicDetailDTO
 import com.lalala.streaming.external.kafka.KafkaProducer
 import com.lalala.streaming.handler.Command.*
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -16,7 +17,6 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.core.io.buffer.DataBuffer
 import org.springframework.core.io.buffer.DataBufferUtils
-import org.springframework.http.HttpStatusCode
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
@@ -116,14 +116,14 @@ class StreamingHandler(
         }
     }
 
-    fun getMusic(session: WebSocketSession, musicId: String): Mono<MusicDetailDTO> {
+    fun getMusic(session: WebSocketSession, musicId: String): Mono<MusicDetail> {
         return musicClient.build().get()
             .uri("/v1/api/musics/${musicId}")
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
-            .bodyToMono(typeReference<BaseResponse<MusicDetailDTO>>())
+            .bodyToMono(typeReference<BaseResponse<MusicDetail>>())
             .map {
-                it.data as MusicDetailDTO
+                it.data as MusicDetail
             }
             .timeout(Duration.ofSeconds(1))
             .retryWhen(Retry.backoff(3, Duration.ofSeconds(1)))
