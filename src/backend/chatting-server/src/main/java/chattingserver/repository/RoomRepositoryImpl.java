@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.query.Update;
 
 @Repository
 public class RoomRepositoryImpl implements RoomRepositoryCustom {
-
     private final MongoTemplate mongoTemplate;
 
     public RoomRepositoryImpl(MongoTemplate mongoTemplate) {
@@ -21,20 +20,15 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
 
     @Override
     public void exitRoom(String roomId, Long uid) {
-        Query query = new Query(Criteria.where("_id").is(roomId).and("users.uid").is(uid));
-        Update update = new Update().pull("users", new Query(Criteria.where("uid").is(uid)));
+        Query query = new Query(Criteria.where("_id").is(roomId));
+        Update update = new Update().pull("users", Query.query(Criteria.where("uid").is(uid)));
         mongoTemplate.updateFirst(query, update, Room.class);
     }
 
     @Override
-    public UpdateResult updateLastReadMsgId(ReadMessageUpdateRequestDto requestDto) {
-
-        Query query = Query.query(
-                Criteria.where("_id").is(requestDto.getRoomId())
-                        .andOperator(Criteria.where("users").elemMatch(Criteria.where("uid").is(requestDto.getUid())))
-        );
-
-        Update update = new Update().set("users.$.lastReadMessageId", requestDto.getMessageId());
+    public UpdateResult updateLastReadMsgId(String roomId, Long uid, String messageId) {
+        Query query = new Query(Criteria.where("_id").is(roomId).and("users.uid").is(uid));
+        Update update = new Update().set("users.$.lastReadMessageId", messageId);
         return mongoTemplate.updateFirst(query, update, Room.class);
     }
 
@@ -43,5 +37,34 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
         Query query = new Query(Criteria.where("_id").is(roomId));
         Update update = new Update().addToSet("users", user);
         return mongoTemplate.updateFirst(query, update, Room.class);
+    }
+
+    @Override
+    public void updatePlaylist(String roomId, Playlist playlist) {
+        Query query = new Query(Criteria.where("_id").is(roomId));
+        Update update = new Update()
+                .set("playlist", playlist)
+                .set("playlistDuration", playlist.getTotalPlaylistTime())
+                .set("thumbnailImage", playlist.getFirstMusic().getThumbnail());
+        mongoTemplate.updateFirst(query, update, Room.class);
+    }
+
+    public List<Room> findRoomsNoOffset(Long uid, LocalDateTime lastCreatedAt, int limit, boolean joined) {
+        Criteria criteria = new Criteria();
+        if (joined) {
+            criteria.and("users.uid").is(uid);
+        } else {
+            criteria.and("users.uid").ne(uid);
+        }
+
+        if (lastCreatedAt != null) {
+            criteria.and("createdAt").lt(lastCreatedAt);
+        }
+
+        Query query = Query.query(criteria)
+                .with(Sort.by(Sort.Direction.DESC, "createdAt"))
+                .limit(limit);
+
+        return mongoTemplate.find(query, Room.class);
     }
 }

@@ -8,22 +8,58 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
-public class Consumers {
-    private final SimpMessagingTemplate template;
+public class Producers {
+    @Value("${kafka.topic.chat-name}")
+    private String topicChatName;
 
-    @KafkaListener(groupId = "${spring.kafka.consumer.chat-consumer.group-id}", topics = "${kafka.topic.chat-name}")
-    public void listenChat(ChatMessageDto chatMessageDto) {
-        template.convertAndSend("/chat/topic/room/" + chatMessageDto.getRoomId(), chatMessageDto);
+    @Value("${kafka.topic.room-name}")
+    private String topicRoomName;
+
+    private final KafkaTemplate<String, ChatMessageDto> chatKafkaTemplate;
+    private final KafkaTemplate<String, IndexingRequestMessageDto> roomKafkaTemplate;
+    private final ChatMessageService chatMessageService;
+    private final RoomService roomService;
+
+    public void sendMessage(ChatMessageDto chatMessageDto) {
+        if (chatMessageDto.getMessageType() == MessageType.CREATION) {
+            RoomResponseDto roomResponseDto = roomService.getRoomInfo(chatMessageDto.getRoomId());
+            sendRoomMessage(createIndexingRequestMessage(roomResponseDto));
+        } else {
+            sendChatMessage(chatMessageDto);
+        }
     }
 
-    // TODO search indexing test용 추후 삭제 예정
-    @KafkaListener(groupId = "${spring.kafka.consumer.room-consumer.group-id}", topics = "${kafka.topic.room-name}", containerFactory = "kafkaListenerContainerFactory")
-    public void listenRoomCreation(IndexingRequestMessageDto indexingRequestMessageDto) {
+    public void sendRoomMessage(IndexingRequestMessageDto roomMessageDto) {
+        roomKafkaTemplate.send(topicRoomName, roomMessageDto)
+                .whenComplete((result, ex) -> {
+                    if (ex != null) {
+                        handleSendFailure("Room", roomMessageDto.getRoomId(), ex);
+                    }
+                });
+    }
 
-        template.convertAndSend("/chat/topic/search/room/index", indexingRequestMessageDto);
+    private void sendChatMessage(ChatMessageDto chatMessageDto) {
+        chatKafkaTemplate.send(topicChatName, chatMessageDto)
+                .whenComplete((result, ex) -> {
+                    if (ex != null) {
+                        handleSendFailure("Chat", chatMessageDto.getId(), ex);
+                        chatMessageService.deleteChat(chatMessageDto.getId());
+                    }
+                });
+    }
 
+    private void handleSendFailure(String messageType, String messageId, Throwable ex) {
+        throw new KafkaException(messageType + " 메시지 전송 실패: " + messageId, ex);
+    }
+
+    private IndexingRequestMessageDto createIndexingRequestMessage(RoomResponseDto room) {
+        return IndexingRequestMessageDto.builder()
+                .roomId(room.getId())
+                .roomName(room.getRoomName())
+                .playlistId(room.getPlaylist().getId())
+                .thumbnailImage(room.getThumbnailImage())
+                .build();
     }
 }

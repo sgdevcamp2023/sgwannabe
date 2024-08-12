@@ -17,44 +17,27 @@ public class Music {
     private String playtime;
     private String thumbnail;
 
-    static class PlayTimeDuration {
-        private final Duration minutes;
-        private final Duration seconds;
+    @Value
+    public static class PlayTimeDuration {
+        Duration minutes;
+        Duration seconds;
 
-        private PlayTimeDuration(
-                final Long minutes,
-                final Long seconds
-        ) {
-            this.minutes = Duration.ofMinutes(minutes);
-            this.seconds = Duration.ofSeconds(seconds);
+        public static PlayTimeDuration from(List<String> parsedPlaytime) {
+            return new PlayTimeDuration(
+                    Duration.ofMinutes(Long.parseLong(parsedPlaytime.get(0))),
+                    Duration.ofSeconds(Long.parseLong(parsedPlaytime.get(1)))
+            );
         }
 
         public Duration getPlayTimeDuration() {
             return minutes.plus(seconds);
         }
-
-        public static PlayTimeDuration from(final List<String> parsedPlaytime) {
-            return new PlayTimeDuration(
-                    Long.parseLong(parsedPlaytime.get(0)),
-                    Long.parseLong(parsedPlaytime.get(1))
-            );
-        }
     }
 
-    static class PlayTimeParser {
-        private PlayTimeParser() {}
-
+    private static class PlayTimeParser {
         public static List<String> parse(String playtime) {
-            return List.of(
-                    playtime.split(":")[0],
-                    playtime.split(":")[1]
-            );
+            return List.of(playtime.split(":"));
         }
     }
 
-    public Duration getPlayTimeDuration() {
-        final List<String> parsedPlaytime = PlayTimeParser.parse(playtime);
-        final PlayTimeDuration playTimeDuration = PlayTimeDuration.from(parsedPlaytime);
-        return playTimeDuration.getPlayTimeDuration();
-    }
 }

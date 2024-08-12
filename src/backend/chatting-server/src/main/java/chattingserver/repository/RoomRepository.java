@@ -14,17 +14,11 @@ import java.util.Optional;
 public interface RoomRepository extends MongoRepository<Room, String>, RoomRepositoryCustom {
     Optional<Room> findById(String id);
 
-    @Query("{'users.uid': ?0}")
-    List<Room> findJoinedRoomsByUid(Long uid);
+    @Query(value = "{'users.uid': ?0}", fields = "{'id': 1, 'roomName': 1, 'thumbnailImage': 1, 'createdAt': 1}")
+    List<Room> findJoinedRoomsByUid(Long uid, Sort sort, Pageable pageable);
 
-    @Query("{'users.uid': {$ne: ?0}}")
-    List<Room> findUnjoinedRoomsSortedByCreationDate(Long uid, Sort sort);
+    @Query(value = "{'users.uid': {$ne: ?0}, 'createdAt': {$lt: ?1}}", sort = "{'createdAt': -1}")
+    List<Room> findUnjoinedRooms(Long uid, LocalDateTime lastCreatedAt, Pageable pageable);
 
-    @Override
-    <S extends Room> S save(S entity);
-
-    @Override
-    boolean existsById(String s);
-
-
+    boolean existsByIdAndUsersUidNot(String roomId, Long uid);
 }

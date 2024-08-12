@@ -30,9 +30,8 @@ public class Room {
     private LocalDateTime createdAt;
 
     private User playlistOwner;
-    public void setMembers(List<User> users) {
-        this.users = users;
-    }
+    @Setter
+    private List<User> users;
 
 
 
